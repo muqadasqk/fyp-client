@@ -1,7 +1,7 @@
 import { QueryClient } from "@tanstack/react-query";
 
 // create a React Query client
-const queryClient = new QueryClient({
+const client = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60 * 5, // cache data for 5 minutes
@@ -11,4 +11,4 @@ const queryClient = new QueryClient({
   },
 });
 
-export default queryClient;
+export default client;
