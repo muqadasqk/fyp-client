@@ -5,10 +5,26 @@ import { NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import clsx from "clsx";
 
+const Navigatinons = (links) => {
+  const className = "d-flex align-items-center p-2 text-white text-decoration-none rounded";
+
+  return (
+    <nav className="flex-grow-1">
+      {links.map(({ href, icon, text }, index) => (
+        <NavLink key={index} to={href} className={({ isActive }) =>
+          clsx(isActive ? "bg-primary fw-bold" : "hover-bg-primary", className)}
+        >
+          {icon}{text}
+        </NavLink>
+      ))}
+    </nav>
+  )
+}
+
 const DashboardSidebar = ({ isOpen, toggleSidebar, authenticatedUser }) => {
   const dispatch = useDispatch();
 
-  const menuItems = [
+  const links = [
     { icon: <FaHome className="me-2" />, text: "Dashboard", href: "/dashboard" },
     { icon: <FaSimCard className="me-2" />, text: "eSim Plans", href: "/eSim-plans" },
     { icon: <FaListCheck className="me-2" />, text: "Manage User's eSim", href: "/manage-user-profiles" },
@@ -16,7 +32,7 @@ const DashboardSidebar = ({ isOpen, toggleSidebar, authenticatedUser }) => {
   ];
 
   return (
-    <div
+    <aside
       className={clsx(
         "bg-secondary text-white position-fixed top-0 start-0 h-100 d-flex flex-column",
         "transition-transform",
@@ -39,22 +55,7 @@ const DashboardSidebar = ({ isOpen, toggleSidebar, authenticatedUser }) => {
           </Button>
         </div>
 
-        <nav className="flex-grow-1">
-          {menuItems.map((item, index) => (
-            <NavLink
-              key={index}
-              to={item.href}
-              className={({ isActive }) =>
-                clsx(
-                  "d-flex align-items-center p-2 text-white text-decoration-none rounded",
-                  isActive ? "bg-primary fw-bold" : "hover-bg-primary"
-                )
-              }
-            >
-              {item.icon}{item.text}
-            </NavLink>
-          ))}
-        </nav>
+        <Navigatinons links={links} />
 
         <div className="mt-auto">
           <Button variant="danger" className="w-100" /*onClick={() => dispatch(logout())}*/>
@@ -63,7 +64,7 @@ const DashboardSidebar = ({ isOpen, toggleSidebar, authenticatedUser }) => {
         </div>
 
       </Container>
-    </div>
+    </aside>
   );
 };
 

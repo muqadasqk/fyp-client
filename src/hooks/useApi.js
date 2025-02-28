@@ -5,7 +5,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 
-export const useApi = () => {
+const useApi = () => {
     const dispatch = useDispatch();
     const [data, setData] = useState(null);
 
@@ -50,3 +50,5 @@ export const useApi = () => {
 
     return { data, get, getById, post, put, delete: del };
 };
+
+export default useApi;
