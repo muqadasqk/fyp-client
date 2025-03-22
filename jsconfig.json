@@ -3,31 +3,18 @@
     "baseUrl": "./",
     "paths": {
       "@app": ["src/app/index"],
-      "@app/*": ["src/app/*"],
       "@assets": ["src/assets/index"],
-      "@assets/*": ["src/assets/*"],
       "@components": ["src/components/index"],
-      "@components/*": ["src/components/*"],
       "@config": ["src/config/index"],
-      "@config/*": ["src/config/*"],
       "@features": ["src/features/index"],
-      "@features/*": ["src/features/*"],
       "@hooks": ["src/hooks/index"],
-      "@hooks/*": ["src/hooks/*"],
       "@layouts": ["src/layouts/index"],
-      "@layouts/*": ["src/layouts/*"],
       "@pages": ["src/pages/index"],
-      "@pages/*": ["src/pages/*"],
       "@routes": ["src/routes/index"],
-      "@routes/*": ["src/routes/*"],
       "@schemas": ["src/schemas/index"],
-      "@schemas/*": ["src/schemas/*"],
       "@services": ["src/services/index"],
-      "@services/*": ["src/services/*"],
       "@constants": ["src/utils/constants/index"],
-      "@constants/*": ["src/utils/constants/*"],
       "@utils": ["src/utils/index"],
-      "@utils/*": ["src/utils/*"]
     }
   }
 }

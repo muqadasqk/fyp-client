@@ -1,22 +1,22 @@
 import { Helmet } from "react-helmet-async";
-import { Container, DashboardBreadcrumb } from "@components";
+import { DashboardBreadcrumb } from "@components";
 import { Fragment } from "react";
 
-const DashboardContent = ({ title, description, children }) => {
+const DashboardContent = ({ title = "", description = "", children }) => {
   return (
     <Fragment>
       <Helmet>
-        <title>{title} | Admin Dashboard</title>
-        <meta name="description" content={description ?? "Admin dashboard page"} />
+        <html lang="en" />
+        <title>{title}</title>
+        <meta name="description" content={description} />
       </Helmet>
 
-      <Container className="p-4 bg-white shadow-sm rounded">
+      <div>
         <DashboardBreadcrumb />
-
-        <h2 className="mb-2">{title}</h2>
-        {description && <p className="text-muted">{description}</p>}
-        <div className="mt-3">{children}</div>
-      </Container>
+        <h2>{title}</h2>
+        {description && <p>{description}</p>}
+        <div>{children}</div>
+      </div>
     </Fragment>
   );
 };

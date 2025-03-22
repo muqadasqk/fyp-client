@@ -5,9 +5,9 @@ const DashboardBreadcrumb = () => {
   const pathSegments = location.pathname.split("/").filter(Boolean);
 
   return (
-    <nav aria-label="breadcrumb">
-      <ol className="breadcrumb">
-        <li className="breadcrumb-item">
+    <nav>
+      <ol>
+        <li>
           <Link to="/">Dashboard</Link>
         </li>
         {pathSegments.map((segment, index) => {
@@ -15,7 +15,7 @@ const DashboardBreadcrumb = () => {
           const isLast = index === pathSegments.length - 1;
 
           return (
-            <li key={path} className={`breadcrumb-item ${isLast ? "active" : ""}`}>
+            <li key={path} className={isLast ? "active" : undefined}>
               {isLast ? segment.replace("-", " ") : <Link to={path}>{segment.replace("-", " ")}</Link>}
             </li>
           );

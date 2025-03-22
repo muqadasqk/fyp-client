@@ -3,7 +3,12 @@ import { useAuth } from "@hooks";
 
 const AuthGuard = () => {
     const { isAuthenticated } = useAuth();
-    return isAuthenticated ? <Navigate to="/" replace /> : <Outlet />;
+
+    if (isAuthenticated) {
+        return <Navigate to="/" replace />;
+    }
+
+    return <Outlet />;
 };
 
 export default AuthGuard;

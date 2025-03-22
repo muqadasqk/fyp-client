@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   isLoading: false,
-  error: null,
+  errors: {}
 };
 
 const uiSlice = createSlice({
@@ -12,15 +12,15 @@ const uiSlice = createSlice({
     setLoading: (state, action) => {
       state.isLoading = action.payload;
     },
-    setError: (state, action) => {
-      state.error = action.payload;
+    setErrors: (state, action) => {
+      state.errors = action.payload;
     },
-    clearError: (state) => {
-      state.error = null;
+    clearErrors: (state) => {
+      state.errors = {};
     },
   },
 });
 
-export const { setLoading, setError, clearError } = uiSlice.actions;
+export const { setLoading, setErrors, clearErrors } = uiSlice.actions;
 export default uiSlice.reducer;
 

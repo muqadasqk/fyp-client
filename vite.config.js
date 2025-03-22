@@ -1,5 +1,4 @@
 import react from "@vitejs/plugin-react";
-// import { API_BASE_URL } from "./src/config/env";
 import { defineConfig } from "vite";
 import path from "path";
 
@@ -22,17 +21,5 @@ export default defineConfig({
       "@utils": path.resolve(__dirname, "src/utils"),
     },
     extensions: [".js", ".jsx", ".ts", ".tsx", ".json"],
-  },
-
-  server: {
-    proxy: {
-      "/api": 'http://127.0.0.1:8000'
-      // { 
-      //   target: '',
-      //   changeOrigin: true,
-      //   secure: false, // Set to true if using HTTPS backend
-      //   rewrite: (path) => path.replace(/^\/api/, ''), // Remove "/api" prefix before forwarding
-      // },
-    },
   },
 });

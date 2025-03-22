@@ -1,12 +1,15 @@
+import { authReducer, uiReducer } from "@features";
 import { configureStore } from "@reduxjs/toolkit";
 
-// configure and export store
 const store = configureStore({
-    reducer: {},
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({
-            serializableCheck: false, // required for redux-persist
-        }),
+    reducer: {
+        ui: uiReducer,
+        auth: authReducer,
+    },
+
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        serializableCheck: false,
+    }),
 });
 
 export default store;

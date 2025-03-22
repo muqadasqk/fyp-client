@@ -1,69 +1,58 @@
-import { FaHome, FaCog, FaSignOutAlt, FaTimes, FaListCheck, FaSimCard } from "react-icons/fa";
-import { Container, Button, Image } from "@components";
-
+import { FaHome, FaCog, FaSignOutAlt, FaTimes } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import clsx from "clsx";
+import { signout } from "@features";
+import { useAuth } from "@hooks";
 
-const Navigatinons = (links) => {
-  const className = "d-flex align-items-center p-2 text-white text-decoration-none rounded";
+const admin = [
+  { icon: <FaHome />, text: "Admin Dashboard", href: "/" },
+  { icon: <FaHome />, text: "Manage Accounts", href: "/manage-accounts" },
+  { icon: <FaCog />, text: "Profile Settings", href: "/profile" },
+];
+
+const supervisor = [
+  { icon: <FaHome />, text: "Supervisor Dashboard", href: "/" },
+  { icon: <FaCog />, text: "Profile Settings", href: "/profile" },
+];
+
+const student = [
+  { icon: <FaHome />, text: "Student Dashboard", href: "/" },
+  { icon: <FaCog />, text: "Profile Settings", href: "/profile" },
+];
+
+const Navigatinons = () => {
+  const { role } = useAuth();
+  const links = ({ admin, supervisor, student })[role];
 
   return (
-    <nav className="flex-grow-1">
-      {links.map(({ href, icon, text }, index) => (
-        <NavLink key={index} to={href} className={({ isActive }) =>
-          clsx(isActive ? "bg-primary fw-bold" : "hover-bg-primary", className)}
-        >
+    <nav>
+      {links.map(({ icon, text, href }) => (
+        <NavLink key={href} to={href} className={({ isActive }) => isActive ? "active" : undefined} >
           {icon}{text}
         </NavLink>
-      ))}
-    </nav>
+      ))
+      }
+    </nav >
   )
 }
 
-const DashboardSidebar = ({ isOpen, toggleSidebar, authenticatedUser }) => {
+const DashboardSidebar = ({ toggleSidebar }) => {
   const dispatch = useDispatch();
 
-  const links = [
-    { icon: <FaHome className="me-2" />, text: "Dashboard", href: "/dashboard" },
-    { icon: <FaSimCard className="me-2" />, text: "eSim Plans", href: "/eSim-plans" },
-    { icon: <FaListCheck className="me-2" />, text: "Manage User's eSim", href: "/manage-user-profiles" },
-    { icon: <FaCog className="me-2" />, text: "Profile Settings", href: "/profile" },
-  ];
-
   return (
-    <aside
-      className={clsx(
-        "bg-secondary text-white position-fixed top-0 start-0 h-100 d-flex flex-column",
-        "transition-transform",
-        isOpen ? "translate-none" : "translate-middle-x",
-        "z-20 shadow-sm"
-      )}
-      style={{ width: "16rem" }}
-    >
-      <Container fluid className="p-3 h-100">
-
-        <div className="d-flex align-items-center justify-content-between mb-4">
-          <Image
-            src="/images/fyp-management-system-logo.png"
-            className="w-75"
-            alt="FYP Management System Logo"
-          />
-
-          <Button variant="outline" className="d-md-none" onClick={toggleSidebar}>
-            <FaTimes className="fs-5" />
-          </Button>
+    <aside>
+      <div>
+        <div>
+          <img src="/images/fyp-ms-logo.png" alt="FYP Management System" />
+          <button onClick={toggleSidebar}><FaTimes /></button>
         </div>
-
-        <Navigatinons links={links} />
-
-        <div className="mt-auto">
-          <Button variant="danger" className="w-100" /*onClick={() => dispatch(logout())}*/>
-            <FaSignOutAlt className="me-2" /> Logout
-          </Button>
+        <Navigatinons />
+        <div>
+          <button onClick={() => dispatch(signout())}>
+            <FaSignOutAlt /> Signout
+          </button>
         </div>
-
-      </Container>
+      </div>
     </aside>
   );
 };

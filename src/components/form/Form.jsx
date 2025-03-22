@@ -1,11 +1,41 @@
+import { useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
+import { useSelector, useDispatch } from "react-redux";
+import { clearErrors } from "@features";
 
-const Form = ({ children, onSubmit, defaultValues, resolver }) => {
-    const methods = useForm({ defaultValues, resolver });
+const Form = ({ children, onSubmit, resolver, defaultValues = {}, ...props }) => {
+    const dispatch = useDispatch();
+    const { errors } = useSelector((state) => state.ui);
+    const methods = useForm({ defaultValues, resolver, mode: "onTouched" });
+
+    useEffect(() => {
+        dispatch(clearErrors());
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (errors) Object.entries(errors).forEach(([field, message]) => {
+            methods.setError(field, { type: "server", message });
+        });
+    }, [errors, methods]);
+
+    const handleFormSubmit = async (data) => {
+        await methods.trigger();
+        const formData = new FormData();
+
+        Object.entries(data).forEach(([key, value]) => {
+            if (value instanceof FileList) {
+                formData.append(key, data[key][0]);
+            } else {
+                formData.append(key, value);
+            }
+        });
+
+        onSubmit(formData);
+    };
 
     return (
         <FormProvider {...methods}>
-            <form onSubmit={methods.handleSubmit(onSubmit)} className="w-100">
+            <form onSubmit={methods.handleSubmit(handleFormSubmit)} noValidate {...props}>
                 {children}
             </form>
         </FormProvider>

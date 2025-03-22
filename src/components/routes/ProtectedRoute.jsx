@@ -3,7 +3,12 @@ import { useAuth } from "@hooks";
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <Outlet /> : <Navigate to="/signin" replace />;
+
+  if (!isAuthenticated) {
+    return <Navigate to="/signin" replace />;
+  }
+
+  return <Outlet />;
 };
 
 export default ProtectedRoute;
