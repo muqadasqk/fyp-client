@@ -1,4 +1,4 @@
-import { DashboardContent, Pagination, Table } from "@components"
+import { DashboardContent, Pagination, RangeSector, SearchBar, Table } from "@components"
 import { retrieveUsers } from "@features";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
@@ -17,21 +17,17 @@ const ManageAccounts = () => {
     }
 
     return (
-        <DashboardContent isLaoding={loading} title="Manage Accounts" description="Manage user accounts | Approve/Reject account requests">
+        <DashboardContent isLoading={loading} title="Manage Accounts" description="Manage user accounts | Approve/Reject account requests">
             <h1>All Users</h1>
             <div>
                 <div>
-                    <select name="limit" onChange={handleChange}>
-                        {[1, 5, 10, 20, 50, 100].map(size => <option key={size} value={size}>{size}</option>)}
-                    </select>
-
-                    <input type="search" name="query" onChange={handleChange} />
+                    <RangeSector onChange={handleChange} value={params.limit} />
+                    <SearchBar placeholder="Search users name, email, nic, roll no, roll, status..." onChange={handleChange} value={params.query} />
                 </div>
-
                 <Table
+                    isLoading={loading}
                     heads={["name", "email", "nic", "rollNo", "role", "image", "status", "verifiedAt"]}
                     items={users}
-                    pagination={metadata}
                 />
 
                 <Pagination paginationData={metadata} setCurrentPage={setParams} />

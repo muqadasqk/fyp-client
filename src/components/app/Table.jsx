@@ -1,6 +1,9 @@
-const Table = ({ heads, items }) => {
+import { Loading } from "@components";
+
+const Table = ({ heads, items, isLoading }) => {
     return (
         <div>
+            {isLoading && <Loading />}
             <table>
                 <thead>
                     <tr>

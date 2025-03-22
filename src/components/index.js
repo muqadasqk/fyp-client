@@ -1,7 +1,10 @@
 // application components
 export { default as Button } from "./app/Button";
+export { default as Loading } from "./app/Loading";
 export { default as Table } from "./app/Table";
 export { default as Pagination } from "./app/Pagination";
+export { default as SearchBar } from "./app/SearchBar";
+export { default as RangeSector } from "./app/RangeSector";
 
 // routes components
 export { default as ProtectedRoute } from "./routes/ProtectedRoute";
