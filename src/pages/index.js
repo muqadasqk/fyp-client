@@ -5,6 +5,7 @@ export { default as ForgotPassword } from "./auth/ForgotPassword";
 
 // protected
 export { default as Dashboard } from "./protected/Dashboard";
+export { default as ManageAccounts } from "./protected/ManageAccounts";
 
 // static
 export { default as NotFound } from "./static/NotFound";

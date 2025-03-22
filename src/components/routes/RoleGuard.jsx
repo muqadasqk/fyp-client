@@ -8,7 +8,7 @@ const RoleGuard = ({ allowedRoles }) => {
         return <Navigate to="/signin" replace />;
     }
 
-    if (role || !allowedRoles.includes(role)) {
+    if (!role || !allowedRoles.includes(role)) {
         return <Navigate to="/unauthorized" replace />;
     }
 

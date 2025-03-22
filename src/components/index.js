@@ -1,5 +1,7 @@
 // application components
 export { default as Button } from "./app/Button";
+export { default as Table } from "./app/Table";
+export { default as Pagination } from "./app/Pagination";
 
 // routes components
 export { default as ProtectedRoute } from "./routes/ProtectedRoute";

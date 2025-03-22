@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ProtectedRoute, AuthGuard, RoleGuard } from "@components";
 import { AuthLayout, DashboardLayout } from "@layouts";
-import { Signup, Signin, NotFound, UnAuthorized, ForgotPassword, Dashboard } from "@pages";
+import { Signup, Signin, NotFound, UnAuthorized, ForgotPassword, Dashboard, ManageAccounts } from "@pages";
 
 const router = createBrowserRouter([
   { // unprotected routes
@@ -33,12 +33,12 @@ const router = createBrowserRouter([
 
   { // role-base access control routes
     path: "/",
-    element: <RoleGuard allowedRoles={["student"]} />,
+    element: <RoleGuard allowedRoles={["admin"]} />,
     children: [
       {
         element: <DashboardLayout />,
         children: [
-          { path: "/pitch-idea", element: <Dashboard /> }
+          { path: "/manage-accounts", element: <ManageAccounts /> }
         ],
       },
     ],
