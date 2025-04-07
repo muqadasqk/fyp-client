@@ -1,59 +1,61 @@
-import React from 'react';
+import { Button } from "@components";
+import { useState, Fragment } from "react";
 
-const Pagination = ({ paginationData, setCurrentPage }) => {
-    const { currentPage, totalPages } = paginationData;
+const Pagination = ({ data, set }) => {
+    const { page, totalPages } = data;
+    const [currentPage, setCurrentPage] = useState(page || 1);
 
-    const handlePrev = () => setCurrentPage((prev) => ({ ...prev, page: Math.max(prev.page - 1, 1) }));
-    const handleNext = () => setCurrentPage((prev) => ({ ...prev, page: Math.min(prev.page + 1, totalPages) }));
-
-    const generatePageNumbers = () => {
-        const pages = [];
-        const visiblePages = 5;
-
-        if (totalPages <= 10) {
-            return Array.from({ length: totalPages }, (_, i) => i + 1);
-        }
-
-        for (let i = 1; i <= visiblePages; i++) {
-            pages.push(i);
-        }
-
-        if (currentPage > visiblePages + 1) {
-            pages.push('...');
-        }
-
-        if (currentPage > visiblePages && currentPage < totalPages - visiblePages + 1) {
-            pages.push(currentPage);
-        }
-
-        if (currentPage < totalPages - visiblePages) {
-            pages.push('...');
-        }
-
-        for (let i = totalPages - visiblePages + 1; i <= totalPages; i++) {
-            pages.push(i);
-        }
-
-        return pages;
+    const handlePageChange = (newPage) => {
+        if (newPage < 1 || newPage > totalPages) return;
+        set(newPage);
+        setCurrentPage(newPage);
     };
 
+    const getPageNumbers = () => {
+        if (totalPages <= 2) return Array.from({ length: totalPages }, (_, i) => i + 1);
+
+        const pages = new Set([1, totalPages]);
+
+        if (currentPage > 2) pages.add(currentPage - 1);
+        pages.add(currentPage);
+        if (currentPage < totalPages - 1) pages.add(currentPage + 1);
+
+        return Array.from(pages).sort((a, b) => a - b);
+    };
+
+    const pagesToDisplay = getPageNumbers();
+
     return (
-        <div>
-            <div>
-                <span>Page {currentPage} / {totalPages}</span>
-                <button onClick={handlePrev} disabled={currentPage === 1}>Prev</button>
-                {generatePageNumbers().map((page, index) => (
-                    <button
-                        key={index}
-                        onClick={() => typeof page === 'number' && setCurrentPage((prev) => ({ ...prev, page }))}
-                        disabled={currentPage === page}
-                    >
-                        {page}
-                    </button>
-                ))}
-                <button onClick={handleNext} disabled={currentPage === totalPages}>Next</button>
-            </div>
-        </div>
+        <Fragment>
+            <span>Page {currentPage} / {totalPages}</span>
+
+            {totalPages > 1 && (
+                <Button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage <= 1}
+                >
+                    Prev
+                </Button>
+            )}
+
+            {pagesToDisplay.map((num, index) => (
+                <Fragment key={index}>
+                    {index > 0 && num !== pagesToDisplay[index - 1] + 1 && <span> ... </span>}
+                    <Button key={index} onClick={() => handlePageChange(num)} disabled={currentPage === num}>
+                        {num}
+                    </Button>
+                </Fragment>
+            ))}
+
+            {totalPages > 1 && (
+                <Button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage >= totalPages}
+                >
+                    Next
+                </Button>
+            )}
+        </Fragment>
     );
 };
 

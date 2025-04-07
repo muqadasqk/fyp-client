@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async";
-import { DashboardBreadcrumb, Loading } from "@components";
+import { Spinner } from "@components";
 import { Fragment } from "react";
 
 const DashboardContent = ({ title = "", description = "", isLoading, children }) => {
@@ -12,9 +12,8 @@ const DashboardContent = ({ title = "", description = "", isLoading, children })
       </Helmet>
 
       <div>
-        {isLoading && <Loading />}
-        <DashboardBreadcrumb />
-        <h2>{title}</h2>
+        {isLoading && <Spinner />}
+        {title && <h2>{title}</h2>}
         {description && <p>{description}</p>}
         <div>{children}</div>
       </div>

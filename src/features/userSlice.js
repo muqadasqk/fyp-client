@@ -3,17 +3,25 @@ import { apiRequest } from "@utils"
 
 const initialState = {
     users: [],
-    metadata: {},
+    pagination: {},
     loading: false
 }
 
 export const retrieveUsers = createAsyncThunk("user/retrieveUsers",
-    async (params, { rejectWithValue }) => {
+    async (page, { rejectWithValue }) => {
         try {
-            const { data } = await apiRequest.get("/users", {
-                params,
-                showSuccessToast: false,
-            });
+            const { data } = await apiRequest.post("/users/all", { page }, { showSuccessToast: false });
+            return data;
+        } catch (error) {
+            return rejectWithValue(error.respone?.data);
+        }
+    }
+)
+
+export const updateStatus = createAsyncThunk("user/updateStatus",
+    async ({ id, statusCode }, { rejectWithValue }) => {
+        try {
+            const { data } = await apiRequest.patch(`/users/${id}`, { statusCode });
             return data;
         } catch (error) {
             return rejectWithValue(error.respone?.data);
@@ -27,15 +35,30 @@ const userSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
+            // retrieve all
             .addCase(retrieveUsers.pending, (state) => {
                 state.loading = true;
             })
             .addCase(retrieveUsers.fulfilled, (state, action) => {
                 state.loading = false;
                 state.users = action.payload.users;
-                state.metadata = action.payload.metadata;
+                state.pagination = action.payload.pagination;
             })
             .addCase(retrieveUsers.rejected, (state) => {
+                state.loading = false;
+            })
+
+            // update status
+            .addCase(updateStatus.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(updateStatus.fulfilled, (state, action) => {
+                state.loading = false;
+                state.users = state.users.map((user) =>
+                    user._id === action.payload.user._id ? action.payload.user : user
+                );
+            })
+            .addCase(updateStatus.rejected, (state) => {
                 state.loading = false;
             })
     }

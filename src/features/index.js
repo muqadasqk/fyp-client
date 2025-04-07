@@ -8,4 +8,4 @@ export { signup, confirmEmail, signin, signout, resetPassword, verifyOtp, sendOt
 
 // users
 export { default as userReducer } from "./userSlice";
-export { retrieveUsers } from "./userSlice";
+export { retrieveUsers, updateStatus } from "./userSlice";

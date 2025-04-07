@@ -12,22 +12,28 @@ const signupSchema = z.object({
         .min(6, { message: "Email must be at least 6 characters long" })
         .max(255, { message: "Email must not exceed 255 characters" }),
 
-    nic: z
+    cnic: z
         .string()
-        .length(13, { message: "NIC must be exactly 13 digits" })
+        .length(13, { message: "CNIC No. must be exactly 13 digits" })
         .regex(/^\d{13}$/, { message: "NIC must contain only digits" }),
+
+    phone: z
+        .string()
+        .regex(/^(3[0-3,7]\d{8})$/, { message: "Enter a valid Phone number (10-digits)" })
+        .optional()
+        .or(z.literal("")),
 
     rollNo: z
         .string()
-        .regex(/^[0-9]{2}[a-zA-Z]{2}[0-9]{3}$/, { message: "Invalid roll number format (e.g., 21SW066)" })
+        .regex(/^[0-9]{2}[a-zA-Z]{2}[0-9]{3}$/, { message: "Invalid Roll No. format (e.g., 21SW066)" })
         .optional()
         .or(z.literal("")),
 
     role: z
         .string()
-        .min(1, { message: "The role field is required" })
+        .min(1, { message: "The Role field is required" })
         .refine((val) => ["supervisor", "student"].includes(val), {
-            message: "Invalid role selection",
+            message: "Invalid Role selection",
         }),
 
     password: z
@@ -51,10 +57,6 @@ const signupSchema = z.object({
 });
 
 const confirmEmailSchema = z.object({
-    email: z
-        .string()
-        .email({ message: "Invalid email address" })
-        .min(6, { message: "Email must be at least 6 characters long" }),
     otp: z
         .string()
         .min(6, { message: "The OTP field is required" })
@@ -64,9 +66,9 @@ const confirmEmailSchema = z.object({
 
 const signinSchema = z.object({
     username: z
-        .string().min(1, { message: "The username field is required" }),
+        .string().min(1, { message: "The Username field is required" }),
     password: z
-        .string().min(1, { message: "The password field is required" }),
+        .string().min(1, { message: "The Password field is required" }),
 });
 
 const resetPasswordSchema = z
@@ -87,10 +89,6 @@ const resetPasswordSchema = z
 
 
 const verifyOtpSchema = z.object({
-    email: z
-        .string()
-        .email({ message: "Invalid email address" })
-        .min(6, { message: "Email must be at least 6 characters long" }),
     otp: z
         .string()
         .min(6, { message: "The OTP field is required" })
@@ -101,8 +99,8 @@ const verifyOtpSchema = z.object({
 const sendOtpSchema = z.object({
     email: z
         .string()
-        .email({ message: "Invalid email address" })
-        .min(6, { message: "Email must be at least 6 characters long" })
+        .email({ message: "Invalid Email address" })
+        .min(6, { message: "Email must be at least 6 characters long" }),
 });
 
 export { signupSchema, confirmEmailSchema, signinSchema, resetPasswordSchema, verifyOtpSchema, sendOtpSchema };

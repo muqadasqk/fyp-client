@@ -37,7 +37,7 @@ axiosInstance.interceptors.response.use(
     },
     (error) => {
         if (error.config?.showToast && error.config?.showErrorToast) {
-            showErrorToast(error.response?.data?.message ?? "Something went wrong");
+            showErrorToast(error.smessage ?? (error.response?.data?.message ?? "Something went wrong"));
         }
         return Promise.reject(error);
     }

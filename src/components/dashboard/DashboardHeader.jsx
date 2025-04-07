@@ -14,7 +14,7 @@ const DashboardHeader = ({ toggleSidebar }) => {
         <div>
           <div>
             <button onClick={toggleSidebar}><FaBars /></button>
-            <img src="/images/fyp-ms-logo" alt="FYP Management System" />
+            <img src="/images/fyp-ms-logo.png" alt="FYP Management System" width={20} />
           </div>
           <div>
             <button><FaEnvelope /></button>

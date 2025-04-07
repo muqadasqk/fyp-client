@@ -2,7 +2,7 @@ import { Fragment, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 
-const Input = ({ name, label, value, type = "text", icon, ...props }) => {
+const Input = ({ name, label, value, type = "text", optional, icon, ...props }) => {
     const { register, formState: { errors } } = useFormContext();
     const [showPassword, setShowPassword] = useState(false);
     const isPassword = type === "password";
@@ -10,7 +10,7 @@ const Input = ({ name, label, value, type = "text", icon, ...props }) => {
 
     return (
         <Fragment>
-            {label && <label htmlFor={name}>{label}</label>}
+            {label && <label htmlFor={name}>{label} {optional&& <em>(Optional)</em>}</label>}
 
             <div className="relative">
                 {/* {icon && <span className="absolute left-2 top-2">{icon}</span>} */}
@@ -19,7 +19,7 @@ const Input = ({ name, label, value, type = "text", icon, ...props }) => {
                     type={isPassword && showPassword ? "text" : type}
                     id={name}
                     className={`input-field ${errorMessage ? "input-error" : ""}`}
-                    {...register(name, { required: props.required ? `The ${name} field is required` : false })}
+                    {...register(name)}
                     defaultValue={value ?? undefined}
                     {...props}
                 />

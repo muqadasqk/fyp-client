@@ -1,16 +1,14 @@
-import loadingSpinner from "../../assets/icons/loading.spinner.svg";
+import { spinner } from "@assets";
+import { Link } from "react-router-dom";
 
-const Button = ({ isLoading, children, ...props }) => {
+const Button = ({ isLoading, href, children, ...props }) => {
+    if (href) return (
+        <Link to={href} {...props}>{children}</Link>
+    )
+
     return (
-        <button {...props} disabled={isLoading}>
-            {isLoading ? (
-                <>
-                    <img src={loadingSpinner} width={20} alt="Loading..." className="spinner-icon" />
-                    {children}
-                </>
-            ) : (
-                children
-            )}
+        <button disabled={isLoading} {...props}>
+            {isLoading ? <img src={spinner} width={15} /> : children}
         </button>
     );
 };

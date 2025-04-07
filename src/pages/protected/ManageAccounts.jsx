@@ -1,39 +1,85 @@
-import { DashboardContent, Pagination, RangeSector, SearchBar, Table } from "@components"
-import { retrieveUsers } from "@features";
+import { Button, DashboardContent, Pagination, RangeSelector, SearchBar, Sort, Table } from "@components";
+import { retrieveUsers, updateStatus } from "@features";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux"
+import { FaCross, FaLock, FaLockOpen, FaTrash } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 
 const ManageAccounts = () => {
     const dispatch = useDispatch();
-    const [params, setParams] = useState({ query: "", page: 1, limit: 10 });
-    const { loading, users, metadata } = useSelector((state) => state.users);
+    const { users, pagination, loading } = useSelector((state) => state.users);
+    const [page, setPage] = useState({ current: 1, size: 10, query: {}, sort: { createdAt: -1 } });
 
     useEffect(() => {
-        dispatch(retrieveUsers(params));
-    }, [params]);
+        dispatch(retrieveUsers(page));
+    }, [page, dispatch]);
 
-    const handleChange = ({ target }) => {
-        setParams((pre) => ({ ...pre, [target.name]: target.value }));
+    const handle = (id, action) => {
+        let statusCode;
+        switch (action) {
+            case "Approve": statusCode = 20001; break;
+            case "Reject": statusCode = 20002; break;
+            case "Lock": statusCode = 20003; break;
+            case "Unlock": statusCode = 20004; break;
+        }
+
+        dispatch(updateStatus({ id, statusCode }));
     }
 
     return (
-        <DashboardContent isLoading={loading} title="Manage Accounts" description="Manage user accounts | Approve/Reject account requests">
-            <h1>All Users</h1>
+        <DashboardContent title="Manage Supervisor and Student Accounts" description="Manage Supervisor and Student Accounts | Approve/Reject account requests">
             <div>
-                <div>
-                    <RangeSector onChange={handleChange} value={params.limit} />
-                    <SearchBar placeholder="Search users name, email, nic, roll no, roll, status..." onChange={handleChange} value={params.query} />
-                </div>
-                <Table
-                    isLoading={loading}
-                    heads={["name", "email", "nic", "rollNo", "role", "image", "status", "verifiedAt"]}
-                    items={users}
+                <RangeSelector
+                    value={page.size}
+                    onChange={({ target }) => setPage((p) => ({ ...p, size: target.value }))}
                 />
-
-                <Pagination paginationData={metadata} setCurrentPage={setParams} />
+                <SearchBar
+                    fields={{
+                        name: "Name",
+                        email: "Email",
+                        phone: "Phone",
+                        nic: "CNIC No.",
+                        rollNo: "Roll No.",
+                        role: "Role",
+                        status: "Account Status"
+                    }}
+                    set={(query) => setPage((p) => ({ ...p, query }))}
+                />
+                <Sort
+                    fields={{
+                        createdAt: "Date",
+                        name: "Name",
+                        email: "Email",
+                        cnic: "CNIC No.",
+                        phone: "Phone Number",
+                        status: "Account Status",
+                    }}
+                    set={(sort) => setPage((p) => ({ ...p, sort }))}
+                />
             </div>
-        </DashboardContent>
-    )
-}
 
-export default ManageAccounts
+            <Table
+                isLoading={loading}
+                records={users}
+                fields={{
+                    name: "Full Name",
+                    email: "Email Address",
+                    cnic: "CNIC No.",
+                    phone: "Phone Number",
+                    rollNo: "Roll No.",
+                    role: "Role",
+                    status: "Account Status"
+                }}
+                actions={[
+                    { label: "Approve", icon: <FaTrash />, ShowWhen: { status: "approvalPending" }, fn: handle },
+                    { label: "Reject", icon: <FaCross />, ShowWhen: { status: "approvalPending" }, fn: handle },
+                    { label: "Lock", icon: <FaLock />, ShowWhen: { status: "active" }, fn: handle },
+                    { label: "Unlock", icon: <FaLockOpen />, ShowWhen: { status: "inactive" }, fn: handle },
+                ]}
+            />
+
+            <Pagination data={pagination} set={(current) => setPage((p) => ({ ...p, current }))} />
+        </DashboardContent>
+    );
+};
+
+export default ManageAccounts;

@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signout } from "@features";
 import { useAuth } from "@hooks";
+import { Button } from "@components";
 
 const admin = [
   { icon: <FaHome />, text: "Admin Dashboard", href: "/" },
@@ -43,14 +44,14 @@ const DashboardSidebar = ({ toggleSidebar }) => {
     <aside>
       <div>
         <div>
-          <img src="/images/fyp-ms-logo.png" alt="FYP Management System" />
+          <img src="/images/fyp-ms-logo.png" alt="FYP Management System" width={20} />
           <button onClick={toggleSidebar}><FaTimes /></button>
         </div>
         <Navigatinons />
         <div>
-          <button onClick={() => dispatch(signout())}>
+          <Button onClick={() => dispatch(signout())}>
             <FaSignOutAlt /> Signout
-          </button>
+          </Button>
         </div>
       </div>
     </aside>
