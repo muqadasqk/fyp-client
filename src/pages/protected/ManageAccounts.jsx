@@ -34,44 +34,48 @@ const ManageAccounts = () => {
     return (
         <DashboardContent title="Manage Supervisor and Student Accounts" description="Manage Supervisor and Student Accounts | Approve/Reject account requests">
             <div>
-                <Button type="button" onClick={() => setSelectRoleForm(true)}>
-                    <FaPlus /> Add a Supervisor/Student
-                </Button>
+                <div>
+                    <Button type="button" onClick={() => setSelectRoleForm(true)}>
+                        <FaPlus /> Add a Supervisor/Student
+                    </Button>
 
-                {selectRoleForm && <ul>
-                    <li onClick={() => handleRoleForm("supervisor")}>A Supervisor</li>
-                    <li onClick={() => handleRoleForm("student")}>A Student</li>
-                </ul>}
+                    {selectRoleForm && <ul>
+                        <li onClick={() => handleRoleForm("supervisor")}>A Supervisor</li>
+                        <li onClick={() => handleRoleForm("student")}>A Student</li>
+                    </ul>}
 
-                {role && <CreateUserForm isLoading={loading} role={role} closeForm={(v) => setRole(v && null)} />}
+                    {role && <CreateUserForm isLoading={loading} role={role} closeForm={(v) => setRole(v && null)} />}
+                </div>
 
-                <RangeSelector
-                    value={page.size}
-                    onChange={({ target }) => setPage((p) => ({ ...p, size: target.value }))}
-                />
-                <SearchBar
-                    fields={{
-                        name: "Name",
-                        email: "Email",
-                        phone: "Phone",
-                        nic: "CNIC No.",
-                        rollNo: "Roll No.",
-                        role: "Role",
-                        status: "Account Status"
-                    }}
-                    set={(query) => setPage((p) => ({ ...p, query }))}
-                />
-                <Sort
-                    fields={{
-                        createdAt: "Date",
-                        name: "Name",
-                        email: "Email",
-                        cnic: "CNIC No.",
-                        phone: "Phone Number",
-                        status: "Account Status",
-                    }}
-                    set={(sort) => setPage((p) => ({ ...p, sort }))}
-                />
+                <div>
+                    <RangeSelector
+                        value={page.size}
+                        onChange={({ target }) => setPage((p) => ({ ...p, size: target.value }))}
+                    />
+                    <SearchBar
+                        fields={{
+                            name: "Name",
+                            email: "Email",
+                            phone: "Phone",
+                            nic: "CNIC No.",
+                            rollNo: "Roll No.",
+                            role: "Role",
+                            status: "Account Status"
+                        }}
+                        set={(query) => setPage((p) => ({ ...p, query }))}
+                    />
+                    <Sort
+                        fields={{
+                            createdAt: "Date",
+                            name: "Name",
+                            email: "Email",
+                            cnic: "CNIC No.",
+                            phone: "Phone Number",
+                            status: "Account Status",
+                        }}
+                        set={(sort) => setPage((p) => ({ ...p, sort }))}
+                    />
+                </div>
             </div>
 
             <Table
@@ -94,7 +98,9 @@ const ManageAccounts = () => {
                 ]}
             />
 
-            <Pagination data={pagination} set={(current) => setPage((p) => ({ ...p, current }))} />
+            <div>
+                <Pagination data={pagination} set={(current) => setPage((p) => ({ ...p, current }))} />
+            </div>
         </DashboardContent>
     );
 };
