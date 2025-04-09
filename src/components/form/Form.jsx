@@ -3,10 +3,16 @@ import { useForm, FormProvider } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 import { clearErrors } from "@features";
 
+// method to reset the form fields
+export let resetForm;
+
 const Form = ({ children, onSubmit, resolver, defaultValues = {}, ...props }) => {
     const dispatch = useDispatch();
     const { errors } = useSelector((state) => state.ui);
     const methods = useForm({ defaultValues, resolver, mode: "onTouched" });
+
+    // method to reset the form fields
+    resetForm = () => methods.reset();
 
     useEffect(() => {
         dispatch(clearErrors());

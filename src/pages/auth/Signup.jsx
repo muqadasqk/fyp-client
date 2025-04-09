@@ -64,7 +64,12 @@ const Signup = () => {
                     label="Password"
                     placeholder="Create a strong password"
                 />
-                <Input label="Profile Photo" type="file" name="image" accept=".jpg,.jpeg,.png" />
+                <Input
+                    type="file"
+                    name="image"
+                    label="Profile Photo"
+                    accept=".jpg,.jpeg,.png"
+                />
 
                 <Button type="submit" isLoading={loading} >Sign Up</Button>
             </Form>

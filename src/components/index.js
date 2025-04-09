@@ -22,7 +22,14 @@ export { default as DashboardHeader } from "./dashboard/DashboardHeader";
 export { default as DashboardSidebar } from "./dashboard/DashboardSidebar";
 
 // form components
-export { default as Form } from "./form/Form";
+export { default as Form, resetForm } from "./form/Form";
 export { default as Input } from "./form/Input";
 export { default as Select } from "./form/Select";
 export { default as TextArea } from "./form/TextArea";
+
+// profile components
+export { default as ProfileForm } from "./profile/ProfileForm";
+export { default as UpdatePasswordForm } from "./profile/UpdatePasswordForm";
+
+// uers components
+export { default as CreateUserForm } from "./users/CreateUserForm";

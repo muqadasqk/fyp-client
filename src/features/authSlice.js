@@ -223,5 +223,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { signout, clearEmailForOtp, clearResetPasswordToken } = authSlice.actions;
+export const { update, signout, clearEmailForOtp, clearResetPasswordToken } = authSlice.actions;
 export default authSlice.reducer;

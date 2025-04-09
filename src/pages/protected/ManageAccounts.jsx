@@ -1,12 +1,14 @@
-import { Button, DashboardContent, Pagination, RangeSelector, SearchBar, Sort, Table } from "@components";
+import { Button, CreateUserForm, DashboardContent, Pagination, RangeSelector, SearchBar, Sort, Table } from "@components";
 import { retrieveUsers, updateStatus } from "@features";
 import { useEffect, useState } from "react";
-import { FaCross, FaLock, FaLockOpen, FaTrash } from "react-icons/fa";
+import { FaCross, FaLock, FaLockOpen, FaPlus, FaPlusSquare, FaTrash } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 
 const ManageAccounts = () => {
     const dispatch = useDispatch();
     const { users, pagination, loading } = useSelector((state) => state.users);
+    const [selectRoleForm, setSelectRoleForm] = useState(false);
+    const [role, setRole] = useState(null);
     const [page, setPage] = useState({ current: 1, size: 10, query: {}, sort: { createdAt: -1 } });
 
     useEffect(() => {
@@ -25,9 +27,24 @@ const ManageAccounts = () => {
         dispatch(updateStatus({ id, statusCode }));
     }
 
+    const handleRoleForm = (role) => {
+        setRole(role); setSelectRoleForm(false);
+    }
+
     return (
         <DashboardContent title="Manage Supervisor and Student Accounts" description="Manage Supervisor and Student Accounts | Approve/Reject account requests">
             <div>
+                <Button type="button" onClick={() => setSelectRoleForm(true)}>
+                    <FaPlus /> Add a Supervisor/Student
+                </Button>
+
+                {selectRoleForm && <ul>
+                    <li onClick={() => handleRoleForm("supervisor")}>A Supervisor</li>
+                    <li onClick={() => handleRoleForm("student")}>A Student</li>
+                </ul>}
+
+                {role && <CreateUserForm isLoading={loading} role={role} closeForm={(v) => setRole(v && null)} />}
+
                 <RangeSelector
                     value={page.size}
                     onChange={({ target }) => setPage((p) => ({ ...p, size: target.value }))}

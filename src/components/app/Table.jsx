@@ -1,10 +1,9 @@
-import { spinner } from "@assets";
 import { Button } from "@components";
 
-const Table = ({ fields, records, actions, isLoading }) => {
+const Table = ({ fields, records, actions, ...prop }) => {
     return (
         <div>
-            <table>
+            <table {...prop}>
                 <thead>
                     <tr>
                         {Object.entries(fields).map(([key, label]) => (
@@ -14,20 +13,19 @@ const Table = ({ fields, records, actions, isLoading }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {/* {isLoading && <tr>
-                        <td><img src={spinner} alt="Loading spinner" width={20} /></td>
-                    </tr>} */}
                     {records.length >= 1 ? records.map((record) => (
                         <tr key={record._id}>
                             {Object.keys(fields).map((field) => (
-                                <td key={field}>{record[field]}</td>
+                                <td key={field}>{record[field] ?? "N/A"}</td>
                             ))}
                             {actions && <td>
                                 {actions.map(({ label, icon = null, ShowWhen, fn }) => {
                                     const k = Object.keys(ShowWhen)[0];
-                                    if (record[k] === ShowWhen[k]) return <Button key={label} onClick={() => fn(record._id, label)}>
-                                        {icon && icon} {label}
-                                    </Button>
+                                    if (record[k] === ShowWhen[k]) {
+                                        return <Button key={label} onClick={() => fn(record._id, label)}>
+                                            {icon && icon} {label}
+                                        </Button>
+                                    }
                                 })}
                             </td>}
                         </tr>
