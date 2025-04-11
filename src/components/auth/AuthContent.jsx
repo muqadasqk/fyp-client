@@ -1,23 +1,25 @@
-import React from 'react'
+import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 const AuthContent = ({ title = "Title", description = "Description", children }) => {
     return (
-        <div>
+        <div className="w-full">
             <Helmet>
                 <html lang="en" />
                 <title>{title}</title>
                 <meta name="description" content={description} />
             </Helmet>
 
-            <div>
-                <h3>{title}</h3>
-                <p>{description}</p>
+            <div className="text-center mb-6">
+                <h3 className="text-2xl font-bold text-gray-800">{title}</h3>
+                <p className="text-sm text-gray-500 mt-1">{description}</p>
+            </div>
 
-                <div>{children}</div>
+            <div>
+                {children}
             </div>
         </div>
     );
-}
+};
 
-export default AuthContent
+export default AuthContent;
