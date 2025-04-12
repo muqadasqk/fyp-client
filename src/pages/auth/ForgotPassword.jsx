@@ -21,7 +21,7 @@ const ForgotPassword = () => {
         <AuthContent title="Forgot Password" description="Enter your account email address">
             <Form onSubmit={handleSendOtp} resolver={zodResolver(sendOtpSchema)}>
                 <Input label="Email Address" name="email" placeholder="Enter your account email" />
-                <Button type="submit" isLoading={loading}>Send OTP</Button>
+                <Button type="submit" isLoading={loading} className="w-full my-4">Send OTP</Button>
             </Form>
 
             <div>

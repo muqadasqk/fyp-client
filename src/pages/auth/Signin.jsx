@@ -42,7 +42,7 @@ const Signin = () => {
                 <div className="text-right">
                     <Link
                         to="/forgot-password"
-                        className="text-sm text-blue-600 hover:underline"
+                        className="text-sm text-blue-600 py-2 hover:underline"
                     >
                         Forgot Password?
                     </Link>

@@ -11,7 +11,7 @@ const Input = ({ name, label, optional, type = "text", ...props }) => {
   return (
     <Fragment>
       {label && (
-        <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor={name} className="font-medium text-sm text-gray-700 mb-1">
           {label} {optional && <em className="text-gray-400 text-xs">(Optional)</em>}
         </label>
       )}
@@ -30,15 +30,15 @@ const Input = ({ name, label, optional, type = "text", ...props }) => {
         {isPassword && (
           <span
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-2.5 cursor-pointer text-gray-500"
+            className="absolute right-3 top-2.5 cursor-pointer text-gray-500 my-1 "
           >
-            {showPassword ? <BsEyeSlash size={18} /> : <BsEye size={18} />}
+            {showPassword ? <BsEyeSlash size={14} /> : <BsEye size={18} />}
           </span>
         )}
       </div>
 
       {errorMessage && (
-        <p className="mt-2 text-sm text-red-600">{errorMessage}</p>
+        <p className="mt-2 text-sm text-red-600 italic">{errorMessage}</p>
       )}
     </Fragment>
   );
