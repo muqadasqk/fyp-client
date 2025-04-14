@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearEmailForOtp, confirmEmail, sendOtp, signup } from "@features";
 import { useState } from "react";
 import { FaUser } from "react-icons/fa";
+
 const Signup = () => {
     const dispatch = useDispatch();
     const [role, setRole] = useState("student");
@@ -19,52 +20,49 @@ const Signup = () => {
     if (emailForOtp) return <EmailConfirmationForm />;
 
     return (
-        <AuthContent title="Sign Up" description="It's simple and easy!">
-            <div className="flex justify-center">
-                <Form className="w-full   " onSubmit={handleSignup} resolver={zodResolver(signupSchema)} encType="multipart/form-data">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <AuthContent title="Sign Up" description="It's simple and easy!" className="w-[55%] my-10 ">
+            <div className="flex ">
+                <Form onSubmit={handleSignup} resolver={zodResolver(signupSchema)} encType="multipart/form-data">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:gap-4">
                         {/* Full Name Field */}
                         <div className="flex flex-col">
-                            <label htmlFor="name" className="font-medium text-sm text-gray-700 mb-1">Full Name</label>
-                            <Input name="name" id="name" className="w-full h-12" placeholder="Enter your name" />
+                            <Input name="name"
+                                label="Name"
+                                id="name"
+                                placeholder="Enter your name" />
                         </div>
 
                         {/* Email Field */}
                         <div className="flex flex-col">
-                            <label htmlFor="email" className="font-medium text-sm text-gray-700 mb-1">Email Address</label>
-                            <Input name="email" id="email" placeholder="Enter your email" className='w-full' />
+                            <Input name="email"
+                                label="Email" id="email"
+                                placeholder="Enter your email"
+                            />
                         </div>
                     </div>
 
                     {/* CNIC and Phone Number Fields */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                        <div className="flex flex-col">
-                            <label htmlFor="cnic" className="font-medium text-sm text-gray-700 mb-1">CNIC No.</label>
-                            <Input name="cnic" id="cnic" placeholder="NIC number(without dashes)" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:gap-4">
+                        <div className="flex flex-col m-0 p-0">
+                            <Input
+                                name="cnic"
+                                id="cnic"
+                                label="CNIC NO"
+                                placeholder="CNIC No. (without dashes)"
+                            />
                         </div>
                         <div className="flex flex-col">
-                            <label htmlFor="phone" className="font-medium text-sm text-gray-700 mb-1">Phone Number</label>
-                            <Input name="phone" id="phone" placeholder="Enter your phone number (10-digits)" optional />
+                            <Input
+                                label="Phone Number"
+                                name="phone"
+                                placeholder="Enter your phone number (10-digits)"
+                                optional
+                            />
                         </div>
                     </div>
 
-                    {/* Roll No. for Students */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 ">
-                        {role === "student" && (
-                            <div className="flex flex-col mt-4">
-                                <label htmlFor="rollNo" className="font-medium text-sm text-gray-700 mb-1">Roll No.</label>
-                                <Input name="rollNo" id="rollNo" placeholder="Enter your roll number (e.g., 21SW066)" />
-                            </div>
-                        )}
-
-                        {/* Password Field */}
-                        <div className="flex flex-col mt-4">
-                            <label htmlFor="password" className="font-medium text-sm text-gray-700 mb-1">Password</label>
-                            <Input type="password" name="password" id="password" placeholder="strong password" />
-                        </div>
-                    </div>
                     {/* Role Select */}
-                    <div className="flex flex-col mt-4">
+                    <div className="flex flex-col">
                         <label htmlFor="role" className="font-medium text-sm text-gray-700 mb-1">Your Role</label>
                         <Select
                             name="role"
@@ -79,10 +77,33 @@ const Signup = () => {
                             ]}
                         />
                     </div>
-                    {/* Profile Photo Field */}
-                    <div className="flex flex-col mt-4">
 
-                        <Input label="Profile Photo" type="file" name="image" accept=".jpg,.jpeg,.png" />
+                    {/* Roll No. for Students */}
+                    <div className={`grid grid-cols-1 md:grid-cols-${role === "student" ? "2" : "1"} lg:gap-4`}>
+                        {role === "student" && (
+                            <div className="flex flex-col ">
+                                <Input label="Roll No."
+                                    name="rollNo"
+                                    id="rollNo"
+                                    placeholder="Enter roll number (e.g., 21SW066)" />
+                            </div>
+                        )}
+
+                        {/* Password Field */}
+                        <div className="flex flex-col">
+                            <Input type="password"
+                                label="Password"
+                                name="password"
+                                id="password"
+                                placeholder="Create strong password" />
+                        </div>
+                    </div>
+
+                    {/* Profile Photo Field */}
+                    <div className="flex flex-col ">
+                        <Input label="Profile Photo"
+                            type="file" name="image"
+                            accept=".jpg,.jpeg,.png" />
                     </div>
 
                     {/* Submit Button */}
@@ -119,7 +140,7 @@ const EmailConfirmationForm = () => {
     };
 
     return (
-        <AuthContent title="Confirm Email" description="We just sent you an OTP to your email, confirm by entering below!">
+        <AuthContent title="Confirm Email" description="We just sent you an OTP to your email, confirm by entering below!"  className="w-[35%]" >
             <Form onSubmit={handleEmailConfirmation} resolver={zodResolver(confirmEmailSchema)}>
                 <Input
                     type="number"
@@ -128,7 +149,7 @@ const EmailConfirmationForm = () => {
                     placeholder="Enter a 6-digit OTP here"
                 />
 
-                <Button type="submit" isLoading={loading} >Confirm Now</Button>
+       <Button type="submit" isLoading={loading}  className="w-full mt-2">Confirm Now</Button>
             </Form>
 
             <div className="text-center mt-3">

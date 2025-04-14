@@ -3,7 +3,6 @@ import { signout } from "@features";
 import { useAuth } from "@hooks";
 import { FaBars, FaUser, FaSignOutAlt, FaBell } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
 
 const DashboardHeader = ({ toggleSidebar }) => {
     const dispatch = useDispatch();

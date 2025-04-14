@@ -1,9 +1,19 @@
+import clsx from 'clsx';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
-const AuthContent = ({ title = "Title", description = "Description", children }) => {
+const AuthContent = ({ title = "Title", description = "Description", className = "w-full", children }) => {
     return (
-        <div className="w-full">
+        <div
+            className={clsx(
+                "border-none rounded-lg lg:p-10 shadow ",
+                "lg:bg-white lg:border-gray-200",
+                "md:bg-white ",
+                "sm:bg-none sm:border-none"
+            ,
+                className
+            )}
+        >
             <Helmet>
                 <html lang="en" />
                 <title>{title}</title>

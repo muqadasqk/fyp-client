@@ -18,7 +18,7 @@ const ForgotPassword = () => {
     if (emailForOtp) return <VerifyOtpForm />
 
     return (
-        <AuthContent title="Forgot Password" description="Enter your account email address">
+        <AuthContent title="Forgot Password" description="Enter your account email address" className="w-[40%]">
             <Form onSubmit={handleSendOtp} resolver={zodResolver(sendOtpSchema)}>
                 <Input label="Email Address" name="email" placeholder="Enter your account email" />
                 <Button type="submit" isLoading={loading} className="w-full my-4">Send OTP</Button>

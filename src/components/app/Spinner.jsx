@@ -3,7 +3,7 @@ import { Overlay } from '@components'
 
 const Spinner = ({ size }) => {
     return (
-        <Overlay>
+        <Overlay >
             <img src={spinner} alt="Loading spinner" width={size} />
         </Overlay>
     )

@@ -9,16 +9,14 @@ const DashboardLayout = () => {
   const toggleSidebar = () => setSidebarOpen((prev) => !prev);
 
   return (
-    <div key={location.pathname}>
+    <div className="flex h-screen bg-gray-100" key={location.pathname}>
       <DashboardSidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
 
-      <div>
+      <div className="flex flex-col  flex-1 overflow-hidden">
         <DashboardHeader toggleSidebar={toggleSidebar} />
-        <main>
-          <div>
-            <Outlet />
-          </div>
-        </main>
+        <main className="flex-1 overflow-y-auto overflow-x-hidden p-6">
+           <Outlet />
+          </main>
       </div >
     </div>
   );

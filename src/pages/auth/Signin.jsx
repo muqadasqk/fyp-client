@@ -17,25 +17,24 @@ const Signin = () => {
         <AuthContent
             title="Sign In"
             description="Welcome back! Please enter your credentials to continue"
+            className="lg:w-[30%] "
         >
             <Form
                 onSubmit={handleSignin}
                 resolver={zodResolver(signinSchema)}
-                className="space-y-6"
+            // className="space-y-3"
             >
-                <div className="space-y-2">
+                <div>
                     <Input
                         name="username"
                         label="Username"
                         placeholder="Enter your username"
-                        className="w-full"
                     />
                     <Input
                         type="password"
                         name="password"
                         label="Password"
                         placeholder="Enter your password"
-                        className="w-full"
                     />
                 </div>
 
