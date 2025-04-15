@@ -18,7 +18,7 @@ const ForgotPassword = () => {
     if (emailForOtp) return <VerifyOtpForm />
 
     return (
-        <AuthContent title="Forgot Password" description="Enter your account email address" className="w-[40%]">
+        <AuthContent title="Forgot Password" description="Enter your account email address" className="w-[50%%]">
             <Form onSubmit={handleSendOtp} resolver={zodResolver(sendOtpSchema)}>
                 <Input label="Email Address" name="email" placeholder="Enter your account email" />
                 <Button type="submit" isLoading={loading} className="w-full my-4">Send OTP</Button>
@@ -49,16 +49,67 @@ const VerifyOtpForm = () => {
     }
 
     return (
-        <AuthContent title="Verify OTP" description="Verify the OTP code we just sent to your email address">
+        <AuthContent title="Verify OTP" description="Verify the OTP code we just sent to your email address" className="w-[35%]" >
             <Form onSubmit={handleVerifyOtp} resolver={zodResolver(verifyOtpSchema)}>
-                <Input
+                {/* <Input
                     type="number"
                     name="otp"
                     label="One Time Passcode"
                     placeholder="Enter a 6-digit OTP here"
-                />
+                /> */}
+                <div class="flex space-x-2">
+                    <input
+                        type="text"
+                        name="otp"
+                        maxlength="1"
+                        inputmode="numeric"
+                        class="w-12 h-12 text-center 
+         border border-gray-300 rounded-lg 
+         focus:outline-none focus:ring-2 
+         focus:ring-primary focus:border-primary-500"
+                    />
 
-                <Button type="submit" isLoading={loading}>Verify OTP</Button>
+                    <input type="number"
+                        name="otp"
+                        maxlength="1"
+                        class="w-12 h-12 text-center border
+                       border-gray-300 rounded-lg 
+         focus:outline-none focus:ring-2 
+         focus:ring-primary focus:border-primary-50" />
+
+                    <input type="number"
+                        name="otp"
+                        maxlength="1"
+                        class="w-12 h-12 text-center
+                           border border-gray-300 rounded-lg 
+         focus:outline-none focus:ring-2 
+         focus:ring-primary focus:border-primary-50" />
+
+                    <input type="number"
+                        name="otp"
+                        maxlength="1"
+                        class="w-12 h-12 text-center 
+                  border border-gray-300 rounded-lg 
+         focus:outline-none focus:ring-2 
+         focus:ring-primary focus:border-primary-50" />
+
+                    <input type="number"
+                        name="otp"
+                        maxlength="1"
+                        class="w-12 h-12 text-center
+                  border border-gray-300 rounded-lg 
+         focus:outline-none focus:ring-2 
+         focus:ring-primary focus:border-primary-50" />
+
+                    <input type="number"
+                        name="otp"
+                        maxlength="1"
+                        class="w-12 h-12 text-center
+                  border border-gray-300 rounded-lg 
+         focus:outline-none focus:ring-2 
+         focus:ring-primary focus:border-primary-50"/>
+                </div>
+                <Button type="submit" isLoading={loading} className="w-full mt-2">Verify OTP</Button>
             </Form>
 
             <div className="text-center mt-3">
@@ -67,7 +118,7 @@ const VerifyOtpForm = () => {
                 </small>
             </div>
 
-            <div>
+            <div className=" text-center mt-3">
                 <small>Want to signin your account? <Button href="/signin">Sign In</Button></small>
             </div>
         </AuthContent>
