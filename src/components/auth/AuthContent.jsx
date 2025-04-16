@@ -6,11 +6,8 @@ const AuthContent = ({ title = "Title", description = "Description", className =
     return (
         <div
             className={clsx(
-                "border-none rounded-lg lg:p-10 shadow ",
-                "lg:bg-white lg:border-gray-200",
-                "md:bg-white ",
-                "sm:bg-none sm:border-none"
-            ,
+                "border-0 p-10 w-full",
+                "sm:border sm:rounded sm:border-gray-200 sm:bg-white",
                 className
             )}
         >

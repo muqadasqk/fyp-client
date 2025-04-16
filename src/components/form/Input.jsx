@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
@@ -20,9 +21,13 @@ const Input = ({ name, label, optional, type = "text", ...props }) => {
         type={isPassword && showPassword ? "text" : type}
         id={name}
         {...register(name)}
+        className={clsx(
+          "mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary",
+          {
+            "border-red-500 focus:ring-red-500 focus:border-red-500": errorMessage,
+            "border-gray-300 focus:ring-primary focus:border-primary-500": !errorMessage,
+          })}
         {...props}
-        className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary ${errorMessage ? "border-red-500" : "border-gray-300"
-          }`}
       />
 
       {isPassword && (

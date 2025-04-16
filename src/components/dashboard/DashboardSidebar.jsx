@@ -1,61 +1,70 @@
-import { FaHome, FaCog, FaSignOutAlt, FaTimes } from "react-icons/fa";
+import { FaHome} from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { signout } from "@features";
 import { useAuth } from "@hooks";
+import { signout } from "@features";
 import { Button } from "@components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSignOutAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
+const common = [
+  { icon: <FaHome />, text: "Dashboard", href: "/" },
+];
 
 const admin = [
-    { icon: <FaHome />, text: "Admin Dashboard", href: "/" },
-    { icon: <FaHome />, text: "Manage Accounts", href: "/manage-accounts" },
-    { icon: <FaCog />, text: "Profile Settings", href: "/profile" },
+  { icon: <FaHome />, text: "Manage Accounts", href: "/manage-accounts" },
 ];
 
-const supervisor = [
-    { icon: <FaHome />, text: "Supervisor Dashboard", href: "/" },
-    { icon: <FaCog />, text: "Profile Settings", href: "/profile" },
-];
+const supervisor = [];
 
-const student = [
-    { icon: <FaHome />, text: "Student Dashboard", href: "/" },
-    { icon: <FaCog />, text: "Profile Settings", href: "/profile" },
-];
+const student = [];
 
 const Navigatinons = () => {
-    const { role } = useAuth();
-    const links = ({ admin, supervisor, student })[role];
+  const { role } = useAuth();
+  const links = ({ admin, supervisor, student })[role];
 
-    return (
-        <nav>
-            {links.map(({ icon, text, href }) => (
-                <NavLink key={href} to={href} className={({ isActive }) => isActive ? "active" : undefined} >
-                    {icon}{text}
-                </NavLink>
-            ))
-            }
-        </nav >
-    )
+  return (
+    <nav className="space-y-2 px-4">
+      {[...common, ...links].map(({ icon, text, href }) => (
+        <NavLink
+          key={href}
+          to={href}
+          className={({ isActive }) =>
+            `block px-4 py-2 rounded hover:bg-white/10 hover:text-white transition text-white ${isActive ? "bg-white/10" : ""
+            }`
+          }
+        >
+          <span className="inline-flex items-center gap-2">
+            {icon}
+            {text}
+          </span>
+        </NavLink>
+      ))}
+    </nav>
+  )
 }
 
-const DashboardSidebar = ({ toggleSidebar }) => {
-    const dispatch = useDispatch();
+const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
+  const dispatch = useDispatch();
 
-    return (
-        <aside>
-            <div>
-                <div>
-                    <img src="/images/fyp-ms-logo.png" alt="FYP Management System" width={20} />
-                    <button onClick={toggleSidebar}><FaTimes /></button>
-                </div>
-                <Navigatinons />
-                <div>
-                    <Button onClick={() => dispatch(signout())}>
-                        <FaSignOutAlt /> Signout
-                    </Button>
-                </div>
-            </div>
-        </aside>
-    );
+  return (
+    <div className={`text-white w-[80%] sm:w-[20%] space-y-6 py-7 absolute inset-y-0 transform ${isOpen ? "translate-x-0" : "-translate-x-full"}
+        md:relative md:translate-x-0 transition duration-200 ease-in-out z-20`}
+      style={{ background: "var(--background-color)" }}>
+      <div className="flex items-center justify-center px-4  ">
+        <img src="/images/fyp-ms-logo.png" alt="FYP Management System" className="w-20 h-20" />
+        <button onClick={toggleSidebar} className="md:hidden ms-40"
+        ><FontAwesomeIcon icon={faTimes} className="h-10 w-10" />
+        </button>
+      </div>
+      <Navigatinons />
+      <div className="absolute w-full bottom-4 p-4">
+        <Button onClick={() => dispatch(signout())}
+          className="w-full block rounded transition duration-500 text-white bg-[var(--out-line)] hover:bg-white/10">
+          <FontAwesomeIcon icon={faSignOutAlt} className="mr-3" /> Signout
+        </Button>
+
+      </div>
+    </div>
+  );
 };
-
 export default DashboardSidebar;

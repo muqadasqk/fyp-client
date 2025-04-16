@@ -9,7 +9,7 @@ import { FaUser } from "react-icons/fa";
 
 const Signup = () => {
     const dispatch = useDispatch();
-    const [role, setRole] = useState("student");
+    const [role, setRole] = useState("supervisor");
     const { loading, emailForOtp } = useSelector((state) => state.auth);
 
     const handleSignup = (data) => {
@@ -20,8 +20,12 @@ const Signup = () => {
     if (emailForOtp) return <EmailConfirmationForm />;
 
     return (
-        <AuthContent title="Sign Up" description="It's simple and easy!" className="w-[55%] my-10 ">
-            <div className="flex ">
+        <AuthContent
+            title="Sign Up"
+            description="It's simple and easy!"
+            className="md:w-[50%] my-10"
+        >
+            <div className="flex">
                 <Form onSubmit={handleSignup} resolver={zodResolver(signupSchema)} encType="multipart/form-data">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:gap-4">
                         {/* Full Name Field */}
@@ -63,11 +67,9 @@ const Signup = () => {
 
                     {/* Role Select */}
                     <div className="flex flex-col">
-                        <label htmlFor="role" className="font-medium text-sm text-gray-700 mb-1">Your Role</label>
                         <Select
                             name="role"
-                            id="role"
-                            icon={<FaUser className="text-gray-400" />}
+                            label="Role No."
                             placeholder="Please select your role"
                             value={role}
                             onChange={({ target }) => setRole(target.value)}
@@ -107,11 +109,14 @@ const Signup = () => {
                     </div>
 
                     {/* Submit Button */}
-                    <Button type="submit" isLoading={loading} className="w-full my-4">Sign Up</Button>
+                    <Button type="submit" isLoading={loading} className="w-full my-2">Sign Up</Button>
                 </Form>
             </div>
-            <div className="mt-2 text-center">
-                <small>Have an account? <Button href="/signin">Sign In</Button></small>
+
+            <div className="mt-4 text-center text-gray-600">
+                Got an account? <Button href="/signin">
+                    Sign In
+                </Button>
             </div>
         </AuthContent>
     );
@@ -140,7 +145,7 @@ const EmailConfirmationForm = () => {
     };
 
     return (
-        <AuthContent title="Confirm Email" description="We just sent you an OTP to your email, confirm by entering below!"  className="w-[35%]" >
+        <AuthContent title="Confirm Email" description="We just sent you an OTP to your email, confirm by entering below!" className="md:w-[50%%] lg:w-[35%]">
             <Form onSubmit={handleEmailConfirmation} resolver={zodResolver(confirmEmailSchema)}>
                 <Input
                     type="number"
@@ -149,17 +154,15 @@ const EmailConfirmationForm = () => {
                     placeholder="Enter a 6-digit OTP here"
                 />
 
-       <Button type="submit" isLoading={loading}  className="w-full mt-2">Confirm Now</Button>
+                <Button type="submit" isLoading={loading} className="w-full mt-2">Confirm Now</Button>
             </Form>
 
-            <div className="text-center mt-3">
-                <small>
-                    Didn't receive an OTP? <Button type="link" href="./" onClick={handleResendOtp}>Resend Now</Button>
-                </small>
+            <div className="mt-4 text-center text-gray-600">
+                Didn't receive an OTP? <Button href="./" onClick={handleResendOtp}>Resend Now</Button>
             </div>
 
-            <div className="mt-4 text-center">
-                <small>Want to sign in to your account? <Button href="/signin">Sign In</Button></small>
+            <div className="mt-1 text-center text-gray-600">
+                Want to sign in to your account? <Button href="/signin">Sign In</Button>
             </div>
         </AuthContent>
     );

@@ -7,25 +7,20 @@ const Select = ({
     value,
     placeholder,
     icon,
+    optional,
     options = [],
     ...props
 }) => {
     const {
         register,
-        watch,
         formState: { errors },
     } = useFormContext();
-
-    const selectedValue = watch(name, value ?? "");
 
     return (
         <div className="relative pb-3">
             {label && (
-                <label
-                    htmlFor={name}
-                    className="block text-gray-700 "
-                >
-                    {label}
+                <label htmlFor={name} className="font-medium text-gray-700">
+                    {label} {optional && <em className="text-gray-400 ">(Optional)</em>}
                 </label>
             )}
 
@@ -34,16 +29,20 @@ const Select = ({
                     {icon}
                 </div>
             )} */}
-           
-                defaultValue={selectedValue} <select
+
+            <select
+                defaultValue={value}
                 id={name}
-                    className={clsx("block w-full appearance-none px-3 py-2 bg-white rounded-md shadow-sm focus:outline-none transition duration-150 ease-in-out",
-                        { "border-red-500 focus:ring-red-500 focus:border-red-500": errors[name],
-                          "border-gray-300 focus:ring-primary focus:border-primary-500": !errors[name],
-                        }
-                      )}
                 {...register(name)}
+                className={clsx(
+                    `mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary`,
+                    {
+                        "border-red-500 focus:ring-red-500 focus:border-red-500": errors[name],
+                        "border-gray-300 focus:ring-primary focus:border-primary-500": !errors[name],
+                    }
+                )}
                 {...props}
+
             >
                 <option value="" disabled>
                     {placeholder ?? "Choose one..."}

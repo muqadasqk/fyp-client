@@ -7,15 +7,15 @@
 /* ============================================= */
 :root {
     --primary-color: #005BAB;
-    --secondary-color: #A3C53A;
+    --secondary-color: #8d3ac5;
     --text-color: #333;
     --out-line:#1A438D;
-    --background-color: #f9f9f9;
+    --background-color:#005BAB;
     --link-color: #2980b9;
     --link-hover-color: #1c5981;
     --white-color: #FFFFFF;
     color-scheme: light dark;
-    
+    --border-color : gray;
 
   }
   
@@ -38,6 +38,7 @@
     -moz-osx-font-smoothing: grayscale;
     color: var(--text-color);
     background-color: var(--background-color);
+    border-color: var(--border-color);
   }
   
   /* ============================================= */
@@ -99,6 +100,7 @@
     }
   
     a,
+    button,
     p {
       font-size: 1rem;
       
@@ -141,8 +143,9 @@
     }
   
     a,
+    button,
     p {
-      font-size: 1rem;
+      font-size: 2rem;
      
     }
   

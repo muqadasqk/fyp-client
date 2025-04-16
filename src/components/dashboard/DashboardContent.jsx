@@ -1,7 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { Spinner } from "@components";
 import { Fragment } from "react";
-
 const DashboardContent = ({ title = "", description = "", isLoading, children }) => {
     return (
         <Fragment>

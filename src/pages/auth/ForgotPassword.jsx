@@ -18,14 +18,14 @@ const ForgotPassword = () => {
     if (emailForOtp) return <VerifyOtpForm />
 
     return (
-        <AuthContent title="Forgot Password" description="Enter your account email address" className="w-[50%%]">
+        <AuthContent title="Forgot Password" description="Enter your account email address" className="md:w-[50%%] lg:w-[35%]">
             <Form onSubmit={handleSendOtp} resolver={zodResolver(sendOtpSchema)}>
                 <Input label="Email Address" name="email" placeholder="Enter your account email" />
-                <Button type="submit" isLoading={loading} className="w-full my-4">Send OTP</Button>
+                <Button type="submit" isLoading={loading} className="w-full mt-2">Send OTP</Button>
             </Form>
 
-            <div>
-                <small>Want to signin your account? <Button href="/signin">Sign In</Button></small>
+            <div className="mt-4 text-center text-gray-600">
+                Want to signin your account? <Button href="/signin">Sign In</Button>
             </div>
         </AuthContent>
     )
@@ -49,77 +49,23 @@ const VerifyOtpForm = () => {
     }
 
     return (
-        <AuthContent title="Verify OTP" description="Verify the OTP code we just sent to your email address" className="w-[35%]" >
+        <AuthContent title="Verify OTP" description="Verify the OTP code we just sent to your email address" className="md:w-[50%%] lg:w-[35%]" >
             <Form onSubmit={handleVerifyOtp} resolver={zodResolver(verifyOtpSchema)}>
-                {/* <Input
+                <Input
                     type="number"
                     name="otp"
                     label="One Time Passcode"
                     placeholder="Enter a 6-digit OTP here"
-                /> */}
-                <div class="flex space-x-2">
-                    <input
-                        type="text"
-                        name="otp"
-                        maxlength="1"
-                        inputmode="numeric"
-                        class="w-12 h-12 text-center 
-         border border-gray-300 rounded-lg 
-         focus:outline-none focus:ring-2 
-         focus:ring-primary focus:border-primary-500"
-                    />
-
-                    <input type="number"
-                        name="otp"
-                        maxlength="1"
-                        class="w-12 h-12 text-center border
-                       border-gray-300 rounded-lg 
-         focus:outline-none focus:ring-2 
-         focus:ring-primary focus:border-primary-50" />
-
-                    <input type="number"
-                        name="otp"
-                        maxlength="1"
-                        class="w-12 h-12 text-center
-                           border border-gray-300 rounded-lg 
-         focus:outline-none focus:ring-2 
-         focus:ring-primary focus:border-primary-50" />
-
-                    <input type="number"
-                        name="otp"
-                        maxlength="1"
-                        class="w-12 h-12 text-center 
-                  border border-gray-300 rounded-lg 
-         focus:outline-none focus:ring-2 
-         focus:ring-primary focus:border-primary-50" />
-
-                    <input type="number"
-                        name="otp"
-                        maxlength="1"
-                        class="w-12 h-12 text-center
-                  border border-gray-300 rounded-lg 
-         focus:outline-none focus:ring-2 
-         focus:ring-primary focus:border-primary-50" />
-
-                    <input type="number"
-                        name="otp"
-                        maxlength="1"
-                        class="w-12 h-12 text-center
-                  border border-gray-300 rounded-lg 
-         focus:outline-none focus:ring-2 
-         focus:ring-primary focus:border-primary-50"/>
-                </div>
+                />
                 <Button type="submit" isLoading={loading} className="w-full mt-2">Verify OTP</Button>
             </Form>
 
-            <div className="text-center mt-3">
-                <small>
-                    Didn't receive an OTP? <Button href="./" onClick={handleResendOtp}>Resend Now</Button>
-                </small>
+            <div className="mt-4 text-center text-gray-600">
+                Didn't receive an OTP? <Button href="./" onClick={handleResendOtp}>Resend Now</Button>
             </div>
 
-            <div className=" text-center mt-3">
-                <small>Want to signin your account? <Button href="/signin">Sign In</Button></small>
+            <div className="mt-1 text-center text-gray-600">
+                Want to signin your account? <Button href="/signin">Sign In</Button>
             </div>
         </AuthContent>
     )
@@ -138,7 +84,7 @@ const SetPasswordForm = () => {
     };
 
     return (
-        <AuthContent title="Set a new Password" description="Set a new strong password for your account">
+        <AuthContent title="Set a new Password" description="Set a new strong password for your account" className="md:w-[50%] lg:w-[35%]">
             <Form onSubmit={handleSetPassword} resolver={zodResolver(resetPasswordSchema)}>
                 <Input
                     type="password"
@@ -153,13 +99,11 @@ const SetPasswordForm = () => {
                     placeholder="Confirm your new password"
                 />
 
-                <Button type="submit" isLoading={loading}>Save Password</Button>
+                <Button type="submit" isLoading={loading} className="w-full mt-2">Save Password</Button>
             </Form>
 
-            <div>
-                <small>
-                    Want to signin your account? <Button href="/signin">Sign In</Button>
-                </small>
+            <div className="mt-4 text-center text-gray-600">
+                Want to signin your account? <Button href="/signin">Sign In</Button>
             </div>
         </AuthContent>
     )
