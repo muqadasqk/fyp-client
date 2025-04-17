@@ -23,7 +23,7 @@ const DashboardLayout = ({ hidesidebar }) => {
 
       <div className="flex flex-col flex-1 overflow-hidden">
         <DashboardHeader toggleSidebar={toggleSidebar} />
-        <main className="flex-1 overflow-y-auto overflow-x-hidden p-6">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden">
           <Outlet />
         </main>
       </div>

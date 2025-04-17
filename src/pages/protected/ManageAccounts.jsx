@@ -1,3 +1,4 @@
+import { Spinner } from "@components";
 import { Button, CreateUserForm, DashboardContent, Pagination, RangeSelector, SearchBar, Sort, Table } from "@components";
 import { retrieveUsers, updateStatus } from "@features";
 import { useEffect, useState } from "react";
@@ -32,26 +33,33 @@ const ManageAccounts = () => {
     }
 
     return (
-        <DashboardContent title="Manage Supervisor and Student Accounts" description="Manage Supervisor and Student Accounts | Approve/Reject account requests">
-            <div>
-                <div>
+        <DashboardContent isLoading={loading} title="Manage Supervisor and Student Accounts" description="Manage Supervisor and Student Accounts | Approve/Reject account requests">
+            <div className="flex flex-col lg-flex-row justify-between items-start gap-4 mb-6 w-full ">
+                <div className="realative">
                     <Button type="button" onClick={() => setSelectRoleForm(true)}>
-                        <FaPlus /> Add a Supervisor/Student
+                        <FaPlus className="mx-2" /> Add a Supervisor/Student
                     </Button>
 
-                    {selectRoleForm && <ul>
-                        <li onClick={() => handleRoleForm("supervisor")}>A Supervisor</li>
-                        <li onClick={() => handleRoleForm("student")}>A Student</li>
-                    </ul>}
+                    {selectRoleForm && (
+                        <div className="absoulte bg-white shadow-md rounded z-0">
+                            <div onClick={() => handleRoleForm("supervisor")} className="cursor-pointer p-2 rounded transition hover:bg-black/10"> A Supervisor</div>
+                            <div onClick={() => handleRoleForm("student")} className="cursor-pointer p-2 rounded transition hover: bg-black/10">A STudent</div>
+                        </div>)
+                    }
+
 
                     {role && <CreateUserForm isLoading={loading} role={role} closeForm={(v) => setRole(v && null)} />}
                 </div>
-
-                <div>
+            </div>
+            <div className="flex flex-wrap gap-2 items-center mb-3 rounded-md p-2">
+                <div className="flex-shrink-0">
                     <RangeSelector
                         value={page.size}
                         onChange={({ target }) => setPage((p) => ({ ...p, size: target.value }))}
                     />
+                </div>
+
+                <div className="flex-grow">
                     <SearchBar
                         fields={{
                             name: "Name",
@@ -60,10 +68,13 @@ const ManageAccounts = () => {
                             nic: "CNIC No.",
                             rollNo: "Roll No.",
                             role: "Role",
-                            status: "Account Status"
+                            status: "Account Status",
                         }}
                         set={(query) => setPage((p) => ({ ...p, query }))}
                     />
+                </div>
+
+                <div className="flex-shrink-0">
                     <Sort
                         fields={{
                             createdAt: "Date",
@@ -76,10 +87,11 @@ const ManageAccounts = () => {
                         set={(sort) => setPage((p) => ({ ...p, sort }))}
                     />
                 </div>
-            </div>
 
+
+            </div>
             <Table
-                isLoading={loading}
+                // isLoading={loading}
                 records={users}
                 fields={{
                     name: "Full Name",
@@ -91,10 +103,10 @@ const ManageAccounts = () => {
                     status: "Account Status"
                 }}
                 actions={[
-                    { label: "Approve", icon: <FaTrash />, ShowWhen: { status: "approvalPending" }, fn: handle },
-                    { label: "Reject", icon: <FaCross />, ShowWhen: { status: "approvalPending" }, fn: handle },
-                    { label: "Lock", icon: <FaLock />, ShowWhen: { status: "active" }, fn: handle },
-                    { label: "Unlock", icon: <FaLockOpen />, ShowWhen: { status: "inactive" }, fn: handle },
+                    { label: "Approve", icon: <FaTrash />, ShowWhen: { status: "approvalPending" }, onClick: handle },
+                    { label: "Reject", icon: <FaCross />, ShowWhen: { status: "approvalPending" }, onClick: handle },
+                    { label: "Lock", icon: <FaLock />, ShowWhen: { status: "active" }, onClick: handle },
+                    { label: "Unlock", icon: <FaLockOpen />, ShowWhen: { status: "inactive" }, onClick: handle },
                 ]}
             />
 

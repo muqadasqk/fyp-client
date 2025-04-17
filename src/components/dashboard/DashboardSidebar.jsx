@@ -1,11 +1,10 @@
-import { FaHome} from "react-icons/fa";
+import { FaHome,FaSignOutAlt,FaTimes } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useAuth } from "@hooks";
 import { signout } from "@features";
 import { Button } from "@components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSignOutAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
+
 const common = [
   { icon: <FaHome />, text: "Dashboard", href: "/" },
 ];
@@ -34,8 +33,7 @@ const Navigatinons = () => {
           }
         >
           <span className="inline-flex items-center gap-2">
-            {icon}
-            {text}
+            {icon} {text}
           </span>
         </NavLink>
       ))}
@@ -53,14 +51,14 @@ const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
       <div className="flex items-center justify-center px-4  ">
         <img src="/images/fyp-ms-logo.png" alt="FYP Management System" className="w-20 h-20" />
         <button onClick={toggleSidebar} className="md:hidden ms-40"
-        ><FontAwesomeIcon icon={faTimes} className="h-10 w-10" />
+        ><FaTimes className="h-10 w-10" />
         </button>
       </div>
       <Navigatinons />
       <div className="absolute w-full bottom-4 p-4">
         <Button onClick={() => dispatch(signout())}
           className="w-full block rounded transition duration-500 text-white bg-[var(--out-line)] hover:bg-white/10">
-          <FontAwesomeIcon icon={faSignOutAlt} className="mr-3" /> Signout
+          <FaSignOutAlt className="mr-3" /> Signout
         </Button>
 
       </div>

@@ -100,7 +100,6 @@
     }
   
     a,
-    button,
     p {
       font-size: 1rem;
       
@@ -145,7 +144,7 @@
     a,
     button,
     p {
-      font-size: 2rem;
+      font-size: 1.5rem;
      
     }
   
@@ -287,6 +286,20 @@
     clip-path: path('M355,-4 C359,137 -10,162 75,276 L-104,241 L11071,1435 Z');
   }
   
-  .custom-shadow {
-    box-shadow: 0 8px 18px -4px rgba(128, 0, 128, 0.4);
+  .table-container {
+    overflow-x: scroll; 
+    -webkit-overflow-scrolling: touch; 
   }
+  
+  .table-container::-webkit-scrollbar {
+    display: none; 
+  }
+  
+  .table-container {
+    -ms-overflow-style: none;  
+    scrollbar-width: none;     
+  }
+  
+
+  
+  
