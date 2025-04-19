@@ -42,7 +42,7 @@ const ProfileSettings = () => {
                     />
 
                     <Button type="submit">
-                        <FaSave /> Save
+                        <FaSave />  Save
                     </Button>
 
                     <Button type="button" onClick={() => setIsEditing(false)}>

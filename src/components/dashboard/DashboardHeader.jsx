@@ -30,21 +30,25 @@ const DashboardHeader = ({ toggleSidebar }) => {
           >
             <FontAwesomeIcon icon={faBars} className="h-8 w-8" />
           </button>
+        </div>
+
+        {/* <div className="items-center">
           <img
             src="/images/fyp-ms-logo.png"
             alt="FYP Management System"
-            className="w-20 mb-3 ml-3 md:hidden"
+            className="w-10 mb-3 ml-3 md:hidden item-ce"
           />
-        </div>
+        </div> */}
+
         <div className="flex items-center space-x-4">
           <Popover className="relative">
             <PopoverButton className="flex items-center space-x-2 focus:outline-none">
               {/* <FontAwesomeIcon icon={faBell} className="text-gray-500 h-5 w-5" /> */}
               <div
-                className="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold"
-               >
-                <img src={dpSrc} className="w-10 h-10 rounded-full object-cover object-center" />
-                </div>
+                className="w-8 h-18 rounded-full flex items-center justify-center text-white font-semibold"
+              >
+                <img src={dpSrc} className="w-8 h-8 rounded-full object-cover object-center" />
+              </div>
             </PopoverButton>
 
             <PopoverPanel className="absolute right-0 mt-2 w-60 bg-white shadow-lg rounded-md z-20 p-4">
@@ -55,12 +59,12 @@ const DashboardHeader = ({ toggleSidebar }) => {
               </div>
 
               <div className="pt-2">
-                <Button href="/profile" className="block px-2 py-2 rounded transition hover:bg-black/10 hover:no-underline">
+                <Button href="/profile" className="block px-2 py-2 text-md  text-gray-500 rounded transition hover:bg-black/10 hover:no-underline">
                   <FontAwesomeIcon icon={faUser} className="mr-2" />
                   Profile Settings
                 </Button>
 
-                <Button href="./" onClick={() => dispatch(signout())} className=" block px-2 py-2 rounded transition hover:bg-black/10 hover:no-underline">
+                <Button href="./" onClick={() => dispatch(signout())} className=" block px-2 py-2  text-gray-500 text-md rounded transition hover:bg-black/10 hover:no-underline">
                   <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" />
                   SignOut
                 </Button>

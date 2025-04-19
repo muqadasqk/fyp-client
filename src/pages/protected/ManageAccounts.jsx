@@ -34,24 +34,24 @@ const ManageAccounts = () => {
 
     return (
         <DashboardContent isLoading={loading} title="Manage Supervisor and Student Accounts" description="Manage Supervisor and Student Accounts | Approve/Reject account requests">
-            <div className="flex flex-col lg-flex-row justify-between items-start gap-4 mb-6 w-full ">
-                <div className="realative">
+            <div className="flex   relative flex-col lg-flex-row justify-between items-start gap-4 mb-6 w-full ">
+                <div className="relative">
                     <Button type="button" onClick={() => setSelectRoleForm(true)}>
                         <FaPlus className="mx-2" /> Add a Supervisor/Student
                     </Button>
 
                     {selectRoleForm && (
-                        <div className="absoulte bg-white shadow-md rounded z-0">
+                        <div className="absolute w-full bg-white shadow-md rounded z-0">
                             <div onClick={() => handleRoleForm("supervisor")} className="cursor-pointer p-2 rounded transition hover:bg-black/10"> A Supervisor</div>
-                            <div onClick={() => handleRoleForm("student")} className="cursor-pointer p-2 rounded transition hover: bg-black/10">A STudent</div>
+                            <div onClick={() => handleRoleForm("student")} className="cursor-pointer p-2 rounded transition hover:bg-black/10">A Student</div>
                         </div>)
                     }
 
-
                     {role && <CreateUserForm isLoading={loading} role={role} closeForm={(v) => setRole(v && null)} />}
+    
                 </div>
             </div>
-            <div className="flex flex-wrap gap-2 items-center mb-3 rounded-md p-2">
+            <div className="flex flex-wrap gap-2 items-center mb-3 rounded-md">
                 <div className="flex-shrink-0">
                     <RangeSelector
                         value={page.size}
@@ -90,6 +90,7 @@ const ManageAccounts = () => {
 
 
             </div>
+
             <Table
                 // isLoading={loading}
                 records={users}
@@ -103,9 +104,14 @@ const ManageAccounts = () => {
                     status: "Account Status"
                 }}
                 actions={[
-                    { label: "Approve", icon: <FaTrash />, ShowWhen: { status: "approvalPending" }, onClick: handle },
+                    {
+                        label: "Approve",
+                        icon: <FaTrash />,
+                        ShowWhen: { status: "approvalPending" },
+                        onClick: handle
+                    },
                     { label: "Reject", icon: <FaCross />, ShowWhen: { status: "approvalPending" }, onClick: handle },
-                    { label: "Lock", icon: <FaLock />, ShowWhen: { status: "active" }, onClick: handle },
+                    { label: "Lock", icon: <FaLock/>, ShowWhen: { status: "active" }, onClick: handle },
                     { label: "Unlock", icon: <FaLockOpen />, ShowWhen: { status: "inactive" }, onClick: handle },
                 ]}
             />

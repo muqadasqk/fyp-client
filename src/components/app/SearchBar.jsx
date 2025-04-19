@@ -38,7 +38,7 @@ const SearchBar = ({ fields, set, ...props }) => {
                 
             </select>
         
-           <div className="relative">
+           
            <input
                className="bg-white  lg:w-[280%] border p-2 rounded-md "
                 type="search"
@@ -47,7 +47,7 @@ const SearchBar = ({ fields, set, ...props }) => {
                 placeholder={field === "*" ? "Filter records by all fields..." : `Filter records by ${fields[field].toLowerCase()}`}
                 {...props}
             />
-          </div>
+          
          
         </div>
     );

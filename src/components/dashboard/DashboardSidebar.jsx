@@ -1,4 +1,4 @@
-import { FaHome,FaSignOutAlt,FaTimes } from "react-icons/fa";
+import { FaHome, FaSignOutAlt, FaTimes } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useAuth } from "@hooks";
@@ -17,8 +17,7 @@ const supervisor = [];
 
 const student = [];
 
-const Navigatinons = () => {
-  const { role } = useAuth();
+const Navigatinons = ({ role }) => {
   const links = ({ admin, supervisor, student })[role];
 
   return (
@@ -43,18 +42,20 @@ const Navigatinons = () => {
 
 const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
   const dispatch = useDispatch();
+  const { role } = useAuth();
 
   return (
     <div className={`text-white w-[80%] sm:w-[20%] space-y-6 py-7 absolute inset-y-0 transform ${isOpen ? "translate-x-0" : "-translate-x-full"}
         md:relative md:translate-x-0 transition duration-200 ease-in-out z-20`}
       style={{ background: "var(--background-color)" }}>
-      <div className="flex items-center justify-center px-4  ">
-        <img src="/images/fyp-ms-logo.png" alt="FYP Management System" className="w-20 h-20" />
+      <div className="flex items-center justify-center px-4">
+        <img src="/images/fyp-ms-logo.png" alt="FYP Management System" className="w-1/5 h-1/5" />
         <button onClick={toggleSidebar} className="md:hidden ms-40"
         ><FaTimes className="h-10 w-10" />
         </button>
       </div>
-      <Navigatinons />
+
+      <Navigatinons role={role} />
       <div className="absolute w-full bottom-4 p-4">
         <Button onClick={() => dispatch(signout())}
           className="w-full block rounded transition duration-500 text-white bg-[var(--out-line)] hover:bg-white/10">

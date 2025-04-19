@@ -41,12 +41,11 @@ const Form = ({ children, onSubmit, resolver, defaultValues = {}, ...props }) =>
 
     return (
         <FormProvider {...methods}>
-            <div className="w-full ">
+            <div className="w-full">
                 <form onSubmit={methods.handleSubmit(handleFormSubmit)} noValidate {...props}>
                     {children}
                 </form>
             </div>
-
         </FormProvider>
     );
 };
