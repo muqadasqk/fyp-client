@@ -57,59 +57,57 @@ const ProfileForm = () => {
     const renderEditMode = () => (
         <Form onSubmit={onSubmit} resolver={zodResolver(updateProfileSchema)} className="space-y-6">
 
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Input
-                name="name"
-                label="Full Name"
-                placeholder="Your full name"
-                value={profile?.name ?? undefined}
-            />
-            <Input
-                name="email"
-                label="Email Address"
-                placeholder="Your email address"
-                value={profile?.email ?? undefined}
-            />
-           
-            {profile?.cnic && <Input
-                name="cnic"
-                label="CNIC No."
-                value={profile?.cnic ?? undefined}
-                placeholder="Your cnic no."
-                disabled={true}
-            />}
-            <Input
-                name="phone"
-                label="Phone Number"
-                placeholder="Your phone number"
-                value={profile?.phone ?? undefined}
-            />
-            
-            {profile?.rollNo && <Input
-                name="rollNo"
-                label="Roll No."
-                value={profile.rollNo ?? undefined}
-                placeholder="Your roll no."
-                disabled={true}
-            />}
-        
-           
-           <Button type="submit">
-                <FaSave /> Save Changes
-            </Button>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Input
+                    name="name"
+                    label="Full Name"
+                    placeholder="Your full name"
+                    value={profile?.name ?? undefined}
+                />
+                <Input
+                    name="email"
+                    label="Email Address"
+                    placeholder="Your email address"
+                    value={profile?.email ?? undefined}
+                />
 
-            <Button type="button" onClick={() => { setIsEditing(false); }} className=" bg-gray-500 hover:bg-gray-700">
-                <FaTimes /> Cancel
-            </Button>
-           </div>
+                {profile?.cnic && <Input
+                    name="cnic"
+                    label="CNIC No."
+                    value={profile?.cnic ?? undefined}
+                    placeholder="Your cnic no."
+                    disabled={true}
+                />}
+                <Input
+                    name="phone"
+                    label="Phone Number"
+                    placeholder="Your phone number"
+                    value={profile?.phone ?? undefined}
+                />
+
+                {profile?.rollNo && <Input
+                    name="rollNo"
+                    label="Roll No."
+                    value={profile.rollNo ?? undefined}
+                    placeholder="Your roll no."
+                    disabled={true}
+                />}
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4">
+                <Button type="submit" className="flex-1">
+                    <FaSave className="mx-2" /> Save Changes
+                </Button>
+
+                <Button type="button" onClick={() => setIsEditing(false)} className="bg-gray-400 hover:bg-gray-700 flex-1">
+                    <FaTimes className="mx-2" /> Cancel
+                </Button>
+            </div>
         </Form>
-          
-       
-    
     );
 
     return (
-        <div className="bg-white shadow sm:rounded-lg p-4 h-full">
+        <div className="bg-white shadow sm:rounded-lg p-6  w-full">
+
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Profile Information</h2>
             {isEditing ? renderEditMode() : renderViewMode()}
         </div>

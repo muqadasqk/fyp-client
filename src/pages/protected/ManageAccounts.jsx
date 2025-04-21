@@ -34,7 +34,7 @@ const ManageAccounts = () => {
 
     return (
         <DashboardContent isLoading={loading} title="Manage Supervisor and Student Accounts" description="Manage Supervisor and Student Accounts | Approve/Reject account requests">
-            <div className="flex   relative flex-col lg-flex-row justify-between items-start gap-4 mb-6 w-full ">
+            <div className="flex relative flex-col lg-flex-row justify-between items-start gap-4 mb-6 w-full ">
                 <div className="relative">
                     <Button type="button" onClick={() => setSelectRoleForm(true)}>
                         <FaPlus className="mx-2" /> Add a Supervisor/Student

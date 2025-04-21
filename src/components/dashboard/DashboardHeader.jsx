@@ -2,8 +2,7 @@ import { Button } from "@components";
 import { signout } from "@features";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faUser, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { faBars, faUser, faSignOutAlt, faBell } from "@fortawesome/free-solid-svg-icons";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { useEffect, useState } from "react";
 import { readFile } from "@services";
@@ -13,9 +12,33 @@ const DashboardHeader = ({ toggleSidebar }) => {
   const { user } = useSelector((state) => state.auth);
   const [dpSrc, setDpSrc] = useState(undefined);
 
+
   useEffect(() => {
     !!user && (async () => setDpSrc(await readFile(user.image)))();
   }, [user]);
+
+  const notifications = [
+    "You have a new message",
+    "New friend request",
+    "New Student added",
+    "You have a new message",
+    "New friend request",
+    "New Student added",
+    "You have a new message",
+    "New friend request",
+    "New Student added","You have a new message",
+    "New friend request",
+    "New Student added","You have a new message",
+    "New friend request",
+    "New Student added",
+    "You have a new message",
+    "New friend request",
+    "New Student added",
+    "You have a new message",
+    "New friend request",
+    "New Student added",
+  ];
+
 
   return (
     <header
@@ -43,7 +66,31 @@ const DashboardHeader = ({ toggleSidebar }) => {
         <div className="flex items-center space-x-4">
           <Popover className="relative">
             <PopoverButton className="flex items-center space-x-2 focus:outline-none">
-              {/* <FontAwesomeIcon icon={faBell} className="text-gray-500 h-5 w-5" /> */}
+             
+                <FontAwesomeIcon icon={faBell} className="h-6 w-6 text-gray-500" />
+                {notifications.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-semibold rounded-full w-4 h-4 flex items-center justify-center">
+                    {notifications.length}
+                  </span>
+                )}
+            </PopoverButton>
+
+            <PopoverPanel className="absolute right-0 mt-2 w-60 bg-white shadow-lg rounded-md z-20 p-4 overflow-y-auto max-h-60">
+              <div className="text-xs text-gray-500 pb-2 border-b">
+                Notifications
+              </div>
+              <div className="pt-2">
+                {notifications.map((notification, index) => (
+                  <div key={index} className="py-1 text-sm text-gray-700">
+                    {notification}
+                  </div>
+                ))}
+              </div>
+            </PopoverPanel>
+          </Popover>
+        
+          <Popover className="relative">
+            <PopoverButton className="flex items-center space-x-2 focus:outline-none">
               <div
                 className="w-8 h-18 rounded-full flex items-center justify-center text-white font-semibold"
               >
@@ -71,7 +118,7 @@ const DashboardHeader = ({ toggleSidebar }) => {
               </div>
             </PopoverPanel>
           </Popover>
-        </div>
+       </div>
       </div>
     </header>
   );
