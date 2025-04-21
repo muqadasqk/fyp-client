@@ -48,14 +48,16 @@ const ProfileForm = () => {
                 </div>}
             </div>
 
-            <Button type="button" onClick={() => setIsEditing(true)}>
+            <Button type="button" onClick={() => setIsEditing(true)} className="w-full">
                 <FaEdit /> Edit Profile
             </Button>
         </div>
     );
 
     const renderEditMode = () => (
-        <Form onSubmit={onSubmit} resolver={zodResolver(updateProfileSchema)}>
+        <Form onSubmit={onSubmit} resolver={zodResolver(updateProfileSchema)} className="space-y-6">
+
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Input
                 name="name"
                 label="Full Name"
@@ -68,6 +70,7 @@ const ProfileForm = () => {
                 placeholder="Your email address"
                 value={profile?.email ?? undefined}
             />
+           
             {profile?.cnic && <Input
                 name="cnic"
                 label="CNIC No."
@@ -81,6 +84,7 @@ const ProfileForm = () => {
                 placeholder="Your phone number"
                 value={profile?.phone ?? undefined}
             />
+            
             {profile?.rollNo && <Input
                 name="rollNo"
                 label="Roll No."
@@ -88,20 +92,25 @@ const ProfileForm = () => {
                 placeholder="Your roll no."
                 disabled={true}
             />}
-
-            <Button type="submit">
+        
+           
+           <Button type="submit">
                 <FaSave /> Save Changes
             </Button>
 
-            <Button type="button" onClick={() => { setIsEditing(false); }}>
+            <Button type="button" onClick={() => { setIsEditing(false); }} className=" bg-gray-500 hover:bg-gray-700">
                 <FaTimes /> Cancel
             </Button>
+           </div>
         </Form>
+          
+       
+    
     );
 
     return (
-        <div>
-            <h2>Profile Information</h2>
+        <div className="bg-white shadow sm:rounded-lg p-4 h-full">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Profile Information</h2>
             {isEditing ? renderEditMode() : renderViewMode()}
         </div>
     );
