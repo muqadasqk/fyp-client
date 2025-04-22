@@ -3,7 +3,6 @@ import { AuthContent, Button, Form, Input } from "@components";
 import { signinSchema } from "@schemas";
 import { useDispatch, useSelector } from "react-redux";
 import { signin } from "@features";
-import { Link } from "react-router-dom";
 
 const Signin = () => {
     const dispatch = useDispatch();
