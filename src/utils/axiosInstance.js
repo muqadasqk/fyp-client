@@ -31,7 +31,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
     (response) => {
         if (response.config.showToast && response.config.showSuccessToast) {
-            showSuccessToast(response.data.message ?? "Request was successfull");
+            showSuccessToast(response?.data?.message ?? "Request was successfull");
         }
         return response;
     },
