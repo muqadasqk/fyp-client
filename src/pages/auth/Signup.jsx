@@ -5,77 +5,118 @@ import { confirmEmailSchema, signupSchema } from "@schemas";
 import { useDispatch, useSelector } from "react-redux";
 import { clearEmailForOtp, confirmEmail, sendOtp, signup } from "@features";
 import { useState } from "react";
+import { FaUser } from "react-icons/fa";
 
 const Signup = () => {
     const dispatch = useDispatch();
-    const [role, setRole] = useState("student");
+    const [role, setRole] = useState("supervisor");
     const { loading, emailForOtp } = useSelector((state) => state.auth);
 
     const handleSignup = (data) => {
         dispatch(signup(data));
     };
 
-    // show email confirmation form when pending
-    if (emailForOtp) return <EmailConfirmationForm />
+    // Show email confirmation form when pending
+    if (emailForOtp) return <EmailConfirmationForm />;
 
     return (
-        <AuthContent title="Sign Up" description="It's simple and easy!">
-            <Form onSubmit={handleSignup} resolver={zodResolver(signupSchema)} encType="multipart/form-data">
-                <Input
-                    name="name"
-                    label="Full Name"
-                    placeholder="Enter your name"
-                />
-                <Input
-                    name="email"
-                    label="Email Address"
-                    placeholder="Enter your email"
-                />
-                <Select
-                    name="role"
-                    label="Your Role"
-                    placeholder="Please select your role"
-                    value={role}
-                    onChange={({ target }) => setRole(target.value)}
-                    options={[
-                        { label: "Supervisor", value: "supervisor" },
-                        { label: "Student", value: "student" }
-                    ]}
-                />
-                <Input
-                    name="cnic"
-                    label="CNIC No."
-                    placeholder="Enter your nic number (without dashes)"
-                />
-                <Input
-                    name="phone"
-                    label="Phone Number"
-                    placeholder="Enter your phone number (10-digits)"
-                    optional
-                />
-                {role === "student" && <Input
-                    name="rollNo"
-                    label="Roll No."
-                    placeholder="Enter your roll number (e.g., 21SW066)"
-                />}
-                <Input
-                    type="password"
-                    name="password"
-                    label="Password"
-                    placeholder="Create a strong password"
-                />
-                <Input
-                    type="file"
-                    name="image"
-                    label="Profile Photo"
-                    accept=".jpg,.jpeg,.png"
-                />
+        <AuthContent
+            title="Sign Up"
+            description="It's simple and easy!"
+            className="md:w-[50%] my-10"
+        >
+            <div className="flex">
+                <Form onSubmit={handleSignup} resolver={zodResolver(signupSchema)} encType="multipart/form-data">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:gap-4">
+                        {/* Full Name Field */}
+                        <div className="flex flex-col">
+                            <Input name="name"
+                                label="Name"
+                                id="name"
+                                placeholder="Enter your name" />
+                        </div>
 
-                <Button type="submit" isLoading={loading} >Sign Up</Button>
-            </Form>
+                        {/* Email Field */}
+                        <div className="flex flex-col">
+                            <Input name="email"
+                                label="Email" id="email"
+                                placeholder="Enter your email"
+                            />
+                        </div>
+                    </div>
 
-            <div>
-                <small>Have an account? <Button href="/signin">Sign In</Button></small>
+                    {/* CNIC and Phone Number Fields */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:gap-4">
+                        <div className="flex flex-col m-0 p-0">
+                            <Input
+                                name="cnic"
+                                id="cnic"
+                                label="CNIC NO"
+                                placeholder="CNIC No. (without dashes)"
+                            />
+                        </div>
+                        <div className="flex flex-col">
+                            <Input
+                                label="Phone Number"
+                                name="phone"
+                                placeholder="Enter your phone number (10-digits)"
+                                optional
+                            />
+                        </div>
+                    </div>
+
+                    {/* Role Select */}
+                    <div className="flex flex-col">
+                        <Select
+                            name="role"
+                            label="Role No."
+                            placeholder="Please select your role"
+                            value={role}
+                            onChange={({ target }) => setRole(target.value)}
+                            options={[
+                                { label: "Supervisor", value: "supervisor" },
+                                { label: "Student", value: "student" }
+                            ]}
+                        />
+                    </div>
+
+                    {/* Roll No. for Students */}
+                    <div className={`grid grid-cols-1 md:grid-cols-${role === "student" ? "2" : "1"} lg:gap-4`}>
+                        {role === "student" && (
+                            <div className="flex flex-col ">
+                                <Input label="Roll No."
+                                    name="rollNo"
+                                    id="rollNo"
+                                    placeholder="Enter roll number (e.g., 21SW066)" />
+                            </div>
+                        )}
+
+                        {/* Password Field */}
+                        <div className="flex flex-col">
+                            <Input type="password"
+                                label="Password"
+                                name="password"
+                                id="password"
+                                placeholder="Create strong password" />
+                        </div>
+                    </div>
+
+                    {/* Profile Photo Field */}
+                    <div className="flex flex-col ">
+                        <Input label="Profile Photo"
+                            type="file" name="image"
+                            accept=".jpg,.jpeg,.png" />
+                    </div>
+
+                    {/* Submit Button */}
+                    <Button type="submit" isLoading={loading} className="w-full my-2">Sign Up</Button>
+                </Form>
+            </div>
+
+            <div className="mt-4 text-center text-gray-600">
+                Got an account? <Button href="/signin">
+                    Sign In
+                </Button>
             </div>
         </AuthContent>
     );
@@ -93,18 +134,18 @@ const EmailConfirmationForm = () => {
             dispatch(clearEmailForOtp());
             navigate("/signin", { replace: true });
         }
-    }
+    };
 
-    const handleResendtOtp = () => {
+    const handleResendOtp = () => {
         const requestBody = {
             email: emailForOtp,
             subject: "Signup Email Confirmation"
-        }
+        };
         dispatch(sendOtp(requestBody));
-    }
+    };
 
     return (
-        <AuthContent title="Confirm Email" description="We just sent you an OTP to your email, confirm by entering below!">
+        <AuthContent title="Confirm Email" description="We just sent you an OTP to your email, confirm by entering below!" className="md:w-[50%%] lg:w-[35%]">
             <Form onSubmit={handleEmailConfirmation} resolver={zodResolver(confirmEmailSchema)}>
                 <Input
                     type="number"
@@ -113,20 +154,18 @@ const EmailConfirmationForm = () => {
                     placeholder="Enter a 6-digit OTP here"
                 />
 
-                <Button type="submit" isLoading={loading}>Confirm Now</Button>
+                <Button type="submit" isLoading={loading} className="w-full mt-2">Confirm Now</Button>
             </Form>
 
-            <div className="text-center mt-3">
-                <small>
-                    Didn't receive an OTP? <Button type="link" href="./" onClick={handleResendtOtp}>Resend Now</Button>
-                </small>
+            <div className="mt-4 text-center text-gray-600">
+                Didn't receive an OTP? <Button href="./" onClick={handleResendOtp}>Resend Now</Button>
             </div>
 
-            <div>
-                <small>Want to signin your account? <Button href="/signin">Sign In</Button></small>
+            <div className="mt-1 text-center text-gray-600">
+                Want to sign in to your account? <Button href="/signin">Sign In</Button>
             </div>
         </AuthContent>
     );
-}
+};
 
 export default Signup;

@@ -13,8 +13,15 @@ const Signin = () => {
     };
 
     return (
-        <AuthContent title="Sign In" description="Welcome back! Please enter your credentials to continue">
-            <Form onSubmit={handleSignin} resolver={zodResolver(signinSchema)}>
+        <AuthContent
+            title="Sign In"
+            description="Welcome back! Please enter your credentials to continue"
+            className="md:w-[50%] lg:w-[30%]"
+        >
+            <Form
+                onSubmit={handleSignin}
+                resolver={zodResolver(signinSchema)}
+            >
                 <Input
                     name="username"
                     label="Username"
@@ -27,15 +34,21 @@ const Signin = () => {
                     placeholder="Enter your password"
                 />
 
-                <div>
-                    <small><Button href="/forgot-password">Forgot Password?</Button></small>
+                <div className="text-right">
+                    <Button href="/forgot-password">
+                        Forgot Password?
+                    </Button>
                 </div>
 
-                <Button type="submit" isLoading={loading} >Sign In</Button>
+                <Button type="submit" isLoading={loading} className="w-full mt-3">
+                    Sign In
+                </Button>
             </Form>
 
-            <div>
-                <small>Don't have an account? <Button href="/signup">Sign Up</Button></small>
+            <div className="mt-4 text-center text-gray-600">
+                Don't have an account? <Button href="/signup">
+                    Sign Up
+                </Button>
             </div>
         </AuthContent>
     );

@@ -2,24 +2,31 @@ import { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { DashboardHeader, DashboardSidebar } from "@components";
 
-const DashboardLayout = () => {
+const DashboardLayout = ({ hidesidebar }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
 
   const toggleSidebar = () => setSidebarOpen((prev) => !prev);
 
   return (
-    <div key={location.pathname}>
-      <DashboardSidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+    <div className="flex h-screen bg-gray-100 relative" key={location.pathname}>
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-10 md:hidden"
+          onClick={toggleSidebar}
+        />
+      )}
 
-      <div>
+      {!hidesidebar && (
+        <DashboardSidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+      )}
+
+      <div className="flex flex-col flex-1 overflow-hidden">
         <DashboardHeader toggleSidebar={toggleSidebar} />
-        <main>
-          <div>
-            <Outlet />
-          </div>
+        <main className="flex-1 overflow-y-auto overflow-x-hidden">
+          <Outlet />
         </main>
-      </div >
+      </div>
     </div>
   );
 };

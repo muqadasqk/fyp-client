@@ -3,8 +3,10 @@ import { Overlay } from '@components'
 
 const Spinner = ({ size }) => {
     return (
-        <Overlay>
-            <img src={spinner} alt="Loading spinner" width={size} />
+        <Overlay >
+          <div className='items-center justify-center '>
+          <img src={spinner} alt="Loading spinner" width={size} />
+          </div>
         </Overlay>
     )
 }

@@ -18,14 +18,14 @@ const ForgotPassword = () => {
     if (emailForOtp) return <VerifyOtpForm />
 
     return (
-        <AuthContent title="Forgot Password" description="Enter your account email address">
+        <AuthContent title="Forgot Password" description="Enter your account email address" className="md:w-[50%%] lg:w-[35%]">
             <Form onSubmit={handleSendOtp} resolver={zodResolver(sendOtpSchema)}>
                 <Input label="Email Address" name="email" placeholder="Enter your account email" />
-                <Button type="submit" isLoading={loading}>Send OTP</Button>
+                <Button type="submit" isLoading={loading} className="w-full mt-2">Send OTP</Button>
             </Form>
 
-            <div>
-                <small>Want to signin your account? <Button href="/signin">Sign In</Button></small>
+            <div className="mt-4 text-center text-gray-600">
+                Want to signin your account? <Button href="/signin">Sign In</Button>
             </div>
         </AuthContent>
     )
@@ -49,7 +49,7 @@ const VerifyOtpForm = () => {
     }
 
     return (
-        <AuthContent title="Verify OTP" description="Verify the OTP code we just sent to your email address">
+        <AuthContent title="Verify OTP" description="Verify the OTP code we just sent to your email address" className="md:w-[50%%] lg:w-[35%]" >
             <Form onSubmit={handleVerifyOtp} resolver={zodResolver(verifyOtpSchema)}>
                 <Input
                     type="number"
@@ -57,18 +57,15 @@ const VerifyOtpForm = () => {
                     label="One Time Passcode"
                     placeholder="Enter a 6-digit OTP here"
                 />
-
-                <Button type="submit" isLoading={loading}>Verify OTP</Button>
+                <Button type="submit" isLoading={loading} className="w-full mt-2">Verify OTP</Button>
             </Form>
 
-            <div className="text-center mt-3">
-                <small>
-                    Didn't receive an OTP? <Button href="./" onClick={handleResendOtp}>Resend Now</Button>
-                </small>
+            <div className="mt-4 text-center text-gray-600">
+                Didn't receive an OTP? <Button href="./" onClick={handleResendOtp}>Resend Now</Button>
             </div>
 
-            <div>
-                <small>Want to signin your account? <Button href="/signin">Sign In</Button></small>
+            <div className="mt-1 text-center text-gray-600">
+                Want to signin your account? <Button href="/signin">Sign In</Button>
             </div>
         </AuthContent>
     )
@@ -87,7 +84,7 @@ const SetPasswordForm = () => {
     };
 
     return (
-        <AuthContent title="Set a new Password" description="Set a new strong password for your account">
+        <AuthContent title="Set a new Password" description="Set a new strong password for your account" className="md:w-[50%] lg:w-[35%]">
             <Form onSubmit={handleSetPassword} resolver={zodResolver(resetPasswordSchema)}>
                 <Input
                     type="password"
@@ -102,13 +99,11 @@ const SetPasswordForm = () => {
                     placeholder="Confirm your new password"
                 />
 
-                <Button type="submit" isLoading={loading}>Save Password</Button>
+                <Button type="submit" isLoading={loading} className="w-full mt-2">Save Password</Button>
             </Form>
 
-            <div>
-                <small>
-                    Want to signin your account? <Button href="/signin">Sign In</Button>
-                </small>
+            <div className="mt-4 text-center text-gray-600">
+                Want to signin your account? <Button href="/signin">Sign In</Button>
             </div>
         </AuthContent>
     )

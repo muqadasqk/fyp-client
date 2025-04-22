@@ -26,21 +26,29 @@ const SearchBar = ({ fields, set, ...props }) => {
     }
 
     return (
-        <div>
-            <select onChange={handleFieldChange} value={field}>
+        <div className="flex gap-1">
+          
+           <select onChange={handleFieldChange} value={field}
+           className="bg-white border p-2 rounded-md"
+>
                 <option value="*">All Fields</option>
                 {Object.entries(fields).map(([key, label]) => (
                     <option key={key} value={key}>{label}</option>
                 ))}
+                
             </select>
-
-            <input
+        
+           
+           <input
+               className="bg-white  lg:w-[280%] border p-2 rounded-md "
                 type="search"
                 value={text}
                 onChange={handleChange}
                 placeholder={field === "*" ? "Filter records by all fields..." : `Filter records by ${fields[field].toLowerCase()}`}
                 {...props}
             />
+          
+         
         </div>
     );
 };

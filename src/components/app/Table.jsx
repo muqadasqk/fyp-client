@@ -2,28 +2,28 @@ import { Button } from "@components";
 
 const Table = ({ fields, records, actions, ...prop }) => {
     return (
-        <div>
-            <table {...prop}>
+        <div className="table-container"  >
+            <table {...prop} className="min-w-full bg-white ">
                 <thead>
-                    <tr>
+                    <tr className="bg-gray-50">
                         {Object.entries(fields).map(([key, label]) => (
-                            <th key={key}>{label}</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase truncate" key={key}>{label}</th>
                         ))}
-                        {actions && <th>Action</th>}
+                        {actions && <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase truncate">Action</th>}
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className="bg-white divide-y divide-gray-200">
                     {records.length >= 1 ? records.map((record) => (
-                        <tr key={record._id}>
+                        <tr key={record._id} className="hover:bg-gray-200 truncate">
                             {Object.keys(fields).map((field) => (
-                                <td key={field}>{record[field] ?? "N/A"}</td>
+                                <td key={field} className="ps-2">{record[field] ?? "N/A"}</td>
                             ))}
-                            {actions && <td>
-                                {actions.map(({ label, icon = null, ShowWhen, fn }) => {
+                            {actions && <td className="py-2 px-4 whitespace-nowrap">
+                                {actions.map(({ label, icon = null, ShowWhen, onClick }) => {
                                     const k = Object.keys(ShowWhen)[0];
                                     if (record[k] === ShowWhen[k]) {
-                                        return <Button key={label} onClick={() => fn(record._id, label)}>
-                                            {icon && icon} {label}
+                                        return <Button title={`Click to ${label.toLowerCase()}`} key={label} onClick={() => onClick(record._id, label)}>
+                                            {/* {icon && icon} {label} */}{icon && icon}
                                         </Button>
                                     }
                                 })}

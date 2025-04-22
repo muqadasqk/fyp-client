@@ -8,5 +8,4 @@ const useAuth = () => {
         user, token, role: user?.role
     }
 }
-
 export default useAuth;

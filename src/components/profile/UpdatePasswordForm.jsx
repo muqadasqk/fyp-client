@@ -14,8 +14,8 @@ const UpdatePasswordForm = () => {
     };
 
     return (
-        <div>
-            <h1>Update Password</h1>
+        <div className="bg-white shadow sm:rounded-lg p-6">
+            <h1 className="text-2xl font-bold text-gray-900 mb-6">Update Password</h1>
             <div>
                 <Form onSubmit={handlePasswordUpdate} resolver={zodResolver(updatePasswordSchema)}>
                     <Input
@@ -31,7 +31,7 @@ const UpdatePasswordForm = () => {
                         placeholder="Create a new strong password"
                     />
 
-                    <Button type="submit" isLoading={loading}>Update Now</Button>
+                    <Button type="submit" isLoading={loading} className="w-full mt-4">Update Now</Button>
                 </Form>
             </div>
         </div>

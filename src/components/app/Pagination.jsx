@@ -1,6 +1,6 @@
 import { Button } from "@components";
 import { useState, Fragment } from "react";
-
+import {FaChevronRight,FaChevronLeft } from "react-icons/fa";
 const Pagination = ({ data, set }) => {
     const { page, totalPages } = data;
     const [currentPage, setCurrentPage] = useState(page || 1);
@@ -26,36 +26,50 @@ const Pagination = ({ data, set }) => {
     const pagesToDisplay = getPageNumbers();
 
     return (
-        <Fragment>
-            <span>Page {currentPage} / {totalPages}</span>
+        <div className="flex flex-wrap justify-between items-center px-3 py-4 sm:px-6">
+            <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+            
+          <p className="text-sm text-gray-700">
+          Page <span className="font-medium">{currentPage}/{totalPages}</span> </p>
+        </div>
+            
 
-            {totalPages > 1 && (
-                <Button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage <= 1}
-                >
-                    Prev
-                </Button>
-            )}
-
-            {pagesToDisplay.map((num, index) => (
-                <Fragment key={index}>
-                    {index > 0 && num !== pagesToDisplay[index - 1] + 1 && <span> ... </span>}
-                    <Button key={index} onClick={() => handlePageChange(num)} disabled={currentPage === num}>
-                        {num}
+            <div>
+                {totalPages > 1 && (
+                    <Button
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage <= 1}
+                         className="rounded-md  h-10 w-10 mx-2 "
+                    >
+                       <FaChevronLeft/>
                     </Button>
-                </Fragment>
-            ))}
+                )}
 
-            {totalPages > 1 && (
-                <Button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage >= totalPages}
-                >
-                    Next
-                </Button>
-            )}
-        </Fragment>
+
+                {pagesToDisplay.map((num, index) => (
+                    <Fragment key={index}>
+                        {index > 0 && num !== pagesToDisplay[index - 1] + 1 && <span> ... </span>}
+                        <Button key={index} onClick={() => handlePageChange(num)} 
+                        disabled={currentPage === num} 
+                        className="bg-transparent text-black w-10 h-10 hover:text-white ms-2">
+                          {num}
+                            
+                        </Button>
+                    </Fragment>
+                ))}
+
+                {totalPages > 1 && (
+                    <Button
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage >= totalPages}
+                        className="rounded-md w-10 h-10 mx-2"
+                    >
+                        <FaChevronRight/>
+                    </Button>
+                )}
+
+            </div>
+        </div>
     );
 };
 
