@@ -1,10 +1,10 @@
 import { Button, DashboardContent, Form, Input, ProfileForm, UpdatePasswordForm } from "@components"
-import { updateProfile } from "@features";
+import { updateProfile, updateAuthenticatedUser } from "@features";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateProfileImageschema } from "@schemas";
 import { readFile } from "@services";
 import { useEffect, useState } from "react";
-import { FaSave, FaTimes, FaEdit } from "react-icons/fa";
+import { FaSave, FaTimes } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux"
 
 const ProfileSettings = () => {
@@ -19,7 +19,10 @@ const ProfileSettings = () => {
 
     const handleProfilePictureChange = async (data) => {
         const result = await dispatch(updateProfile(data));
-        if (updateProfile.fulfilled.match(result)) setIsEditing(false);
+        if (updateProfile.fulfilled.match(result)) {
+            dispatch(updateAuthenticatedUser(result.payload.user));
+            setIsEditing(false);
+        };
     }
 
     const handleImageSelect = ({ target }) => {

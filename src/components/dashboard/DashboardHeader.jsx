@@ -12,7 +12,6 @@ const DashboardHeader = ({ toggleSidebar }) => {
   const { user } = useSelector((state) => state.auth);
   const [dpSrc, setDpSrc] = useState(undefined);
 
-
   useEffect(() => {
     !!user && (async () => setDpSrc(await readFile(user.image)))();
   }, [user]);
@@ -26,9 +25,9 @@ const DashboardHeader = ({ toggleSidebar }) => {
     "New Student added",
     "You have a new message",
     "New friend request",
-    "New Student added","You have a new message",
+    "New Student added", "You have a new message",
     "New friend request",
-    "New Student added","You have a new message",
+    "New Student added", "You have a new message",
     "New friend request",
     "New Student added",
     "You have a new message",
@@ -66,13 +65,13 @@ const DashboardHeader = ({ toggleSidebar }) => {
         <div className="flex items-center space-x-4">
           <Popover className="relative">
             <PopoverButton className="flex items-center space-x-2 focus:outline-none">
-             
-                <FontAwesomeIcon icon={faBell} className="h-6 w-6 text-gray-500" />
-                {notifications.length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-semibold rounded-full w-4 h-4 flex items-center justify-center">
-                    {notifications.length}
-                  </span>
-                )}
+
+              <FontAwesomeIcon icon={faBell} className="h-6 w-6 text-gray-500" />
+              {notifications.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-semibold rounded-full w-4 h-4 flex items-center justify-center">
+                  {notifications.length}
+                </span>
+              )}
             </PopoverButton>
 
             <PopoverPanel className="absolute right-0 mt-2 w-60 bg-white shadow-lg rounded-md z-20 p-4 overflow-y-auto max-h-60">
@@ -88,7 +87,7 @@ const DashboardHeader = ({ toggleSidebar }) => {
               </div>
             </PopoverPanel>
           </Popover>
-        
+
           <Popover className="relative">
             <PopoverButton className="flex items-center space-x-2 focus:outline-none">
               <div
@@ -118,7 +117,7 @@ const DashboardHeader = ({ toggleSidebar }) => {
               </div>
             </PopoverPanel>
           </Popover>
-       </div>
+        </div>
       </div>
     </header>
   );

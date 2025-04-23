@@ -112,6 +112,10 @@ const authSlice = createSlice({
       deleteLocalStorage("authenticatedUser", "accessToken");
       showSuccessToast("Singout successfully")
     },
+    updateAuthenticatedUser: (state, action) => {
+      state.user = action.payload;
+      writeLocalStorage("authenticatedUser", action.payload, true);
+    },
     clearEmailForOtp: (state) => {
       state.emailForOtp = null;
       deleteLocalStorage("emailForOtp");
@@ -223,5 +227,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { update, signout, clearEmailForOtp, clearResetPasswordToken } = authSlice.actions;
+export const { update, updateAuthenticatedUser, signout, clearEmailForOtp, clearResetPasswordToken } = authSlice.actions;
 export default authSlice.reducer;

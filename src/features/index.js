@@ -4,7 +4,7 @@ export { setLoading, setErrors, clearErrors } from "./uiSlice"
 
 // auth
 export { default as authReducer } from "./authSlice";
-export { signup, confirmEmail, signin, signout, resetPassword, verifyOtp, sendOtp, verifyToken, clearEmailForOtp, clearResetPasswordToken } from "./authSlice";
+export { signup, confirmEmail, updateAuthenticatedUser, signin, signout, resetPassword, verifyOtp, sendOtp, verifyToken, clearEmailForOtp, clearResetPasswordToken } from "./authSlice";
 
 // users
 export { default as userReducer } from "./userSlice";
