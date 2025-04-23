@@ -51,7 +51,7 @@ const Pagination = ({ data, set }) => {
                         {index > 0 && num !== pagesToDisplay[index - 1] + 1 && <span> ... </span>}
                         <Button key={index} onClick={() => handlePageChange(num)} 
                         disabled={currentPage === num} 
-                        className="bg-transparent  w-10 h-10 text-gray-950 hover:text-white ms-2">
+                    className="bg-transparent text-black hover:text-white w-10 h-10 ml-2">
                           {num}
                             
                         </Button>
