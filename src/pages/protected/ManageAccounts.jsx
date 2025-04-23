@@ -56,8 +56,8 @@ const ManageAccounts = () => {
             </div>
 
             <div className="flex flex-wrap gap-2 items-center mb-3 rounded-md">
-            {(sort || range) && !searchshow && (
-                    <div className="sm:block lg:hidden">
+            {(sort && range) && !searchshow && (
+                    <div className="sm:block lg:hiddeen">
                         <Button
                             className="p-2 text-gray "
                             onClick={() => setSearchShow(!searchshow)}
@@ -71,7 +71,10 @@ const ManageAccounts = () => {
                         <div className="flex-shrink-0 lg:block ">
                             <RangeSelector
                                 value={page.size}
-                                onChange={({ target }) => setPage((p) => ({ ...p, size: target.value }))}
+                                onChange={({ target }) =>{
+                                    setPage((p) => ({ ...p, size: target.value }));
+                                    setRange(true);
+                                }}
                             />
                         </div>
                     </>

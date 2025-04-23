@@ -49,7 +49,7 @@ const ProfileForm = () => {
             </div>
 
             <Button type="button" onClick={() => setIsEditing(true)} className="w-full">
-                <FaEdit /> Edit Profile
+                <FaEdit className="mx-2"/> Edit Profile
             </Button>
         </div>
     );
@@ -58,23 +58,24 @@ const ProfileForm = () => {
         <Form onSubmit={onSubmit} resolver={zodResolver(updateProfileSchema)} className="space-y-6">
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
                 <Input
                     name="name"
                     label="Full Name"
                     placeholder="Your full name"
-                    value={profile?.name ?? undefined}
+                    defaultValue={profile?.name ?? undefined}
                 />
                 <Input
                     name="email"
                     label="Email Address"
                     placeholder="Your email address"
-                    value={profile?.email ?? undefined}
+                   defaultValue={profile?.email ?? undefined}
                 />
 
                 {profile?.cnic && <Input
                     name="cnic"
                     label="CNIC No."
-                    value={profile?.cnic ?? undefined}
+                   defaultValue={profile?.cnic ?? undefined}
                     placeholder="Your cnic no."
                     disabled={true}
                 />}
@@ -82,13 +83,13 @@ const ProfileForm = () => {
                     name="phone"
                     label="Phone Number"
                     placeholder="Your phone number"
-                    value={profile?.phone ?? undefined}
+                    defaultValue={profile?.phone ?? undefined}
                 />
 
                 {profile?.rollNo && <Input
                     name="rollNo"
                     label="Roll No."
-                    value={profile.rollNo ?? undefined}
+                    defaultValue={profile.rollNo ?? undefined}
                     placeholder="Your roll no."
                     disabled={true}
                 />}

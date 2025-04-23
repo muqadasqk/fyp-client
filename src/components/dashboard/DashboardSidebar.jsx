@@ -50,8 +50,8 @@ const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
       style={{ background: "var(--background-color)" }}>
       <div className="flex items-center justify-center px-4">
         <img src="/images/fyp-ms-logo.png" alt="FYP Management System" className="w-1/5 h-1/5" />
-        <button onClick={toggleSidebar} className="md:hidden ms-40"
-        ><FaTimes className="h-10 w-10" />
+        <button onClick={toggleSidebar} className="md:hidden ms-auto"
+        ><FaTimes className="h-8 w-8" />
         </button>
       </div>
 
