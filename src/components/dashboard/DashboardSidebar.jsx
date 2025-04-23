@@ -45,7 +45,7 @@ const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
   const { role } = useAuth();
 
   return (
-    <div className={`text-white w-[80%] sm:w-[20%] space-y-6 py-7 absolute inset-y-0 transform ${isOpen ? "translate-x-0" : "-translate-x-full"}
+    <div className={`z-50 text-white w-[80%] sm:w-[20%] space-y-6 py-7 absolute inset-y-0 transform ${isOpen ? "translate-x-0" : "-translate-x-full"}
         md:relative md:translate-x-0 transition duration-200 ease-in-out z-20`}
       style={{ background: "var(--background-color)" }}>
       <div className="flex items-center justify-center px-4">

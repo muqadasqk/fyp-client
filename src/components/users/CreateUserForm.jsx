@@ -17,11 +17,9 @@ const CreateUserForm = ({ role, closeForm, isLoading }) => {
     }
 
     return (
-        <Overlay onClose={() => closeForm(true)}>
+        <Overlay onClose={() => closeForm(true)} title={`Create a ${role}`}>
             <div className="flex">
-
                 <Form onSubmit={onSubmit} resolver={zodResolver(createUserSchema)} encType="multipart/form-data">
-                    <div><h2>Create a {role}</h2></div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:gap-4 w-full">
                         <div className="flex flex-col">
                             <Input

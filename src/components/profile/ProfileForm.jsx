@@ -1,5 +1,5 @@
 import { Button, Form, Input } from "@components";
-import { updateProfile } from "@features";
+import { updateAuthenticatedUser, updateProfile } from "@features";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateProfileSchema } from "@schemas";
 import { readLocalStorage } from "@utils";
@@ -17,6 +17,7 @@ const ProfileForm = () => {
         if (Object.keys(data).some(key => data[key] !== profile[key])) {
             const result = await dispatch(updateProfile(data));
             if (updateProfile.fulfilled.match(result)) {
+                dispatch(updateAuthenticatedUser(result.payload.user));
                 setIsEditing(false);
             } return;
         }
@@ -49,7 +50,7 @@ const ProfileForm = () => {
             </div>
 
             <Button type="button" onClick={() => setIsEditing(true)} className="w-full">
-                <FaEdit className="mx-2"/> Edit Profile
+                <FaEdit className="mx-2" /> Edit Profile
             </Button>
         </div>
     );
@@ -58,7 +59,6 @@ const ProfileForm = () => {
         <Form onSubmit={onSubmit} resolver={zodResolver(updateProfileSchema)} className="space-y-6">
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
                 <Input
                     name="name"
                     label="Full Name"
@@ -69,13 +69,13 @@ const ProfileForm = () => {
                     name="email"
                     label="Email Address"
                     placeholder="Your email address"
-                   defaultValue={profile?.email ?? undefined}
+                    defaultValue={profile?.email ?? undefined}
                 />
 
                 {profile?.cnic && <Input
                     name="cnic"
                     label="CNIC No."
-                   defaultValue={profile?.cnic ?? undefined}
+                    defaultValue={profile?.cnic ?? undefined}
                     placeholder="Your cnic no."
                     disabled={true}
                 />}

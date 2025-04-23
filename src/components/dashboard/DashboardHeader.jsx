@@ -41,7 +41,7 @@ const DashboardHeader = ({ toggleSidebar }) => {
 
   return (
     <header
-      className="bg-white shadow-md "
+      className="bg-white shadow-md z-50"
       style={{ borderBottom: "1.5px solid var(--out-line)" }}
     >
       <div className="flex items-center justify-between px-4 py-3 ">

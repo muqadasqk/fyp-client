@@ -106,7 +106,6 @@ const userSlice = createSlice({
             })
             .addCase(updateProfile.fulfilled, (state, action) => {
                 state.loading = false;
-                // writeLocalStorage("authenticatedUser", action.payload.user, true);
             })
             .addCase(updateProfile.rejected, (state) => {
                 state.loading = false;
