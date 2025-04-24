@@ -1,14 +1,21 @@
-import { spinner } from '@assets'
-import { Overlay } from '@components'
+import React from "react";
+import { spinner } from '@assets'; 
 
-const Spinner = ({ size }) => {
-    return (
-        <Overlay >
-          <div className='items-center justify-center '>
-          <img src={spinner} alt="Loading spinner" width={size} />
-          </div>
-        </Overlay>
-    )
-}
+const Spinner = () => {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center ">
+      <div className="text-center">
+        <div className="mb-4">
+          <img 
+            src={spinner} 
+            alt="Loading spinner" 
+            className="w-16 h-16 animate-spin mx-auto" 
+          />
+        </div>
+       
+      </div>
+    </div>
+  );
+};
 
-export default Spinner
+export default Spinner;

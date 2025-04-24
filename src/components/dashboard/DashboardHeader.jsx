@@ -41,7 +41,7 @@ const DashboardHeader = ({ toggleSidebar }) => {
 
   return (
     <header
-      className="bg-white shadow-md z-50"
+      className="bg-white  z-10 shadow-md "
       style={{ borderBottom: "1.5px solid var(--out-line)" }}
     >
       <div className="flex items-center justify-between px-4 py-3 ">
@@ -56,9 +56,9 @@ const DashboardHeader = ({ toggleSidebar }) => {
 
         {/* <div className="items-center">
           <img
-            src="/images/fyp-ms-logo.png"
+            src="/images/logo.png"
             alt="FYP Management System"
-            className="w-10 mb-3 ml-3 md:hidden item-ce"
+            className="w-30 h-20 mb-3 ml-3 md:hidden item-center"
           />
         </div> */}
 

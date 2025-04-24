@@ -115,7 +115,7 @@ const ManageAccounts = () => {
             </div>
 
             <Table
-                records={users}
+                records={users} 
                 fields={{
                     name: "Full Name",
                     email: "Email Address",

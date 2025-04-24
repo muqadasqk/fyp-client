@@ -45,13 +45,21 @@ const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
   const { role } = useAuth();
 
   return (
-    <div className={`z-50 text-white w-[80%] sm:w-[20%] space-y-6 py-7 absolute inset-y-0 transform ${isOpen ? "translate-x-0" : "-translate-x-full"}
+    <div className={`z-50 text-white "w-full lg:w-[20%] w-[80%]  p-4" space-y-6 py-7 absolute inset-y-0 transform ${isOpen ? "translate-x-0" : "-translate-x-full"}
         md:relative md:translate-x-0 transition duration-200 ease-in-out z-20`}
       style={{ background: "var(--background-color)" }}>
-      <div className="flex items-center justify-center px-4">
-        <img src="/images/logo-transparent.png" alt="FYP Management System"  />
-        <button onClick={toggleSidebar} className="md:hidden ms-auto mt-5"
-        ><FaTimes className="h-8 w-8" />
+      <div className="flex items-center justify-center mx-auto relative">
+        <img
+          src="/images/logo-transparent.png"
+          alt="FYP Management System"
+          className=" md:w-40 md:h-20 block mx-auto md:mt-0 mt-5"
+        />
+
+        <button
+          onClick={toggleSidebar}
+          className="md:hidden ms-auto mt-5"
+        >
+          <FaTimes className="h-8 w-8" />
         </button>
       </div>
 
