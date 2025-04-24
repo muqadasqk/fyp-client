@@ -50,7 +50,7 @@ const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
       style={{ background: "var(--background-color)" }}>
       <div className="flex items-center justify-center mx-auto relative">
         <img
-          src="/images/logo-transparent.png"
+          src="/images/logo.png"
           alt="FYP Management System"
           className=" md:w-40 md:h-20 block mx-auto md:mt-0 mt-5"
         />
