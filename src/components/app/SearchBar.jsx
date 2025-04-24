@@ -40,7 +40,7 @@ const SearchBar = ({ fields, set, ...props }) => {
         
            
            <input
-               className="bg-white  lg:w-[280%] border p-2 rounded-md "
+               className="bg-white  w-full lg:w-[280%] border p-2 rounded-md "
                 type="search"
                 value={text}
                 onChange={handleChange}

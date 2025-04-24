@@ -2,7 +2,7 @@ import { Spinner } from "@components";
 import { Button, CreateUserForm, DashboardContent, Pagination, RangeSelector, SearchBar, Sort, Table } from "@components";
 import { retrieveUsers, updateStatus } from "@features";
 import { useEffect, useState } from "react";
-import { FaCross, FaLock, FaLockOpen, FaPlus, FaPlusSquare, FaTrash, FaSearch } from "react-icons/fa"; // Added FaSearch import
+import { FaCross, FaLock, FaLockOpen, FaPlus,FaTimes, FaTrash, FaSearch} from "react-icons/fa"; // Added FaSearch import
 import { useDispatch, useSelector } from "react-redux";
 
 const ManageAccounts = () => {
@@ -10,9 +10,9 @@ const ManageAccounts = () => {
     const { users, pagination, loading } = useSelector((state) => state.users);
     const [selectRoleForm, setSelectRoleForm] = useState(false);
     const [role, setRole] = useState(null);
-    const [sort, setSort] = useState(false);
+    
     const [searchshow, setSearchShow] = useState(false);
-    const [range, setRange] = useState(false);
+    
     const [page, setPage] = useState({ current: 1, size: 10, query: {}, sort: { createdAt: -1 } });
 
     useEffect(() => {
@@ -56,16 +56,16 @@ const ManageAccounts = () => {
             </div>
 
             <div className="flex flex-wrap gap-2 items-center mb-3 rounded-md">
-            {(sort && range) && !searchshow && (
-                    <div className="sm:block lg:hiddeen">
+            
+                    <div className="sm:block lg:hidden">
                         <Button
                             className="p-2 text-gray "
                             onClick={() => setSearchShow(!searchshow)}
                         >
-                            <FaSearch width={20} />
+                          {searchshow ? <FaTimes className="w-8" /> : <FaSearch className="w-8" />}
                         </Button>
                     </div>
-                )}
+                
                 {!searchshow && (
                     <>
                         <div className="flex-shrink-0 lg:block ">
@@ -73,7 +73,7 @@ const ManageAccounts = () => {
                                 value={page.size}
                                 onChange={({ target }) =>{
                                     setPage((p) => ({ ...p, size: target.value }));
-                                    setRange(true);
+                                    
                                 }}
                             />
                         </div>
@@ -105,7 +105,7 @@ const ManageAccounts = () => {
                              status: "Account Status",
                          }}
                          set={(sort) => {
-                             setSort(true);
+                            
                              setPage((p) => ({ ...p, sort }));
                          }}
                      />
