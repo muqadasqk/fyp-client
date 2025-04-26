@@ -1,5 +1,5 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
-import { apiRequest}  from "@utils";
+import { apiRequest,deleteLocalStorage}  from "@utils";
 import { setErrors } from "./uiSlice";
 
 
@@ -58,7 +58,7 @@ export const updateProposal = createAsyncThunk("proposal/updateProposal",
     }
 )
 
-export const deletProposla = createAsyncThunk("proposal/deleteProposal",
+export const deleteProposal = createAsyncThunk("proposal/deleteProposal",
     async(id,{rejectWithValue})=>{
         try {
             const {data} = await apiRequest.delete(`/proposals/${id}`)
@@ -92,7 +92,7 @@ const proposalSlice = createSlice({
             state.loading = false;
             state.proposals = [action.payload, ...state.proposals];
          })
-         .addCase(createProposal.pending, (state)=>{
+         .addCase(createProposal.rejected, (state)=>{
             state.loading = false;
          })
          .addCase(getOneProposal.pending, (state)=>{
@@ -106,12 +106,37 @@ const proposalSlice = createSlice({
             state.loading =  false
          })
          .addCase(updateProposal.pending, (state)=>{
-            state.loading = false;
+            state.loading = true;
          })
          .addCase(updateProposal.fulfilled, (state,action)=>{
             state.loading = false;
-            state.updateProposal = action.payload
+           const index = state.proposals.findIndex((proposal) => proposal._id === action.meta.arg.id);
+           if(action.meta.arg.statusCode  === 20001){
+            if (index !== -1)
+            state.proposals.splice(index, 1);
+        } else {
+            if (index !== -1){
+                state.proposals[index] = {...action.payload.proposal}
+            }
+          
+        }
+         })
+         .addCase(updateProposal.rejected, (state)=>{
+            state.loading = false
+         })
+         .addCase(deleteProposal.pending, (state)=>{
+            state.loading =  true;
+         })
+         .addCase(deleteProposal.fulfilled, (state,action)=>{
+          state.loading = false;
+          state.proposals = state.proposals.filter((p) => p._id !== action.payload)
+         })
+         .addCase(deleteProposal.rejected, (state)=>{
+            state.loading = false;
          })
     }
+    
 
-})
+});
+
+export default proposalSlice.reducer

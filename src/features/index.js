@@ -9,3 +9,11 @@ export { signup, confirmEmail, updateAuthenticatedUser, signin, signout, resetPa
 // users
 export { default as userReducer } from "./userSlice";
 export { retrieveUsers, createUser, updateProfile, updatePassword, updateStatus } from "./userSlice";
+
+//proposals
+export {default as proposalsReducer} from "./proposalSlice";
+export {retrieveProposals, createProposal, getOneProposal, updateProposal,  deleteProposal} from "./proposalSlice";
+
+//meetings
+export {default as meetingsReducer} from "./meetingSlice";
+export {retrieveMeetings, createMeeting, projectSpecific,getOneMeeting, updateMeeting, deleteMeeting} from "./meetingSlice"
