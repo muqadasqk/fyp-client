@@ -5,7 +5,6 @@ import { confirmEmailSchema, signupSchema } from "@schemas";
 import { useDispatch, useSelector } from "react-redux";
 import { clearEmailForOtp, confirmEmail, sendOtp, signup } from "@features";
 import { useState } from "react";
-import { FaUser } from "react-icons/fa";
 
 const Signup = () => {
     const dispatch = useDispatch();
