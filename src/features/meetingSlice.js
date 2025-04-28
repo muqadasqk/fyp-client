@@ -1,14 +1,12 @@
 import { createSlice,createAsyncThunk} from "@reduxjs/toolkit";
 import { apiRequest } from "@utils";
 import { setErrors } from "./uiSlice";
-import { faL } from "@fortawesome/free-solid-svg-icons";
-
 
 const initialState  = {
     meetings:[],
     pagination:{},
     loading:false,
-    projectMeetings: [],
+    projects:[],
     meeting:null
 }
  export const retrieveMeetings = createAsyncThunk("meeting/retrieveMeetings",
@@ -23,22 +21,35 @@ const initialState  = {
  )
 
  export const createMeeting = createAsyncThunk("meeting/createMeeting",
-    async (formData, {rejectWithValue})=>{
+    async (formData, {rejectWithValue, dispatch}) => {
         try {
             const {data} = await apiRequest.post("/meetings", formData, {
                 headers:{"Content-type" : "application/json"}
             })
             return data
         } catch (error) {
+            dispatch(setErrors(error.response?.data?.errors))
             return rejectWithValue(error.response?.data)
         }
     }
  )
 
- export const projectSpecific = createAsyncThunk("meeting/projectSpecific",
-    async (id , {rejectWithValue}) =>{
+ export const updateMeeting = createAsyncThunk("meeting/updateMeeting",
+    async ({id, updatedData}, {rejectWithValue}) => {
         try {
-            const {data} = await apiRequest.post(`/meetings/p/${id}`);
+            const {data} = await apiRequest.patch(`/meetings/${id}`, updatedData );
+            return (data)
+        } catch (error) {
+            dispatch(setErrors(error.response?.data?.errors));
+            return rejectWithValue(error.response?.data)
+        }
+    }
+)
+
+ export const projectSpecific = createAsyncThunk("meeting/projectSpecific",
+    async (id , {rejectWithValue}) => {
+        try {
+            const {data} = await apiRequest.post(`/meetings/p/${id}` , {showSuccessToast:false});
             return data
         } catch (error) {
             return rejectWithValue(error.response?.data)
@@ -47,9 +58,9 @@ const initialState  = {
  )
 
  export const getOneMeeting = createAsyncThunk("meeting/getOneMeeting",
-    async (id, {rejectWithValue})=>{
+    async (id, {rejectWithValue}) => {
         try {
-            const {data} = await apiRequest.get(`/meetings/${id}`);
+            const {data} = await apiRequest.get(`/meetings/${id}`, {showSuccessToast:false});
             return data
         } catch (error) {
             return rejectWithValue(error.response?.data)
@@ -57,19 +68,9 @@ const initialState  = {
     }
  )
 
- export const updateMeeting = createAsyncThunk("meeting/updateMeeting",
-    async ({id, updatedData}, {rejectWithValue}) =>{
-        try {
-            const {data} = await apiRequest.patch(`/meetings/${id}`,updatedData , {showSuccessToast:false});
-            return (data)
-        } catch (error) {
-            return rejectWithValue(error.response?.data)
-        }
-    }
-)
-
+ 
 export const deleteMeeting = createAsyncThunk("meeting/deleteMeeting",
-    async (id, {rejectWithValue}) =>{
+    async (id, {rejectWithValue}) => {
         try {
             const {data} = await apiRequest.delete(`/meetings/${id}`);
             return data
@@ -106,26 +107,6 @@ const meetingSlice = createSlice({
         .addCase(createMeeting.rejected, (state) => {
          state.loading = false;
         })
-        .addCase(projectSpecific.pending, (state)=>{
-            state.loading = true;
-        })
-        .addCase(projectSpecific.fulfilled, (state, action)=>{
-            state.loading = false;
-            state.projectMeetings = action.payload.meetings
-        })
-        .addCase(projectSpecific.rejected, (state)=>{
-            state.loading = false;
-        })
-        .addCase(getoneMeeting.pending, (state)=>{
-            state.loading = true;
-        })
-        .addCase(getoneMeeting.fulfilled, (state, action)=>{
-            state.loading = false;
-            state.meeting = action.payload
-        })
-        .addCase(getoneMeeting.pending, (state)=>{
-            state.loading = false
-        })
         .addCase(updateMeeting.pending, (state)=>{
             state.loading = true;
         })
@@ -136,12 +117,32 @@ const meetingSlice = createSlice({
         .addCase(updateMeeting.rejected, (state)=>{
             state.loading = false
         })
+        .addCase(projectSpecific.pending, (state)=>{
+            state.loading = true;
+        })
+        .addCase(projectSpecific.fulfilled, (state, action)=>{
+            state.loading = false;
+            state.projects = action.payload.meeting
+        })
+        .addCase(projectSpecific.rejected, (state)=>{
+            state.loading = false;
+        })
+        .addCase(getOneMeeting.pending, (state)=>{
+            state.loading = true;
+        })
+        .addCase(getOneMeeting.fulfilled, (state, action)=>{
+            state.loading = false;
+            state.meeting = action.payload
+        })
+        .addCase(getOneMeeting.rejected, (state)=>{
+            state.loading = false
+        })
         .addCase(deleteMeeting.pending, (state)=>{
             state.loading = true;
         })
         .addCase(deleteMeeting.fulfilled, (state, action)=>{
             state.loading = false;
-            state.meetings = state.meetings.filter((m) => m._id !== action.payload);
+            state.meetings = state.meetings.filter((meeting) => meeting._id !== action.payload._id);
         })
         .addCase(deleteMeeting.rejected, (state)=>{
             state.loading = false;
