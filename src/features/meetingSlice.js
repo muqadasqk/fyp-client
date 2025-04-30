@@ -46,7 +46,7 @@ const initialState  = {
     }
 )
 
- export const projectSpecific = createAsyncThunk("meeting/projectSpecific",
+ export const projectSpecificMeeting = createAsyncThunk("meeting/projectSpecificMeeting",
     async (id , {rejectWithValue}) => {
         try {
             const {data} = await apiRequest.post(`/meetings/p/${id}` , {showSuccessToast:false});
@@ -117,14 +117,14 @@ const meetingSlice = createSlice({
         .addCase(updateMeeting.rejected, (state)=>{
             state.loading = false
         })
-        .addCase(projectSpecific.pending, (state)=>{
+        .addCase(projectSpecificMeeting.pending, (state)=>{
             state.loading = true;
         })
-        .addCase(projectSpecific.fulfilled, (state, action)=>{
+        .addCase(projectSpecificMeeting.fulfilled, (state, action)=>{
             state.loading = false;
             state.projects = action.payload.meeting
         })
-        .addCase(projectSpecific.rejected, (state)=>{
+        .addCase(projectSpecificMeeting.rejected, (state)=>{
             state.loading = false;
         })
         .addCase(getOneMeeting.pending, (state)=>{

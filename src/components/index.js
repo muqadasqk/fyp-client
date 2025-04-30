@@ -33,3 +33,6 @@ export { default as UpdatePasswordForm } from "./profile/UpdatePasswordForm";
 
 // uers components
 export { default as CreateUserForm } from "./users/CreateUserForm";
+
+//theme components
+export {default as useTheme} from "./theme/UseTheme"

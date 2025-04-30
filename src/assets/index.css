@@ -11,12 +11,9 @@
     --text-color: #333;
     --out-line:#1A438D;
     --background-color:#005BAB;
-    --link-color: #2980b9;
-    --link-hover-color: #1c5981;
     --white-color: #FFFFFF;
     color-scheme: light dark;
     --border-color : gray;
-
   }
   
   /* ============================================= */
@@ -41,6 +38,38 @@
     border-color: var(--border-color);
   }
   
+
+  /* ============================================= */
+  /* Dark Theme                                   */
+  /* ============================================= */
+.theme-dark {
+  --background-color: #0B0B0B;
+  --text-color: #d4d7dc;
+  --link-color: #f1f1f1;
+  --header-bg: #1f1f1f;
+  --header-border: #444;
+  
+  
+}
+
+
+  /* ============================================= */
+  /* Light Theme                                   */
+  /* ============================================= */
+.theme-light {
+
+  --background-color: #e5e7eb;
+  --text-color: #6b7280;
+  --link-color: #ffffff;
+  --link-hover-color: #cccccc;
+  --header-bg: #f0f0f0;
+  --header-border: #aaa;
+ 
+
+}
+
+
+
   /* ============================================= */
   /* Headings                                      */
   /* ============================================= */
@@ -288,7 +317,10 @@
   
   .table-container {
     overflow-x: scroll; 
-    -webkit-overflow-scrolling: touch; 
+    padding-left: 5px;
+    -webkit-overflow-scrolling: touch;
+  
+     
   }
   
   .table-container::-webkit-scrollbar {

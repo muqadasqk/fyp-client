@@ -11,14 +11,14 @@ const DashboardContent = ({ title = "", description = "", isLoading, children })
             </Helmet>
 
             {isLoading && <Spinner size={70}/>}
-            <div className="m-5">
+            <div className="m-5" >
                 {(title || description) && (
                     <div >
                         {/* {title && <h2 className="font-bold text-gray-500">{title}</h2>}   */}
                         {/* {description && <p className="text-sm text-gray-500">{description}</p>} */}
                     </div>
                 )}
-                <div>{children}</div>
+                <div >{children}</div>
             </div>
         </Fragment>
     );

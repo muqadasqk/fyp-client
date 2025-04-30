@@ -17,7 +17,7 @@ const Sort = ({ fields, set }) => {
         <select
             value={`${selectedField}|${sortDirection}`}
             onChange={handleFieldChange}
-            className="bg-white border p-2 rounded-md"
+            className="theme-dark:bg-secondaryBackground theme-light:bg-white border p-2 rounded-md"
         >
             {Object.entries(fields).map(([field, label]) =>
                 ["asc", "desc"].map((direction) => (

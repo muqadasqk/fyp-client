@@ -1,20 +1,22 @@
 import { Button } from "@components";
 
 const Table = ({ fields, records, actions, ...prop }) => {
+ 
     return (
-        <div className="table-container"  >
-            <table {...prop} className="min-w-full bg-white ">
+        <div className= "table-container">
+
+            <table {...prop} className="min-w-full">
                 <thead>
-                    <tr className="bg-gray-50">
+                    <tr className="theme-light:bg-gray-50 theme-dark:bg-secondaryBackground">
                         {Object.entries(fields).map(([key, label]) => (
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase truncate" key={key}>{label}</th>
                         ))}
                         {actions && <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase truncate">Action</th>}
                     </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="theme-light:bg-white divide-y divide-gray-200 theme-dark:bg-black">
                     {records.length >= 1 ? records.map((record) => (
-                        <tr key={record._id} className="hover:bg-gray-200 truncate">
+                        <tr key={record._id} className="theme-light:hover:bg-gray-200 truncate hover:theme-dark:bg-secondaryBackground">
                             {Object.keys(fields).map((field) => (
                                 <td key={field} className="ps-2">{record[field] ?? "N/A"}</td>
                             ))}

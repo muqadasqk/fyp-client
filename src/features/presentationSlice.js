@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { setErrors } from "./uiSlice";
 import { apiRequest } from "@utils";
-import { projectSpecific } from "./meetingSlice";
+
 
 const initialState = {
     presentations: [],
@@ -48,7 +48,7 @@ export const updatePresentation = createAsyncThunk("presentation/updatePresentat
     }
 );
 
-export const projectSpecific = createAsyncThunk("presentation/proejctSpecific",
+export const projectSpecificPre = createAsyncThunk("presentation/proejctSpecificPre",
     async (id, {rejectWithValue}) => {
         try {
             const {data} = await apiRequest.post(`/presentations/p/${id}`, {showSuccessToast:false})
@@ -128,14 +128,14 @@ const presentationSlice = createSlice({
                 state.loading = false;
             })
 
-            .addCase(projectSpecific.pending, (state) => {
+            .addCase(projectSpecificPre.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(projectSpecific.fulfilled, (state, action) => {
+            .addCase(projectSpecificPre.fulfilled, (state, action) => {
                 state.loading = false;
                 state.projects = action.payload.projects;
             })
-            .addCase(projectSpecific.rejected, (state) => {
+            .addCase(projectSpecificPre.rejected, (state) => {
                 state.loading = false;
             })
 

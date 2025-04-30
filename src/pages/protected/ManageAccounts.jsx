@@ -40,8 +40,8 @@ const ManageAccounts = () => {
         <DashboardContent isLoading={loading} title="Manage Supervisor and Student Accounts" description="Manage Supervisor and Student Accounts | Approve/Reject account requests">
             <div className="flex relative flex-col lg:flex-row justify-between items-start gap-4 mb-6 w-full">
                 <div className="relative">
-                    <Button type="button" onClick={() => setSelectRoleForm(true)}>
-                        <FaPlus className="mx-2" /> Add a Supervisor/Student
+                    <Button type="button"  className="theme-dark:hover:bg-secondaryBackground theme-dark-bg-black"onClick={() => setSelectRoleForm(true)}>
+                        <FaPlus className="mx-2 " /> Add a Supervisor/Student
                     </Button>
 
                     {selectRoleForm && (
@@ -114,7 +114,7 @@ const ManageAccounts = () => {
                 
             </div>
 
-            <Table
+            <Table 
                 records={users} 
                 fields={{
                     name: "Full Name",
@@ -123,7 +123,8 @@ const ManageAccounts = () => {
                     phone: "Phone Number",
                     rollNo: "Roll No.",
                     role: "Role",
-                    status: "Account Status"
+                    status: "Account Status",
+                
                 }}
                 actions={[
                     { label: "Approve", icon: <FaTrash />, ShowWhen: { status: "approvalPending" }, onClick: handle },

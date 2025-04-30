@@ -29,7 +29,7 @@ const SearchBar = ({ fields, set, ...props }) => {
         <div className="flex gap-1">
           
            <select onChange={handleFieldChange} value={field}
-           className="bg-white border p-2 rounded-md"
+           className="theme-dark:bg-secondaryBackground theme-light:bg-white border p-2 rounded-md"
 >
                 <option value="*">All Fields</option>
                 {Object.entries(fields).map(([key, label]) => (
@@ -40,7 +40,7 @@ const SearchBar = ({ fields, set, ...props }) => {
         
            
            <input
-               className="bg-white  w-full lg:w-[280%] border p-2 rounded-md "
+               className="theme-dark:bg-secondaryBackground  theme-light:bg-white w-full lg:w-[280%] border p-2 rounded-md "
                 type="search"
                 value={text}
                 onChange={handleChange}
