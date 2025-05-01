@@ -35,4 +35,4 @@ export { default as UpdatePasswordForm } from "./profile/UpdatePasswordForm";
 export { default as CreateUserForm } from "./users/CreateUserForm";
 
 //theme components
-export {default as useTheme} from "./theme/UseTheme"
+export { default as ThemeSwitcher } from "./theme/ThemeSwitcher"

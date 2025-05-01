@@ -45,7 +45,7 @@ const Signin = () => {
                 </Button>
             </Form>
 
-            <div className="mt-4 text-center text-gray-600">
+            <div className="mt-4 text-center text-secondary">
                 Don't have an account? <Button href="/signup">
                     Sign Up
                 </Button>

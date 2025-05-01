@@ -19,8 +19,8 @@ const Select = ({
     return (
         <div className="relative pb-3">
             {label && (
-                <label htmlFor={name} className="font-medium text-gray-700">
-                    {label} {optional && <em className="text-gray-400 ">(Optional)</em>}
+                <label htmlFor={name} className="font-medium">
+                    {label} {optional && <em className="text-gray-400">(Optional)</em>}
                 </label>
             )}
 
@@ -35,7 +35,7 @@ const Select = ({
                 id={name}
                 {...register(name)}
                 className={clsx(
-                    `mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary`,
+                    `bg-default mt-1 block w-full px-3 py-2 border rounded-md shadow-sm`,
                     {
                         "border-red-500 focus:ring-red-500 focus:border-red-500": errors[name],
                         "border-gray-300 focus:ring-primary focus:border-primary-500": !errors[name],

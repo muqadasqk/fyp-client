@@ -7,7 +7,7 @@ const AuthContent = ({ title = "Title", description = "Description", className =
         <div
             className={clsx(
                 "border-0 p-10 w-full",
-                "sm:border sm:rounded sm:border-gray-200 sm:bg-white",
+                "sm:border sm:rounded-lg sm:border-default sm:bg-default",
                 className
             )}
         >
@@ -18,8 +18,8 @@ const AuthContent = ({ title = "Title", description = "Description", className =
             </Helmet>
 
             <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold text-gray-800">{title}</h3>
-                <p className="text-sm text-gray-500 mt-1">{description}</p>
+                <h3 className="text-2xl text-primary font-bold">{title}</h3>
+                <p className="text-sm text-secondary mt-1">{description}</p>
             </div>
 
             <div>

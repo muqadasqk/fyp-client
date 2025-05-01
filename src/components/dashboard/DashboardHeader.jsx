@@ -1,16 +1,15 @@
-import { Button } from "@components";
+import { Button, ThemeSwitcher } from "@components";
 import { signout } from "@features";
 import { useDispatch, useSelector } from "react-redux";
 import { FaBars, FaUser, FaSignOutAlt, FaBell, FaSun, FaMoon, } from "react-icons/fa";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { useEffect, useState } from "react";
 import { readFile } from "@services";
-import { useTheme } from "@components";
+
 const DashboardHeader = ({ toggleSidebar }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const [dpSrc, setDpSrc] = useState(undefined);
-  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
     !!user && (async () => setDpSrc(await readFile(user.image)))();
@@ -41,7 +40,7 @@ const DashboardHeader = ({ toggleSidebar }) => {
 
   return (
     <header
-    className="z-10 shadow-md theme-dark:bg-[color:var(--Headerbg)] theme-light:bg-white "
+      className="z-10 shadow-md theme-dark:bg-[color:var(--Headerbg)] theme-light:bg-white "
 
       style={{ borderBottom: "1.5px solid var(--header-border)" }}
     >
@@ -55,42 +54,8 @@ const DashboardHeader = ({ toggleSidebar }) => {
           </button>
         </div>
 
-        {/* <div className="items-center">
-          <img
-            src="/images/logo.png"
-            alt="FYP Management System"
-            className="w-30 h-20 mb-3 ml-3 md:hidden item-center"
-          />
-        </div> */}
-
         <div className="flex items-center space-x-4">
-          <Popover className="relative">
-            <PopoverButton className="flex items-center space-x-2 p-2 rounded-full">
-              {theme === "theme-dark" ? (
-                <FaSun className="text-yellow-400 w-6 h-6" />
-              ) : (
-                <FaMoon className="text-blue-500 w-6 h-6" />
-              )}
-            </PopoverButton>
-            <PopoverPanel className="absolute z-20 right-0 mt-1 p-4 rounded shadow-lg  theme-dark:bg-secondaryBackground flex gap-3">
-            
-              <Button
-                onClick={() => setTheme("theme-dark")}
-                className={`p-2 rounded-full ${theme === "theme-dark" ? "bg-bgBlue" : ""}`}
-
-              >
-                <FaSun/>
-              </Button>
-              <Button
-                onClick={() => setTheme("theme-light")}
-                className={`p-2 rounded-full ${theme === "theme-light" ? "bg-bgBlue" : ""
-                  }`}
-              >
-                <FaMoon  />
-              </Button>
-            </PopoverPanel>
-          </Popover>
-
+          <ThemeSwitcher />
 
           <Popover className="relative">
             <PopoverButton className="flex items-center space-x-2 focus:outline-none">
