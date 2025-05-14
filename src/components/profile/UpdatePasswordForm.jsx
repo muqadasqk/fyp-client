@@ -14,8 +14,8 @@ const UpdatePasswordForm = () => {
     };
 
     return (
-        <div className="bg-white shadow sm:rounded-lg p-6">
-            <h1 className="text-2xl font-bold text-gray-900 mb-6">Update Password</h1>
+        <div className="bg-primary border border-primary sm:rounded-lg p-6">
+            <h1 className="text-2xl font-bold mb-6">Update Password</h1>
             <div>
                 <Form onSubmit={handlePasswordUpdate} resolver={zodResolver(updatePasswordSchema)}>
                     <Input

@@ -45,9 +45,10 @@ const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
   const { role } = useAuth();
 
   return (
-    <div className={`z-50 text-white  "w-full lg:w-[20%] w-[80%] theme-light:bg-[var(--primary-color)] theme-dark:bg-black p-4" space-y-6 py-7 absolute inset-y-0 transform ${isOpen ? "translate-x-0" : "-translate-x-full"}
+    // <div className={`z-50 lg:w-[20%] w-[80%] bg-theme dark:bg-primary dark:border-r dark:border-primary p-4 space-y-6 py-7 absolute inset-y-0 transform ${isOpen ? "translate-x-0" : "-translate-x-full"}
+    <div className={`z-50 lg:w-[20%] w-[80%] bg-theme dark:bg-primary space-y-6 py-7 absolute inset-y-0 transform ${isOpen ? "translate-x-0" : "-translate-x-full"}
     md:relative md:translate-x-0 transition duration-200 ease-in-out z-20`}
-  >
+    >
       <div className="flex items-center justify-center mx-auto relative">
         <img
           src="/images/logo.png"
@@ -64,12 +65,11 @@ const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
       </div>
 
       <Navigatinons role={role} />
-      <div className="absolute w-full bottom-4 p-4">
+      <div className="absolut w-full bottom-4 p-4">
         <Button onClick={() => dispatch(signout())}
           className="w-full">
           <FaSignOutAlt className="mr-3" /> Signout
         </Button>
-
       </div>
     </div>
   );

@@ -35,10 +35,10 @@ const Select = ({
                 id={name}
                 {...register(name)}
                 className={clsx(
-                    `bg-default mt-1 block w-full px-3 py-2 border rounded-md shadow-sm`,
+                    `input-primary mt-1 block w-full`,
                     {
-                        "border-red-500 focus:ring-red-500 focus:border-red-500": errors[name],
-                        "border-gray-300 focus:ring-primary focus:border-primary-500": !errors[name],
+                        "border-red-400 focus:ring-0": errors[name],
+                        // "border-gray-300 focus:ring-primary focus:border-primary-500": !errors[name],
                     }
                 )}
                 {...props}

@@ -18,13 +18,13 @@ const ForgotPassword = () => {
     if (emailForOtp) return <VerifyOtpForm />
 
     return (
-        <AuthContent title="Forgot Password" description="Enter your account email address" className="md:w-[50%%] lg:w-[35%]">
+        <AuthContent title="Forgot Password" description="Enter email address associated with you account" className="md:w-[50%%] lg:w-[35%]">
             <Form onSubmit={handleSendOtp} resolver={zodResolver(sendOtpSchema)}>
                 <Input label="Email Address" name="email" placeholder="Enter your account email" />
                 <Button type="submit" isLoading={loading} className="w-full mt-2">Send OTP</Button>
             </Form>
 
-            <div className="mt-4 text-center text-gray-600">
+            <div className="mt-4 text-center text-secondary">
                 Want to signin your account? <Button href="/signin">Sign In</Button>
             </div>
         </AuthContent>
@@ -60,11 +60,11 @@ const VerifyOtpForm = () => {
                 <Button type="submit" isLoading={loading} className="w-full mt-2">Verify OTP</Button>
             </Form>
 
-            <div className="mt-4 text-center text-gray-600">
+            <div className="mt-4 text-center text-secondary">
                 Didn't receive an OTP? <Button href="./" onClick={handleResendOtp}>Resend Now</Button>
             </div>
 
-            <div className="mt-1 text-center text-gray-600">
+            <div className="mt-1 text-center text-secondary">
                 Want to signin your account? <Button href="/signin">Sign In</Button>
             </div>
         </AuthContent>
@@ -102,7 +102,7 @@ const SetPasswordForm = () => {
                 <Button type="submit" isLoading={loading} className="w-full mt-2">Save Password</Button>
             </Form>
 
-            <div className="mt-4 text-center text-gray-600">
+            <div className="mt-4 text-center text-secondary">
                 Want to signin your account? <Button href="/signin">Sign In</Button>
             </div>
         </AuthContent>

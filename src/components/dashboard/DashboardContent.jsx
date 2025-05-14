@@ -10,15 +10,14 @@ const DashboardContent = ({ title = "", description = "", isLoading, children })
                 <meta name="description" content={description} />
             </Helmet>
 
-            {isLoading && <Spinner size={70}/>}
+            {isLoading && <Spinner size={70} />}
+
+            {/* <div className="m-3">
+                <h6 className="text-secondary">{title}</h6>
+            </div> */}
+
             <div className="m-5" >
-                {(title || description) && (
-                    <div >
-                        {/* {title && <h2 className="font-bold text-gray-500">{title}</h2>}   */}
-                        {/* {description && <p className="text-sm text-gray-500">{description}</p>} */}
-                    </div>
-                )}
-                <div >{children}</div>
+                <div className="relative">{children}</div>
             </div>
         </Fragment>
     );

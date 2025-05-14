@@ -2,11 +2,10 @@
 export { default as Button } from "./app/Button";
 export { default as Spinner } from "./app/Spinner";
 export { default as Overlay } from "./app/Overlay";
+export { default as Listing } from "./listing/Listing";
 export { default as Table } from "./app/Table";
-export { default as Pagination } from "./app/Pagination";
-export { default as Sort } from "./app/Sort";
-export { default as SearchBar } from "./app/SearchBar";
-export { default as RangeSelector } from "./app/RangeSelector";
+export { default as Pagination } from "./listing/Pagination";
+export { default as SearchBar } from "./listing/SearchBar";
 
 // routes components
 export { default as ProtectedRoute } from "./routes/ProtectedRoute";

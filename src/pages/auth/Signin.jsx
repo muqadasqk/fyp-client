@@ -27,19 +27,20 @@ const Signin = () => {
                     label="Username"
                     placeholder="Enter your username"
                 />
+
                 <Input
                     type="password"
                     name="password"
                     label="Password"
                     placeholder="Enter your password"
+
+                    addOn={<div className="text-right">
+                        <Button href="/forgot-password">
+                            Forgot Password?
+                        </Button>
+                    </div>}
                 />
-
-                <div className="text-right">
-                    <Button href="/forgot-password">
-                        Forgot Password?
-                    </Button>
-                </div>
-
+                
                 <Button type="submit" isLoading={loading} className="w-full mt-3">
                     Sign In
                 </Button>

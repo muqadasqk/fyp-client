@@ -39,19 +39,17 @@ const DashboardHeader = ({ toggleSidebar }) => {
 
 
   return (
-    <header
-      className="z-10 shadow-md theme-dark:bg-[color:var(--Headerbg)] theme-light:bg-white "
-
-      style={{ borderBottom: "1.5px solid var(--header-border)" }}
-    >
+    <header className="bg-primary border-b border-primary shadow-sm z-10">
       <div className="flex items-center justify-between px-4 py-3 ">
         <div className="flex items-center">
           <button
             onClick={toggleSidebar}
-            className="text-gray-500 focus:outline-none focus:text-gray-700 md:hidden"
+            className="text-primary md:hidden"
           >
-            <FaBars className="h-8 w-8" />
+            <FaBars className="h-7 w-7" />
           </button>
+          
+          <p className="pl-3">{document.title}</p>
         </div>
 
         <div className="flex items-center space-x-4">
@@ -60,21 +58,21 @@ const DashboardHeader = ({ toggleSidebar }) => {
           <Popover className="relative">
             <PopoverButton className="flex items-center space-x-2 focus:outline-none">
 
-              <FaBell className="h-6 w-6 text-gray-500" />
+              <FaBell className="h-6 w-6 text-primary" />
               {notifications.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-semibold rounded-full w-4 h-4 flex items-center justify-center">
+                <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-semibold rounded-full w-4 h-4 flex items-center justify-center">
                   {notifications.length}
-                </span>
+                </div>
               )}
             </PopoverButton>
 
-            <PopoverPanel className="absolute right-0 mt-2 w-60  shadow-lg rounded-md z-20 p-4 overflow-y-auto max-h-60">
-              <div className="text-xs text-gray-500 pb-2 border-b">
+            <PopoverPanel className="absolute right-0 mt-2 w-60 bg-primary border border-primary shadow-lg rounded-md z-20 p-4 overflow-y-auto max-h-60">
+              <div className="pb-2 border-b border-primary">
                 Notifications
               </div>
               <div className="pt-2">
                 {notifications.map((notification, index) => (
-                  <div key={index} className="py-1 text-sm text-gray-700">
+                  <div key={index} className="py-1 text-primary">
                     {notification}
                   </div>
                 ))}
@@ -85,26 +83,26 @@ const DashboardHeader = ({ toggleSidebar }) => {
           <Popover className="relative">
             <PopoverButton className="flex items-center space-x-2 focus:outline-none">
               <div
-                className="w-8 h-18 rounded-full flex items-center justify-center text-white font-semibold"
+                className="w-18 h-18 rounded-full flex items-center justify-center font-semibold"
               >
                 <img src={dpSrc} className="w-8 h-8 rounded-full object-cover object-center" />
               </div>
             </PopoverButton>
 
-            <PopoverPanel className="absolute right-0 mt-2 w-60 bg-white shadow-lg rounded-md z-20 p-4">
-              <div className="text-xs text-gray-500 pb-2 border-b">
+            <PopoverPanel className="absolute right-0 mt-2 w-60 shadow-md bg-primary border border-primary rounded-md z-20">
+              <div className="text-sm p-3 border-b border-primary">
                 Signed in as
                 <br />
                 <strong >{user.email}</strong>
               </div>
 
-              <div className="pt-2">
-                <Button href="/profile" className="block px-2 py-2 text-md  text-gray-500 rounded transition hover:bg-black/10 hover:no-underline">
+              <div>
+                <Button href="/profile" className="flex justify-start items-center p-2 ps-5 text-primary hover:bg-primary-hover hover:no-underline">
                   <FaUser className="mr-2" />
                   Profile Settings
                 </Button>
 
-                <Button href="./" onClick={() => dispatch(signout())} className=" block px-2 py-2  text-gray-500 text-md rounded transition hover:bg-black/10 hover:no-underline">
+                <Button href="./" onClick={() => dispatch(signout())} className="flex justify-start items-center p-2 ps-5 text-primary hover:bg-primary-hover hover:no-underline">
                   <FaSignOutAlt className="mr-2" />
                   SignOut
                 </Button>

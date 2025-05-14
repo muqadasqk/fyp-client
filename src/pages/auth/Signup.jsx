@@ -68,7 +68,7 @@ const Signup = () => {
                     <div className="flex flex-col">
                         <Select
                             name="role"
-                            label="Role No."
+                            label="Role"
                             placeholder="Please select your role"
                             value={role}
                             onChange={({ target }) => setRole(target.value)}
@@ -112,7 +112,7 @@ const Signup = () => {
                 </Form>
             </div>
 
-            <div className="mt-4 text-center text-gray-600">
+            <div className="mt-4 text-center text-secondary">
                 Got an account? <Button href="/signin">
                     Sign In
                 </Button>
@@ -160,7 +160,7 @@ const EmailConfirmationForm = () => {
                 Didn't receive an OTP? <Button href="./" onClick={handleResendOtp}>Resend Now</Button>
             </div>
 
-            <div className="mt-1 text-center text-gray-600">
+            <div className="mt-1 text-center  text-secondary">
                 Want to sign in to your account? <Button href="/signin">Sign In</Button>
             </div>
         </AuthContent>

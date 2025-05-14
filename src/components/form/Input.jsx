@@ -1,9 +1,10 @@
+import { Button } from "@components";
 import clsx from "clsx";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 
-const Input = ({ name, label, optional, type = "text", ...props }) => {
+const Input = ({ name, label, optional, type = "text", addOn, ...props }) => {
   const { register, formState: { errors } } = useFormContext();
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = type === "password";
@@ -12,8 +13,14 @@ const Input = ({ name, label, optional, type = "text", ...props }) => {
   return (
     <div className="relative pb-3">
       {label && (
-        <label htmlFor={name} className="font-medium">
-          {label} {optional && <em className="text-gray-400">(Optional)</em>}
+        <label htmlFor={name} className="font-medium flex justify-between items-center">
+          <span>{label} {optional && <em className="text-gray-500">(Optional)</em>}</span>
+
+          {addOn && <div className="text-right">
+            <Button href="/forgot-password">
+              Forgot Password?
+            </Button>
+          </div>}
         </label>
       )}
 
@@ -22,10 +29,10 @@ const Input = ({ name, label, optional, type = "text", ...props }) => {
         id={name}
         {...register(name)}
         className={clsx(
-          "bg-default mt-1 block w-full px-3 py-2 border rounded-md shadow-sm",
+          "input-primary mt-1 block w-full",
           {
-            "border-red-500 focus:ring-red-500 focus:border-red-500": errorMessage,
-            "border-gray-300 focus:ring-primary focus:border-primary-500": !errorMessage,
+            "border-red-400 focus:ring-0": errorMessage,
+            // "border-gray-300 focus:ring-primary focus:border-primary-500": !errorMessage,
           })}
         {...props}
       />

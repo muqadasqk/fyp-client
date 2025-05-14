@@ -1,37 +1,108 @@
-import { Button } from "@components";
+import { useState } from "react";
+import { FaChevronUp, FaChevronDown } from "react-icons/fa";
+import clsx from "clsx";
 
-const Table = ({ fields, records, actions, ...prop }) => {
- 
+const TableHeader = ({ fields, sortState, onSortToggle, hasActions }) => {
     return (
-        <div className= "table-container">
+        <thead>
+            <tr className="bg-primary">
+                {Object.entries(fields).map(([key, label], index, arr) => (
+                    <th
+                        key={key}
+                        className={clsx(
+                            "px-6 py-3 text-left text-xs font-medium uppercase truncate",
+                            index === 0 && "rounded-tl-md",
+                            index === arr.length - 1 && !hasActions && "rounded-tr-md"
+                        )}
+                    >
+                        <div
+                            className="flex items-center space-x-1 cursor-pointer"
+                            onClick={() => onSortToggle(key)}
+                        >
+                            <span>{label}</span>
+                            <div className="flex flex-col text-gray-400 text-[10px]">
+                                {sortState[key] !== 'asc' && (
+                                    <FaChevronUp className={clsx({ "text-default": key === Object.keys(sortState)[0] })} />
+                                )}
+                                {sortState[key] !== 'desc' && (
+                                    <FaChevronDown className={clsx({ "text-default": key === Object.keys(sortState)[0] })} />
+                                )}
+                            </div>
+                        </div>
+                    </th>
+                ))}
+                {hasActions && (
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase truncate rounded-tr-md">
+                        Action
+                    </th>
+                )}
+            </tr>
+        </thead>
+    );
+};
 
+const Table = ({ fields, records, actions, onSort, ...prop }) => {
+    const [sortState, setSortState] = useState({});
+
+    const handleSortToggle = (field) => {
+        let direction = 'desc';
+
+        if (sortState[field] === 'desc') {
+            direction = 'asc';
+        } else if (sortState[field] === 'asc') {
+            direction = 'desc';
+        }
+
+        setSortState({ [field]: direction });
+        onSort({ [field]: direction });
+    };
+
+    return (
+        <div className="table-container w-full overflow-x-auto hide-scrollbar">
             <table {...prop} className="min-w-full">
-                <thead>
-                    <tr className="theme-light:bg-gray-50 theme-dark:bg-secondaryBackground">
-                        {Object.entries(fields).map(([key, label]) => (
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase truncate" key={key}>{label}</th>
-                        ))}
-                        {actions && <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase truncate">Action</th>}
-                    </tr>
-                </thead>
-                <tbody className="theme-light:bg-white divide-y divide-gray-200 theme-dark:bg-black">
+                <TableHeader
+                    fields={fields}
+                    sortState={sortState}
+                    onSortToggle={handleSortToggle}
+                    hasActions={!!actions}
+                />
+
+                <tbody className="divide-y dark:divide-[rgba(255,255,255,0.03)]">
                     {records.length >= 1 ? records.map((record) => (
-                        <tr key={record._id} className="theme-light:hover:bg-gray-200 truncate hover:theme-dark:bg-secondaryBackground">
+                        <tr key={record._id} className="hover:bg-black/10">
                             {Object.keys(fields).map((field) => (
                                 <td key={field} className="ps-2">{record[field] ?? "N/A"}</td>
                             ))}
-                            {actions && <td className="py-2 px-4 whitespace-nowrap">
-                                {actions.map(({ label, icon = null, ShowWhen, onClick }) => {
-                                    const k = Object.keys(ShowWhen)[0];
-                                    if (record[k] === ShowWhen[k]) {
-                                        return <Button title={`Click to ${label.toLowerCase()}`} key={label} onClick={() => onClick(record._id, label)}>
-                                            {/* {icon && icon} {label} */}{icon && icon}
-                                        </Button>
-                                    }
-                                })}
-                            </td>}
+                            {actions && (
+                                <td className="py-2 px-4 whitespace-nowrap">
+                                    {actions.map(({ label, icon = null, ShowWhen, onClick }) => {
+                                        const k = Object.keys(ShowWhen)[0];
+                                        if (record[k] === ShowWhen[k]) {
+                                            return (
+                                                <button
+                                                    title={`Click to ${label.toLowerCase()}`}
+                                                    key={label}
+                                                    onClick={() => onClick(record._id, label)}
+                                                    className="bg-primary p-2 rounded"
+                                                >
+                                                    {icon && icon}
+                                                </button>
+                                            );
+                                        }
+                                    })}
+                                </td>
+                            )}
                         </tr>
-                    )) : <tr><td>Nothing to show up!</td></tr>}
+                    )) : (
+                        <tr>
+                            <td
+                                className="px-4 py-2 text-gray-600 text-center"
+                                colSpan={Object.keys(fields).length + (actions ? 1 : 0)}
+                            >
+                                Nothing to show up!
+                            </td>
+                        </tr>
+                    )}
                 </tbody>
             </table>
         </div>

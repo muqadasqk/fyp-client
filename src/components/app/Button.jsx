@@ -3,8 +3,8 @@ import clsx from "clsx";
 import { Link } from "react-router-dom";
 
 const Button = ({ isLoading, href, children, className, ...props }) => {
-    const baseClasses = "flex items-center gap-2 px-4 py-2 bg-primary border rounded border-transparent justify-center";
-    const linkClasses = "hover:underline font-medium transition duration-200";
+    const baseClasses = "flex items-center justify-center gap-2 button-primary";
+    const linkClasses = "text-link";
     if (href) {
         return (
             <Link to={href} className={clsx(linkClasses, className)} {...props}>

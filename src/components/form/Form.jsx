@@ -6,10 +6,10 @@ import { clearErrors } from "@features";
 // method to reset the form fields
 export let resetForm;
 
-const Form = ({ children, onSubmit, resolver, defaultValues = {}, ...props }) => {
+const Form = ({ children, onSubmit, resolver, defaultValues = {}, resolverMode, ...props }) => {
     const dispatch = useDispatch();
     const { errors } = useSelector((state) => state.ui);
-    const methods = useForm({ defaultValues, resolver, mode: "onTouched" });
+    const methods = useForm({ defaultValues, resolver, mode: resolverMode ?? "onTouched" });
 
     // method to reset the form fields
     resetForm = () => methods.reset();

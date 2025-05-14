@@ -26,39 +26,38 @@ const ProfileForm = () => {
 
     const renderViewMode = () => (
         <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700">Full Name</label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label className="font-medium">Full Name</label>
                     <p className="text-lg font-semibold break-words">{profile?.name}</p>
                 </div>
-                <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700">Email Address</label>
+                <div>
+                    <label className="font-medium">Email Address</label>
                     <p className="text-lg font-semibold break-words">{profile?.email}</p>
                 </div>
-                {profile?.cnic && <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700">CNIC No.</label>
+                {profile?.cnic && <div>
+                    <label className="font-medium">CNIC No.</label>
                     <p className="text-lg font-semibold break-words">{profile?.cnic ?? "Not Provided"}</p>
                 </div>}
-                <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700">Phone Number</label>
+                <div>
+                    <label className="font-medium">Phone Number</label>
                     <p className="text-lg font-semibold break-words">{profile?.phone ?? "Not provided"}</p>
                 </div>
-                {profile?.rollNo && <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700">Roll No.</label>
+                {profile?.rollNo && <div>
+                    <label className="font-medium">Roll No.</label>
                     <p className="text-lg font-semibold break-words">{profile.rollNo}</p>
                 </div>}
             </div>
 
             <Button type="button" onClick={() => setIsEditing(true)} className="w-full">
-                <FaEdit className="mx-2" /> Edit Profile
+                <FaEdit /> Edit Profile
             </Button>
         </div>
     );
 
     const renderEditMode = () => (
         <Form onSubmit={onSubmit} resolver={zodResolver(updateProfileSchema)} className="space-y-6">
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
                 <Input
                     name="name"
                     label="Full Name"
@@ -96,20 +95,19 @@ const ProfileForm = () => {
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
                 <Button type="submit" className="flex-1">
-                    <FaSave className="mx-2" /> Save Changes
+                    <FaSave /> Save Changes
                 </Button>
 
-                <Button type="button" onClick={() => setIsEditing(false)} className="bg-gray-400 hover:bg-gray-700 flex-1">
-                    <FaTimes className="mx-2" /> Cancel
+                <Button type="button" onClick={() => setIsEditing(false)} className="button-secondary flex-1">
+                    <FaTimes /> Cancel
                 </Button>
             </div>
         </Form>
     );
 
     return (
-        <div className="bg-white shadow sm:rounded-lg p-6  w-full">
-
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Profile Information</h2>
+        <div className="bg-primary sm:border sm:border-primary sm:rounded-lg p-6 w-full">
+            <h2 className="text-2xl font-bold">Profile Information</h2>
             {isEditing ? renderEditMode() : renderViewMode()}
         </div>
     );

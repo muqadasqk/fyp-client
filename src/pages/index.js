@@ -5,8 +5,10 @@ export { default as ForgotPassword } from "./auth/ForgotPassword";
 
 // protected
 export { default as Dashboard } from "./protected/Dashboard";
-export { default as ManageAccounts } from "./protected/ManageAccounts";
 export { default as ProfileSettings } from "./protected/ProfileSettings";
+
+// protected>admin
+export { default as ManageAccounts } from "./protected/admin/ManageAccounts";
 
 // static
 export { default as NotFound } from "./static/NotFound";
