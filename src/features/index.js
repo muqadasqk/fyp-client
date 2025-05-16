@@ -12,7 +12,7 @@ export { retrieveUsers, createUser, updateProfile, updatePassword, updateStatus 
 
 //proposals
 export { default as proposalReducer } from "./proposalSlice";
-export { retrieveProposals, createProposal, updateProposal, getOneProposal, deleteProposal } from "./proposalSlice";
+export { retrieveProposals, createProposal, updateProposal, retrieveManyProposal, deleteProposal } from "./proposalSlice";
 
 //meetings
 export { default as meetingsReducer } from "./meetingSlice";

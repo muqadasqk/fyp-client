@@ -1,13 +1,16 @@
-import { Link } from "react-router-dom";
+import { Button } from "@components";
+import { FaArrowLeft } from "react-icons/fa";
 
-const UnAuthorized = () => {
+const Unauthorized = () => {
     return (
-        <div className="flex flex-col  flex-1 justify-center text-center min-h-screen p-24 bg-gray-100">
-            <h1>403 - Unauthorized</h1>
-            <p>You do not have permission to access this page.</p>
-            <Link to={-1}>Return Back</Link>
+        <div className="flex flex-col justify-center text-center min-h-screen">
+            <h1>403 | Unauthorized</h1>
+            <p className="-mt-4 mb-4">You do not have permission to access this page.</p>
+            <Button className="self-center flex justify-center items-center gap-1 hover:no-underline" href={-1}>
+                <FaArrowLeft /> Go back
+            </Button>
         </div>
     );
 };
 
-export default UnAuthorized;
+export default Unauthorized;

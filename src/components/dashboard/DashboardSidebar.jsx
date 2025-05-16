@@ -1,61 +1,28 @@
-import { FaHome, FaSignOutAlt, FaTimes } from "react-icons/fa";
-import { NavLink } from "react-router-dom";
+import { FaSignOutAlt, FaTimes } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { useAuth } from "@hooks";
 import { signout } from "@features";
 import { Button } from "@components";
-
-const common = [
-  { icon: <FaHome />, text: "Dashboard", href: "/" },
-];
-
-const admin = [
-  { icon: <FaHome />, text: "Manage Accounts", href: "/manage-accounts" },
-];
-
-const supervisor = [];
-
-const student = [];
-
-const Navigatinons = ({ role }) => {
-  const links = ({ admin, supervisor, student })[role];
-
-  return (
-    <nav className="space-y-2 px-4">
-      {[...common, ...links].map(({ icon, text, href }) => (
-        <NavLink
-          key={href}
-          to={href}
-          className={({ isActive }) =>
-            `block px-4 py-2 rounded hover:bg-white/10  transition ${isActive ? "bg-white/10" : ""
-            }`
-          }
-        >
-          <span className="inline-flex items-center gap-2">
-            {icon} {text}
-          </span>
-        </NavLink>
-      ))}
-    </nav>
-  )
-}
+import Navigatinons from "./Navigations";
+import clsx from "clsx";
 
 const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
   const dispatch = useDispatch();
   const { role } = useAuth();
 
-  return (
-    // <div className={`z-50 lg:w-[20%] w-[80%] bg-theme dark:bg-primary dark:border-r dark:border-primary p-4 space-y-6 py-7 absolute inset-y-0 transform ${isOpen ? "translate-x-0" : "-translate-x-full"}
-    <div className={`z-50 lg:w-[20%] w-[80%] bg-theme dark:bg-primary space-y-6 py-7 absolute inset-y-0 transform ${isOpen ? "translate-x-0" : "-translate-x-full"}
-    md:relative md:translate-x-0 transition duration-200 ease-in-out z-20`}
+  return (<div
+      className={clsx(
+        "z-50 lg:w-[20%] w-[80%] bg-theme dark:bg-primary space-y-6 px-4 py-5 absolute inset-y-0 transform",
+        "md:relative md:translate-x-0 transition duration-200 ease-in-out z-20 flex flex-col",
+        isOpen ? "translate-x-0" : "-translate-x-full"
+      )}
     >
       <div className="flex items-center justify-center mx-auto relative">
         <img
           src="/images/logo.png"
           alt="FYP Management System"
-          className=" md:w-40 md:h-20 block mx-auto md:mt-0 mt-5"
+          className="md:w-40 md:h-20 block mx-auto md:mt-0 mt-5"
         />
-
         <button
           onClick={toggleSidebar}
           className="md:hidden ms-auto mt-5"
@@ -64,14 +31,17 @@ const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
         </button>
       </div>
 
-      <Navigatinons role={role} />
-      <div className="absolut w-full bottom-4 p-4">
-        <Button onClick={() => dispatch(signout())}
-          className="w-full">
-          <FaSignOutAlt className="mr-3" /> Signout
+      <div className="flex-grow">
+        <Navigatinons role={role} />
+      </div>
+
+      <div>
+        <Button onClick={() => dispatch(signout())} className="w-full bg-theme-hover dark:bg-primary-hover">
+          <FaSignOutAlt /> Signout
         </Button>
       </div>
     </div>
+
   );
 };
 export default DashboardSidebar;

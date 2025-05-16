@@ -3,3 +3,6 @@ export { signupSchema, confirmEmailSchema, signinSchema, resetPasswordSchema, ve
 
 //  user
 export { createUserSchema, updateProfileSchema, updateProfileImageschema, updatePasswordSchema } from "./user";
+
+// proposal
+export { createProposalSchema } from "./proposal";

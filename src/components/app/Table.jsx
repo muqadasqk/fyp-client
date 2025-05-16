@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaChevronUp, FaChevronDown } from "react-icons/fa";
 import clsx from "clsx";
+import { readObjectValueByPath } from "@utils";
 
 const TableHeader = ({ fields, sortState, onSortToggle, hasActions }) => {
     return (
@@ -54,7 +55,7 @@ const Table = ({ fields, records, actions, onSort, ...prop }) => {
         }
 
         setSortState({ [field]: direction });
-        onSort({ [field]: direction });
+        onSort({ [field]: direction === 'asc' ? 1 : -1 });
     };
 
     return (
@@ -71,7 +72,9 @@ const Table = ({ fields, records, actions, onSort, ...prop }) => {
                     {records.length >= 1 ? records.map((record) => (
                         <tr key={record._id} className="hover:bg-black/10">
                             {Object.keys(fields).map((field) => (
-                                <td key={field} className="ps-2">{record[field] ?? "N/A"}</td>
+                                <td key={field} className="ps-2 whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px]">
+                                    {readObjectValueByPath(record, field) ?? "N/A"}
+                                    </td>
                             ))}
                             {actions && (
                                 <td className="py-2 px-4 whitespace-nowrap">

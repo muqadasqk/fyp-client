@@ -3,13 +3,14 @@ import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "react-hot-toast";
 import Routes from "@routes";
 import { useDispatch } from "react-redux";
-import { setTheme, verifyToken } from "@features";
+import { retrieveUsers, setTheme, verifyToken } from "@features";
 
 function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(verifyToken());
+    dispatch(retrieveUsers({}))
 
     const media = window.matchMedia('(prefers-color-scheme: dark)');
     const switchTheme = (e) => {

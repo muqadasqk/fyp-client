@@ -8,9 +8,8 @@ export { default as Pagination } from "./listing/Pagination";
 export { default as SearchBar } from "./listing/SearchBar";
 
 // routes components
-export { default as ProtectedRoute } from "./routes/ProtectedRoute";
+export { default as ProtectedRoutes } from "./routes/ProtectedRoutes";
 export { default as AuthGuard } from "./routes/AuthGuard";
-export { default as RoleGuard } from "./routes/RoleGuard";
 
 // auth components
 export { default as AuthContent } from "./auth/AuthContent";
@@ -32,6 +31,9 @@ export { default as UpdatePasswordForm } from "./profile/UpdatePasswordForm";
 
 // uers components
 export { default as CreateUserForm } from "./users/CreateUserForm";
+
+// proposal components
+export { default as CreateProposalForm } from "./proposals/CreateProposalForm";
 
 //theme components
 export { default as ThemeSwitcher } from "./theme/ThemeSwitcher"

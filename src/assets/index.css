@@ -10,6 +10,7 @@
 
   :root {
     --theme-primary-color: #2563EB;
+    --theme-primary-color-hover: #1D4ED8;
 
     --bg-primary: #ffffff;
     --bg-secondary: #f7f5f3;
@@ -77,6 +78,11 @@
 
   .bg-theme {
     background-color: var(--theme-primary-color) !important;
+    color: #fff !important;
+  }
+
+  .bg-theme-hover {
+    background-color: var(--theme-primary-color-hover) !important;
     color: #fff !important;
   }
 

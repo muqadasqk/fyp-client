@@ -1,4 +1,4 @@
-import { uiReducer, authReducer, userReducer } from "@features";
+import { uiReducer, authReducer, userReducer, proposalReducer } from "@features";
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
@@ -6,6 +6,7 @@ const store = configureStore({
         ui: uiReducer,
         auth: authReducer,
         users: userReducer,
+        proposals: proposalReducer
     },
 
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({

@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { ProtectedRoute, AuthGuard, RoleGuard } from "@components";
+import { ProtectedRoutes, AuthGuard } from "@components";
 import { AuthLayout, DashboardLayout } from "@layouts";
-import { Signup, Signin, NotFound, UnAuthorized, ForgotPassword, Dashboard, ManageAccounts, ProfileSettings } from "@pages";
+import { Signup, Signin, NotFound, Unauthorized, ForgotPassword, Dashboard, ManageAccounts, ProfileSettings, Proposals } from "@pages";
 
 const router = createBrowserRouter([
   { // unprotected routes
@@ -20,7 +20,7 @@ const router = createBrowserRouter([
 
   { // protected routes
     path: "/",
-    element: <ProtectedRoute />,
+    element: <ProtectedRoutes />,
     children: [
       {
         element: <DashboardLayout />,
@@ -32,21 +32,35 @@ const router = createBrowserRouter([
     ],
   },
 
-  { // role-base access control routes
+  { // role-base access control routes (admin only)
     path: "/",
-    element: <RoleGuard allowedRoles={["admin"]} />,
+    element: <ProtectedRoutes allowedRoles={["admin"]} />,
     children: [
       {
         element: <DashboardLayout />,
         children: [
-          { path: "/manage-accounts", element: <ManageAccounts /> }
+          { path: "/manage-accounts", element: <ManageAccounts /> },
+          { path: "/manage-proposals", element: <ManageAccounts /> }
+        ],
+      },
+    ],
+  },
+
+  { // role-base access control routes (student only)
+    path: "/",
+    element: <ProtectedRoutes allowedRoles={["student"]} />,
+    children: [
+      {
+        element: <DashboardLayout />,
+        children: [
+          { path: "/proposals", element: <Proposals /> }
         ],
       },
     ],
   },
 
   // unknown routes
-  { path: "/unauthorized", element: <UnAuthorized /> },
+  { path: "/unauthorized", element: <Unauthorized /> },
   { path: "*", element: <NotFound /> }
 ]);
 

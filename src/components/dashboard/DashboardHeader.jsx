@@ -99,12 +99,12 @@ const DashboardHeader = ({ toggleSidebar }) => {
               <div>
                 <Button href="/profile" className="flex justify-start items-center p-2 ps-5 text-primary hover:bg-primary-hover hover:no-underline">
                   <FaUser className="mr-2" />
-                  Profile Settings
+                  Profile
                 </Button>
 
                 <Button href="./" onClick={() => dispatch(signout())} className="flex justify-start items-center p-2 ps-5 text-primary hover:bg-primary-hover hover:no-underline">
                   <FaSignOutAlt className="mr-2" />
-                  SignOut
+                  Signout
                 </Button>
               </div>
             </PopoverPanel>

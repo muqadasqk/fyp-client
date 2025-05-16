@@ -48,7 +48,6 @@ const ManageAccounts = () => {
 
             {role && <CreateUserForm isLoading={loading} role={role} closeForm={(v) => setRole(v && null)} />}
 
-            {/* Listing here */}
             <Listing
                 onChange={retrieveUsers}
                 recordList={users}

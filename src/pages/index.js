@@ -10,6 +10,9 @@ export { default as ProfileSettings } from "./protected/ProfileSettings";
 // protected>admin
 export { default as ManageAccounts } from "./protected/admin/ManageAccounts";
 
+// protected>student
+export { default as Proposals } from "./protected/student/Proposals";
+
 // static
 export { default as NotFound } from "./static/NotFound";
-export { default as UnAuthorized } from "./static/UnAuthorized";
+export { default as Unauthorized } from "./static/Unauthorized";

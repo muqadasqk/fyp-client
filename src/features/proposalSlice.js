@@ -1,20 +1,19 @@
-import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
-import { apiRequest}  from "@utils";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { apiRequest } from "@utils";
 import { setErrors } from "./uiSlice";
 
 const initialState = {
-    proposals :[],
-    pagination:{},
-    loading:false,
-    proposal:null
+    proposals: [],
+    pagination: {},
+    loading: false,
 }
 
 export const retrieveProposals = createAsyncThunk("proposal/retrieveProposals",
-    async (page, {rejectWithValue}) => {
+    async (page, { rejectWithValue }) => {
         try {
-            const {data} = await apiRequest.post("/proposals/all", {page},{showSuccessToast:false});
-            return data;
-        } catch (error){
+            const response = await apiRequest.post("/proposals/all", { page }, { showSuccessToast: false });
+            return response.data;
+        } catch (error) {
             return rejectWithValue(error.response?.data);
         }
     }
@@ -23,10 +22,10 @@ export const retrieveProposals = createAsyncThunk("proposal/retrieveProposals",
 export const createProposal = createAsyncThunk("proposal/createProposal",
     async (formData, { rejectWithValue, dispatch }) => {
         try {
-            const {data} = await apiRequest.post("/proposals",formData,{
-                headers:{"Content-Type":"application/json"}
+            const response = await apiRequest.post("/proposals", formData, {
+                headers: { "Content-Type": "application/json" }
             });
-            return data;
+            return response.data;
         } catch (error) {
             dispatch(setErrors(error.response?.data?.errors));
             return rejectWithValue(error.response?.data);
@@ -35,10 +34,10 @@ export const createProposal = createAsyncThunk("proposal/createProposal",
 )
 
 export const updateProposal = createAsyncThunk("proposal/updateProposal",
-    async({id,statusCode},{rejectWithValue, dispatch})=>{
+    async ({ id, statusCode }, { rejectWithValue, dispatch }) => {
         try {
-            const {data} = await apiRequest.patch(`/proposals/${id}`,{statusCode});
-            return data
+            const response = await apiRequest.patch(`/proposals/${id}`, { statusCode });
+            return response.data
         } catch (error) {
             dispatch(setErrors(error.response?.data?.errors));
             return rejectWithValue(error.response?.data)
@@ -46,99 +45,98 @@ export const updateProposal = createAsyncThunk("proposal/updateProposal",
     }
 )
 
-export const getOneProposal = createAsyncThunk("proposal/getOneProposal",
-   async (id,{rejectWithValue})=>{
-    try {
-        const {data} = await apiRequest.get(`/proposals/${id}`,{showSuccessToast:false});
-            return data
-    
-    } catch (error) {
-        return rejectWithValue(error.response?.data)
-    }
-   }
-)
-
-export const deleteProposal = createAsyncThunk("proposal/deleteProposal",
-    async(id,{rejectWithValue})=>{
+export const retrieveManyProposal = createAsyncThunk("proposal/retrieveManyProposal",
+    async ({ page, id }, { rejectWithValue }) => {
         try {
-            const {data} = await apiRequest.delete(`/proposals/${id}`)
-            return  data
+            const response = await apiRequest.post(`/proposals/${id}`, { page }, { showSuccessToast: false });
+            return response.data
         } catch (error) {
             return rejectWithValue(error.response?.data)
         }
     }
 )
-const proposalSlice = createSlice({
-    name:"proposals",
-    initialState:initialState,
-    reducers:{},
-    extraReducers:(builder)=>{
-        builder
-        .addCase(retrieveProposals.pending, (state)=>{
-           state.loading = true;
-        })
-        .addCase(retrieveProposals.fulfilled, (state,action)=>{
-            state.loading = false;
-            state.proposals = action.payload.proposals;
-            state.pagination = action.payload.pagination
-        })
-        .addCase(retrieveProposals.rejected, (state)=>{
-          state.loading = false
-        })
 
-        .addCase(createProposal.pending, (state)=>{
-            state.loading = true;
-         })
-         .addCase(createProposal.fulfilled, (state,action)=>{
-            state.loading = false;
-            state.proposals = [action.payload, ...state.proposals];
-         })
-         .addCase(createProposal.rejected, (state)=>{
-            state.loading = false;
-         })
-
-         .addCase(updateProposal.pending, (state)=>{
-            state.loading = true;
-         })
-         .addCase(updateProposal.fulfilled, (state,action)=>{
-            state.loading = false;
-         const {id, statusCode} = action.meta.arg;
-         const index = state.proposals.findIndex((proposal)=> proposal._id === id);
-         if(index !== -1){
-            if(statusCode !== 20001){
-                state.proposals[index] = {...action.payload};
-            }
-         }
-        })
-         
-         .addCase(updateProposal.rejected, (state)=>{
-            state.loading = false
-         })
-
-         .addCase(getOneProposal.pending, (state)=>{
-            state.loading =  true;
-         })
-         .addCase(getOneProposal.fulfilled, (state,action)=>{
-            state.loading = false;
-            state.proposal = action.payload;
-         })
-         .addCase(getOneProposal.rejected, (state)=>{
-            state.loading =  false
-         })
-         
-         .addCase(deleteProposal.pending, (state)=>{
-            state.loading =  true;
-         })
-         .addCase(deleteProposal.fulfilled, (state,action)=>{
-          state.loading = false;
-          state.proposals = state.proposals.filter((proposal) => proposal._id !== action.payload._id)
-         })
-         .addCase(deleteProposal.rejected, (state)=>{
-            state.loading = false;
-         })
+export const deleteProposal = createAsyncThunk("proposal/deleteProposal",
+    async (id, { rejectWithValue }) => {
+        try {
+            const response = await apiRequest.delete(`/proposals/${id}`)
+            return response.data
+        } catch (error) {
+            return rejectWithValue(error.response?.data)
+        }
     }
-    
+)
 
+
+const proposalSlice = createSlice({
+    name: "proposals",
+    initialState: initialState,
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
+            .addCase(retrieveProposals.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(retrieveProposals.fulfilled, (state, action) => {
+                state.loading = false;
+                state.proposals = action.payload.proposals;
+                state.pagination = action.payload.pagination
+            })
+            .addCase(retrieveProposals.rejected, (state) => {
+                state.loading = false
+            })
+
+            .addCase(createProposal.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(createProposal.fulfilled, (state, action) => {
+                state.loading = false;
+                state.proposals = [action.payload.proposal, ...state.proposals];
+            })
+            .addCase(createProposal.rejected, (state) => {
+                state.loading = false;
+            })
+
+            .addCase(updateProposal.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(updateProposal.fulfilled, (state, action) => {
+                state.loading = false;
+                const { id, statusCode } = action.meta.arg;
+                const index = state.proposals.findIndex((proposal) => proposal._id === id);
+                if (index !== -1) {
+                    if (statusCode !== 20003) {
+                        state.proposals[index] = { ...action.payload };
+                    }
+                }
+            })
+            .addCase(updateProposal.rejected, (state) => {
+                state.loading = false
+            })
+
+            .addCase(retrieveManyProposal.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(retrieveManyProposal.fulfilled, (state, action) => {
+                state.loading = false;
+                state.proposals = action.payload.proposals;
+                state.pagination = action.payload.pagination
+            })
+            .addCase(retrieveManyProposal.rejected, (state) => {
+                state.loading = false
+            })
+
+            .addCase(deleteProposal.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(deleteProposal.fulfilled, (state, action) => {
+                state.loading = false;
+                state.proposals = state.proposals.filter((proposal) => proposal._id !== action.meta.arg)
+            })
+            .addCase(deleteProposal.rejected, (state) => {
+                state.loading = false;
+            })
+    }
 });
 
 export default proposalSlice.reducer
