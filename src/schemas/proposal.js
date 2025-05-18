@@ -43,4 +43,41 @@ const createProposalSchema = z.object({
         .max(50, { message: "Category must not exceed 50 characters" }),
 });
 
-export { createProposalSchema }
+const StatusHandleSchema = z.object({
+    supervisor: z
+        .string()
+        .optional()
+        .or(z.literal("")),
+
+    pid: z
+        .string()
+        .refine(
+            (val) => /^[A-Za-z]{2}-\d{3}$/.test(val),
+            {
+                message: "The proposal ID must be in the format 'XX-123'",
+            }
+        ),
+
+    statusCode: z
+        .string()
+        .refine((val) =>
+            ["20001", "20002", "20003"].includes(val),
+            {
+                message: "Set status one of the 'Accept', Accept with conditions', or 'Reject'",
+            }
+        ),
+
+    remarks: z
+        .string()
+        .refine(
+            (val) => {
+                const wordCount = val.trim().split(/\s+/).length;
+                return wordCount >= 5 && wordCount <= 350;
+            },
+            {
+                message: "Abstract must be between 5 and 350 words",
+            }
+        ),
+});
+
+export { createProposalSchema, StatusHandleSchema }

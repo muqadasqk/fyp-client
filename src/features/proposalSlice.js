@@ -9,9 +9,9 @@ const initialState = {
 }
 
 export const retrieveProposals = createAsyncThunk("proposal/retrieveProposals",
-    async (page, { rejectWithValue }) => {
+    async ({ page, id }, { rejectWithValue }) => {
         try {
-            const response = await apiRequest.post("/proposals/all", { page }, { showSuccessToast: false });
+            const response = await apiRequest.post(`/proposals/retrieve/${id}`, { page }, { showSuccessToast: false });
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response?.data);
@@ -34,9 +34,9 @@ export const createProposal = createAsyncThunk("proposal/createProposal",
 )
 
 export const updateProposal = createAsyncThunk("proposal/updateProposal",
-    async ({ id, statusCode }, { rejectWithValue, dispatch }) => {
+    async ({ id, formData }, { rejectWithValue, dispatch }) => {
         try {
-            const response = await apiRequest.patch(`/proposals/${id}`, { statusCode });
+            const response = await apiRequest.patch(`/proposals/${id}`, formData);
             return response.data
         } catch (error) {
             dispatch(setErrors(error.response?.data?.errors));
@@ -106,7 +106,7 @@ const proposalSlice = createSlice({
                 const index = state.proposals.findIndex((proposal) => proposal._id === id);
                 if (index !== -1) {
                     if (statusCode !== 20003) {
-                        state.proposals[index] = { ...action.payload };
+                        state.proposals[index] = { ...action.payload.proposal };
                     }
                 }
             })
@@ -131,7 +131,10 @@ const proposalSlice = createSlice({
             })
             .addCase(deleteProposal.fulfilled, (state, action) => {
                 state.loading = false;
-                state.proposals = state.proposals.filter((proposal) => proposal._id !== action.meta.arg)
+                const index = state.proposals.findIndex((proposal) => proposal._id == action.meta.arg);
+                if (index != -1) {
+                    state.proposals.splice(index, 1);
+                }
             })
             .addCase(deleteProposal.rejected, (state) => {
                 state.loading = false;

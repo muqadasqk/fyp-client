@@ -16,8 +16,6 @@ const Select = ({
         formState: { errors },
     } = useFormContext();
 
-    console.log(options, "options");
-
     return (
         <div className="relative pb-3">
             {label && (
@@ -50,7 +48,7 @@ const Select = ({
                     {placeholder ?? "Choose one..."}
                 </option>
                 {options.map(({ value, label }) => (
-                    <option key={label} value={value}>
+                    <option key={value} value={value}>
                         {label}
                     </option>
                 ))}

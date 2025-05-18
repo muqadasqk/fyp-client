@@ -9,9 +9,10 @@ const initialState = {
 }
 
 export const retrieveUsers = createAsyncThunk("user/retrieveUsers",
-    async (page, { rejectWithValue }) => {
+    async ({ page, id, role }, { rejectWithValue }) => {
+        page = page ?? {};
         try {
-            const { data } = await apiRequest.post("/users/all", { page }, { showSuccessToast: false });
+            const { data } = await apiRequest.post(`/users/retrieve/${id ?? role}`, { page }, { showSuccessToast: false });
             return data;
         } catch (error) {
             return rejectWithValue(error.respone?.data);
@@ -58,6 +59,16 @@ export const updatePassword = createAsyncThunk("user/updatePassword",
     }
 )
 
+export const deleteUser = createAsyncThunk("user/deleteUser",
+    async (id, { rejectWithValue }) => {
+        try {
+            const { data } = await apiRequest.delete(`/users/${id}`);
+            return data;
+        } catch (error) {
+            return rejectWithValue(error.respone?.data);
+        }
+    }
+)
 export const updateStatus = createAsyncThunk("user/updateStatus",
     async ({ id, statusCode }, { rejectWithValue }) => {
         try {
@@ -119,6 +130,19 @@ const userSlice = createSlice({
                 state.loading = false;
             })
             .addCase(updatePassword.rejected, (state) => {
+                state.loading = false;
+            })
+
+            // delete user
+            .addCase(deleteUser.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(deleteUser.fulfilled, (state, action) => {
+                state.loading = false;
+                const index = state.users.findIndex((user) => user._id === action.meta.arg);
+                if (index !== -1) state.users.splice(index, 1);
+            })
+            .addCase(deleteUser.rejected, (state) => {
                 state.loading = false;
             })
 

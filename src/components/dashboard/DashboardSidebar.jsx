@@ -12,7 +12,7 @@ const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
 
   return (<div
       className={clsx(
-        "z-50 lg:w-[20%] w-[80%] bg-theme dark:bg-primary space-y-6 px-4 py-5 absolute inset-y-0 transform",
+        "z-30 lg:w-[20%] w-[80%] bg-theme dark:bg-primary space-y-6 px-4 py-5 absolute inset-y-0 transform",
         "md:relative md:translate-x-0 transition duration-200 ease-in-out z-20 flex flex-col",
         isOpen ? "translate-x-0" : "-translate-x-full"
       )}

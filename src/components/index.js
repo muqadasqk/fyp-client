@@ -2,10 +2,11 @@
 export { default as Button } from "./app/Button";
 export { default as Spinner } from "./app/Spinner";
 export { default as Overlay } from "./app/Overlay";
-export { default as Listing } from "./listing/Listing";
-export { default as Table } from "./app/Table";
+export { default as DataTable } from "./listing/DataTable";
+export { default as Table } from "./listing/Table";
 export { default as Pagination } from "./listing/Pagination";
 export { default as SearchBar } from "./listing/SearchBar";
+export { default as ConfirmtionModal } from "./app/ConfirmtionModal";
 
 // routes components
 export { default as ProtectedRoutes } from "./routes/ProtectedRoutes";
@@ -29,11 +30,14 @@ export { default as TextArea } from "./form/TextArea";
 export { default as ProfileForm } from "./profile/ProfileForm";
 export { default as UpdatePasswordForm } from "./profile/UpdatePasswordForm";
 
-// uers components
+// users components
 export { default as CreateUserForm } from "./users/CreateUserForm";
+export { default as ViewUserDetails } from "./users/ViewUserDetails";
 
 // proposal components
 export { default as CreateProposalForm } from "./proposals/CreateProposalForm";
+export { default as HandleProposalStatusForm } from "./proposals/HandleProposalStatusForm";
+export { default as ViewProposalDetails } from "./proposals/ViewProposalDetails";
 
 //theme components
 export { default as ThemeSwitcher } from "./theme/ThemeSwitcher"

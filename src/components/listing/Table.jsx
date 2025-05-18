@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FaChevronUp, FaChevronDown } from "react-icons/fa";
 import clsx from "clsx";
 import { readObjectValueByPath } from "@utils";
+import { Button } from "@components";
 
 const TableHeader = ({ fields, sortState, onSortToggle, hasActions }) => {
     return (
@@ -55,7 +56,7 @@ const Table = ({ fields, records, actions, onSort, ...prop }) => {
         }
 
         setSortState({ [field]: direction });
-        onSort({ [field]: direction === 'asc' ? 1 : -1 });
+        onSort({ [field]: direction });
     };
 
     return (
@@ -70,26 +71,26 @@ const Table = ({ fields, records, actions, onSort, ...prop }) => {
 
                 <tbody className="divide-y dark:divide-[rgba(255,255,255,0.03)]">
                     {records.length >= 1 ? records.map((record) => (
-                        <tr key={record._id} className="hover:bg-black/10">
+                        <tr key={record._id} className="hover:bg-primary-hover">
                             {Object.keys(fields).map((field) => (
-                                <td key={field} className="ps-2 whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px]">
+                                <td key={field} className="py-2 px-4 whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px]">
                                     {readObjectValueByPath(record, field) ?? "N/A"}
-                                    </td>
+                                </td>
                             ))}
                             {actions && (
                                 <td className="py-2 px-4 whitespace-nowrap">
                                     {actions.map(({ label, icon = null, ShowWhen, onClick }) => {
                                         const k = Object.keys(ShowWhen)[0];
-                                        if (record[k] === ShowWhen[k]) {
+                                        if (record[k] === ShowWhen[k] || ShowWhen[k] === true) {
                                             return (
-                                                <button
+                                                <Button
                                                     title={`Click to ${label.toLowerCase()}`}
                                                     key={label}
                                                     onClick={() => onClick(record._id, label)}
-                                                    className="bg-primary p-2 rounded"
+                                                    className="p-2 rounded"
                                                 >
                                                     {icon && icon}
-                                                </button>
+                                                </Button>
                                             );
                                         }
                                     })}
@@ -99,7 +100,7 @@ const Table = ({ fields, records, actions, onSort, ...prop }) => {
                     )) : (
                         <tr>
                             <td
-                                className="px-4 py-2 text-gray-600 text-center"
+                                className="px-4 py-2 text-primary text-sm text-center"
                                 colSpan={Object.keys(fields).length + (actions ? 1 : 0)}
                             >
                                 Nothing to show up!

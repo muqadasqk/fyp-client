@@ -37,7 +37,6 @@ const DashboardHeader = ({ toggleSidebar }) => {
     "New Student added",
   ];
 
-
   return (
     <header className="bg-primary border-b border-primary shadow-sm z-10">
       <div className="flex items-center justify-between px-4 py-3 ">

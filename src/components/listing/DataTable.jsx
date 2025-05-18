@@ -2,7 +2,7 @@ import { Pagination, SearchBar, Table } from '@components';
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 
-export const Listing = ({ onChange, concernId, recordList, paginationData, searchableFields, recordFields, actions }) => {
+export const DataTable = ({ onChange, concernId, recordList, paginationData, searchableFields, recordFields, actions }) => {
     const dispatch = useDispatch();
     const [page, setPage] = useState({ current: 1, size: 10, query: {}, sort: { createdAt: -1 } });
 
@@ -28,4 +28,4 @@ export const Listing = ({ onChange, concernId, recordList, paginationData, searc
     </div>
 }
 
-export default Listing;
+export default DataTable;

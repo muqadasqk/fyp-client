@@ -1,5 +1,5 @@
-import { Button, CreateProposalForm, DashboardContent, Listing } from '@components'
-import { retrieveManyProposal, retrieveProposals } from '@features'
+import { Button, CreateProposalForm, DashboardContent, DataTable, ViewProposalDetails } from '@components'
+import { retrieveManyProposal } from '@features'
 import { useState } from 'react'
 import { FaLightbulb } from 'react-icons/fa'
 import { useSelector } from 'react-redux'
@@ -7,9 +7,9 @@ import { useSelector } from 'react-redux'
 const Proposals = () => {
     const { proposals, pagination, loading } = useSelector((state) => state.proposals);
     const { user } = useSelector((state) => state.auth);
-    const [pitchIdea, setPitchIdea] = useState(false);
+    const [viewDetails, setViewDetails] = useState(null);
 
-    console.log(proposals, pagination, loading);
+    const [pitchIdea, setPitchIdea] = useState(false);
 
     return (
         <DashboardContent title='Proposals' description='View and manage your proposals'>
@@ -17,39 +17,42 @@ const Proposals = () => {
                 <FaLightbulb /> Pitch an idea
             </Button>
             {pitchIdea && <CreateProposalForm isLoading={loading} closeForm={(v) => setPitchIdea(v && false)} />}
+            {viewDetails && <ViewProposalDetails proposal={proposals.find(proposal => proposal._id == viewDetails)} closeForm={(v) => setViewDetails(v && false)} />}
 
-            <Listing
+            <DataTable
                 onChange={retrieveManyProposal}
                 concernId={user._id}
                 recordList={proposals}
                 paginationData={pagination}
                 recordFields={{
-                    "lead.name": "Lead",
-                    "memberOne.name": "Member One",
-                    "memberTwo.name": "Member Two",
-                    "supervisor.name": "Supervior",
+                    // "lead.name": "Lead",
+                    // "memberOne.name": "Member One",
+                    // "memberTwo.name": "Member Two",
+                    // "supervisor.name": "Supervior",
                     title: "Title",
                     // abstract: "Abstracts",
                     type: "Type",
                     category: "Category",
                     status: "Status",
                 }}
-                // actions={}
+                actions={[
+                    { label: "View Details", icon: <FaLightbulb />, ShowWhen: { status: true }, onClick: (id) => setViewDetails(id) },
+                ]}
                 searchableFields={{
                     title: "Title",
-                    abstract: "Abstracts",
+                    // abstract: "Abstracts",
                     type: "Type",
                     category: "Category",
                     status: "Status",
                 }}
-                sortableFields={{
-                    createdAt: "Date",
-                    title: "Title",
-                    abstract: "Abstracts",
-                    type: "Type",
-                    category: "Category",
-                    status: "Status",
-                }}
+            // sortableFields={{
+            //     createdAt: "Date",
+            //     title: "Title",
+            //     // abstract: "Abstracts",
+            //     type: "Type",
+            //     category: "Category",
+            //     status: "Status",
+            // }}
             />
         </DashboardContent >
     )

@@ -9,6 +9,7 @@ export { default as ProfileSettings } from "./protected/ProfileSettings";
 
 // protected>admin
 export { default as ManageAccounts } from "./protected/admin/ManageAccounts";
+export { default as ManageProposals } from "./protected/admin/ManageProposals";
 
 // protected>student
 export { default as Proposals } from "./protected/student/Proposals";

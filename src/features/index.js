@@ -8,7 +8,7 @@ export { signup, confirmEmail, updateAuthenticatedUser, signin, signout, resetPa
 
 // users
 export { default as userReducer } from "./userSlice";
-export { retrieveUsers, createUser, updateProfile, updatePassword, updateStatus } from "./userSlice";
+export { retrieveUsers, createUser, updateProfile, updatePassword, deleteUser, updateStatus } from "./userSlice";
 
 //proposals
 export { default as proposalReducer } from "./proposalSlice";

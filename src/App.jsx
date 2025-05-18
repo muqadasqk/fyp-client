@@ -10,7 +10,6 @@ function App() {
 
   useEffect(() => {
     dispatch(verifyToken());
-    dispatch(retrieveUsers({}))
 
     const media = window.matchMedia('(prefers-color-scheme: dark)');
     const switchTheme = (e) => {
