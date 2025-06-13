@@ -5,4 +5,7 @@ export { signupSchema, confirmEmailSchema, signinSchema, resetPasswordSchema, ve
 export { createUserSchema, updateProfileSchema, updateProfileImageschema, updatePasswordSchema } from "./user";
 
 // proposal
-export { createProposalSchema, StatusHandleSchema } from "./proposal";
+export { createProposalSchema, AcceptStatusHandleSchema, RejectStatusHandleSchema } from "./proposal";
+
+// project
+export { uploadProposalFileSchema } from "./project";

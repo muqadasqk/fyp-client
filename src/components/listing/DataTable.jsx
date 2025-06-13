@@ -2,14 +2,14 @@ import { Pagination, SearchBar, Table } from '@components';
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 
-export const DataTable = ({ onChange, concernId, recordList, paginationData, searchableFields, recordFields, actions }) => {
+export const DataTable = ({ onChange, retrieve, recordList, paginationData, searchableFields, recordFields, actions }) => {
     const dispatch = useDispatch();
     const [page, setPage] = useState({ current: 1, size: 10, query: {}, sort: { createdAt: -1 } });
 
     useEffect(() => {
-        dispatch(onChange({ page, ...(concernId && { id: concernId }) }));
-    }, [page, concernId, dispatch]);
-
+        const data = { page, ...retrieve };
+        dispatch(onChange(data));
+    }, [page, retrieve, dispatch]);
 
     return <div className="p-5 bg-primary border rounded-lg border-primary overflow-x-hidden">
         <SearchBar

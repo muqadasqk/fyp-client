@@ -1,3 +1,4 @@
+import { capitalize } from "@utils";
 import clsx from "clsx";
 import { useFormContext } from "react-hook-form";
 
@@ -32,7 +33,7 @@ const TextArea = ({ name, label, optional, rows = 4, ...props }) => {
 
             {errorMessage && (
                 <small className="text-sm text-red-600 block mt-1 italic">
-                    {errorMessage}
+                    {capitalize(errorMessage)}
                 </small>
             )}
         </div>

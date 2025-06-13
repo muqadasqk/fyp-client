@@ -43,15 +43,32 @@ const signupSchema = z.object({
             message: "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character",
         }),
 
+    // image: z
+    //     .any()
+    //     .refine((file) => file && file.length > 0, { message: "Image file is required" })
+    //     .refine(
+    //         (file) => file && file.length > 0 && ["image/jpeg", "image/png", "image/jpg"].includes(file[0].type),
+    //         { message: "Only JPG, JPEG, and PNG images are allowed" }
+    //     )
+    //     .refine(
+    //         (file) => file && file.length > 0 && file[0].size <= 3 * 1024 * 1024,
+    //         { message: "Image size must not exceed 3MB" }
+    //     ),
+
     image: z
         .any()
-        .refine((file) => file && file.length > 0, { message: "Image file is required" })
         .refine(
-            (file) => file && file.length > 0 && ["image/jpeg", "image/png", "image/jpg"].includes(file[0].type),
+            (file) => {
+                console.log(file,length);
+                return Object.keys(file).length > 0;
+            },
+            { message: "Image file is required" })
+        .refine(
+            (file) => ["image/jpeg", "image/png", "image/jpg"].includes(file[0].type),
             { message: "Only JPG, JPEG, and PNG images are allowed" }
         )
         .refine(
-            (file) => file && file.length > 0 && file[0].size <= 3 * 1024 * 1024,
+            (file) => file[0].size <= 3 * 1024 * 1024,
             { message: "Image size must not exceed 3MB" }
         ),
 });

@@ -5,6 +5,7 @@ import { clearErrors } from "@features";
 
 // method to reset the form fields
 export let resetForm;
+export let setValue;
 
 const Form = ({ children, onSubmit, resolver, defaultValues = {}, resolverMode, ...props }) => {
     const dispatch = useDispatch();
@@ -13,6 +14,9 @@ const Form = ({ children, onSubmit, resolver, defaultValues = {}, resolverMode, 
 
     // method to reset the form fields
     resetForm = () => methods.reset();
+    setValue = (field, value) => {
+        methods.setValue(field, value);
+    };
 
     useEffect(() => {
         dispatch(clearErrors());

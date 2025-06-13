@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from 'react'
 import { Button, ConfirmtionModal, Overlay } from '@components'
-import { capitalize, formatDateTime } from '@utils'
+import { capEach, capitalize, firstLetter, formatDateTime } from '@utils'
 import { readFile } from '@services'
 import { deleteUser, updateStatus } from '@features'
 import { FaLock, FaTrashAlt, FaUnlock, FaUserCheck, FaUserTimes } from 'react-icons/fa'
@@ -57,7 +57,7 @@ const ViewUserDetails = ({ user, closeForm }) => {
     const FieldBlock = ({ label, value }) => (
         <div className="flex flex-col">
             <span className="text-xs text-secondary font-medium">{label}</span>
-            <span className="text-sm text-primary font-semibold">{value ?? 'N/A'}</span>
+            <span className="text-sm text-primary font-semibold">{!!value ? value : 'N/A'}</span>
         </div>
     )
 
@@ -144,12 +144,12 @@ const ViewUserDetails = ({ user, closeForm }) => {
                             {src ? (
                                 <img src={src} alt="User" className="w-32 h-32 rounded-full object-cover" />
                             ) : (
-                                <div className="w-32 h-32 rounded-full flex items-center justify-center bg-secondary border border-primary text-secondary italic">
-                                    No image
+                                <div className="w-32 h-32 rounded-full flex items-center justify-center bg-secondary border border-primary text-secondary text-4xl">
+                                    <strong>{firstLetter(currentUser.name)}</strong>
                                 </div>
                             )}
                             <div className="text-center">
-                                <p className="text-primary font-semibold">{currentUser.name}</p>
+                                <p className="text-primary font-semibold">{capEach(currentUser.name)}</p>
                                 <p className="text-secondary text-sm">{capitalize(currentUser.role)}</p>
                             </div>
                         </div>
@@ -168,24 +168,28 @@ const ViewUserDetails = ({ user, closeForm }) => {
                         {currentUser.status == "approvalPending" && (
                             <>
                                 <Button className="button-success" onClick={() => setConfirming("approve")}>
-                                    Approve
+                                    <FaUserCheck /> Approve
                                 </Button>
                                 <Button className="button-warning" onClick={() => setConfirming("reject")}>
-                                    Reject
+                                    <FaUserTimes /> Reject
                                 </Button>
                             </>
                         )}
 
                         {currentUser.status == "active" && (
-                            <Button onClick={() => setConfirming("lock")}>Lock Access</Button>
+                            <Button onClick={() => setConfirming("lock")}>
+                                <FaLock /> Lock Access
+                            </Button>
                         )}
 
                         {currentUser.status == "inactive" && (
-                            <Button onClick={() => setConfirming("unlock")}>Unlock Access</Button>
+                            <Button onClick={() => setConfirming("unlock")}>
+                                <FaUnlock /> Unlock Access
+                            </Button>
                         )}
 
                         <Button className="button-danger" onClick={() => setConfirming("delete")}>
-                            Delete
+                            <FaTrashAlt /> Delete
                         </Button>
                     </div>
                 </div>

@@ -5,7 +5,7 @@ import { useMemo, useState } from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
 import { useSelector } from 'react-redux'
 
-const ManageProposals = ({ status }) => {
+const ManagePresentations = ({ status }) => {
     const { proposals, pagination } = useSelector((state) => state.proposals);
     const [viewDetails, setViewDetails] = useState(null);
     const retrieve = useMemo(() => ({ status }), [status]);
@@ -15,7 +15,7 @@ const ManageProposals = ({ status }) => {
     }
 
     return (
-        <DashboardContent title={capitalize(`${status === "conditionallyAccepted" ? "Conditionally Accepted" : status} Proposals`)} description='View and manage proposal ideas'>
+        <DashboardContent title={capitalize(`${status === "pendingReview" ? "Pending Review" : status} Presentations`)} description='View and manage presenations'>
             {viewDetails && (
                 <ViewProposalDetails proposal={viewDetails} closeForm={() => setViewDetails(null)} />
             )}
@@ -46,4 +46,4 @@ const ManageProposals = ({ status }) => {
     )
 }
 
-export default ManageProposals
+export default ManagePresentations

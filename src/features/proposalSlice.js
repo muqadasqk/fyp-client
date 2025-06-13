@@ -9,9 +9,9 @@ const initialState = {
 }
 
 export const retrieveProposals = createAsyncThunk("proposal/retrieveProposals",
-    async ({ page, id }, { rejectWithValue }) => {
+    async ({ status, page }, { rejectWithValue }) => {
         try {
-            const response = await apiRequest.post(`/proposals/retrieve/${id}`, { page }, { showSuccessToast: false });
+            const response = await apiRequest.post(`/proposals/retrieve/${status}`, { page }, { showSuccessToast: false });
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response?.data);
@@ -46,9 +46,9 @@ export const updateProposal = createAsyncThunk("proposal/updateProposal",
 )
 
 export const retrieveManyProposal = createAsyncThunk("proposal/retrieveManyProposal",
-    async ({ page, id }, { rejectWithValue }) => {
+    async ({ page, proposalId }, { rejectWithValue }) => {
         try {
-            const response = await apiRequest.post(`/proposals/${id}`, { page }, { showSuccessToast: false });
+            const response = await apiRequest.post(`/proposals/${proposalId}`, { page }, { showSuccessToast: false });
             return response.data
         } catch (error) {
             return rejectWithValue(error.response?.data)

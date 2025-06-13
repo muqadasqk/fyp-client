@@ -7,6 +7,7 @@ export { default as Table } from "./listing/Table";
 export { default as Pagination } from "./listing/Pagination";
 export { default as SearchBar } from "./listing/SearchBar";
 export { default as ConfirmtionModal } from "./app/ConfirmtionModal";
+export { default as ImageCropper } from "./app/ImageCropper";
 
 // routes components
 export { default as ProtectedRoutes } from "./routes/ProtectedRoutes";
@@ -21,7 +22,7 @@ export { default as DashboardHeader } from "./dashboard/DashboardHeader";
 export { default as DashboardSidebar } from "./dashboard/DashboardSidebar";
 
 // form components
-export { default as Form, resetForm } from "./form/Form";
+export { default as Form, resetForm, setValue } from "./form/Form";
 export { default as Input } from "./form/Input";
 export { default as Select } from "./form/Select";
 export { default as TextArea } from "./form/TextArea";
@@ -38,6 +39,11 @@ export { default as ViewUserDetails } from "./users/ViewUserDetails";
 export { default as CreateProposalForm } from "./proposals/CreateProposalForm";
 export { default as HandleProposalStatusForm } from "./proposals/HandleProposalStatusForm";
 export { default as ViewProposalDetails } from "./proposals/ViewProposalDetails";
+
+// project components
+export { default as HandleProjectStudentsAndSupervisor } from "./projects/HandleProjectStudentsAndSupervisor";
+export { default as ViewProjectDetails } from "./projects/ViewProjectDetails";
+export { default as UploadProjectFileForm } from "./projects/UploadProjectFileForm";
 
 //theme components
 export { default as ThemeSwitcher } from "./theme/ThemeSwitcher"

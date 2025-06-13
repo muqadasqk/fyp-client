@@ -3,4 +3,8 @@ export { readLocalStorage, writeLocalStorage, deleteLocalStorage } from "./local
 export { showErrorToast, showLoadingToast, showSuccessToast } from "./toast"
 export { default as readObjectValueByPath } from "./readObjectValueByPath";
 export { default as capitalize } from "./capitalize";
+export { default as capEach } from "./capEach";
+export { default as cropImage } from "./cropImage";
 export { default as formatDateTime } from "./formatDateTime";
+export { default as firstLetter } from "./firstLetter";
+export { default as splitCamelCase } from "./splitCamelCase";

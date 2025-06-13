@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, Button, Overlay, Select, TextArea, Input } from "@components";
-import { StatusHandleSchema } from "@schemas";
+import { AcceptStatusHandleSchema, RejectStatusHandleSchema } from "@schemas";
 import { useDispatch, useSelector } from "react-redux";
 import { retrieveUsers } from "@features";
 
@@ -24,7 +24,7 @@ const HandleProposalStatusForm = ({ closeForm, handleAction }) => {
             onClose={() => closeForm(true)}
         >
             <div className="flex">
-                <Form onSubmit={handleAction} resolver={zodResolver(StatusHandleSchema)}>
+                <Form onSubmit={handleAction} resolver={zodResolver((!status || status == "20003") ? RejectStatusHandleSchema : AcceptStatusHandleSchema)}>
                     <div className="grid grid-cols-1 md:grid-cols-1 lg:gap-4 w-full">
                         <div className="flex flex-col">
                             <Select

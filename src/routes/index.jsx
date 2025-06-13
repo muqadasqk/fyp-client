@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ProtectedRoutes, AuthGuard } from "@components";
 import { AuthLayout, DashboardLayout } from "@layouts";
-import { Signup, Signin, NotFound, Unauthorized, ForgotPassword, Dashboard, ManageAccounts, ProfileSettings, Proposals, ManageProposals } from "@pages";
+import { Signup, Signin, NotFound, Unauthorized, ForgotPassword, Dashboard, ManageAccounts, ProfileSettings, Proposals, ManageProposals, ManageProjects, ManagePresentations } from "@pages";
 
 const router = createBrowserRouter([
   { // unprotected routes
@@ -61,6 +61,32 @@ const router = createBrowserRouter([
               { path: 'accepted', element: <ManageProposals status="accepted" key="accepted" /> },
               { path: 'pending', element: <ManageProposals status="pending" key="pending" /> },
               { path: 'rejected', element: <ManageProposals status="rejected" key="rejected" /> },
+            ]
+          },
+        ],
+      },
+      {
+        element: <DashboardLayout />,
+        children: [
+          {
+            path: "/projects",
+            children: [
+              { path: 'initialized', element: <ManageProjects status="initialized" key="initialized" /> },
+              { path: 'under-development', element: <ManageProjects status="underDevelopment" key="underDevelopment" /> },
+              { path: 'completed', element: <ManageProjects status="completed" key="completed" /> },
+            ]
+          },
+        ],
+      },
+      {
+        element: <DashboardLayout />,
+        children: [
+          {
+            path: "/presentations",
+            children: [
+              { path: 'pending-review', element: <ManagePresentations status="pendingReview" key="pendingReview" /> },
+              { path: 'approved', element: <ManagePresentations status="approved" key="approved" /> },
+              { path: 'rejected', element: <ManagePresentations status="rejected" key="rejected" /> },
             ]
           },
         ],

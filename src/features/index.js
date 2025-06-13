@@ -14,14 +14,14 @@ export { retrieveUsers, createUser, updateProfile, updatePassword, deleteUser, u
 export { default as proposalReducer } from "./proposalSlice";
 export { retrieveProposals, createProposal, updateProposal, retrieveManyProposal, deleteProposal } from "./proposalSlice";
 
-//meetings
-export { default as meetingsReducer } from "./meetingSlice";
-export { retrieveMeetings, createMeeting, updateMeeting, projectSpecificMeeting, getOneMeeting, deleteMeeting } from "./meetingSlice";
+//projects
+export { default as projectReducer } from "./projectSlice";
+export { retrieveProjects, createProject, updateProject, supervisorProjects, getOneProject, deleteProject } from "./projectSlice";
 
 //presentations
 export { default as presentationReducer } from "./presentationSlice";
 export { retrievePresentations, createPresentation, updatePresentation, projectSpecificPre, getOnePresentation, deletePresentation } from "./presentationSlice";
 
-//projects
-export { default as projectReducer } from "./projectSlice";
-export { retrieveProjects, createProject, updateProject, supervisorSpecific, getOneProject, deleteProject } from "./projectSlice";
+//meetings
+export { default as meetingsReducer } from "./meetingSlice";
+export { retrieveMeetings, createMeeting, updateMeeting, projectSpecificMeeting, getOneMeeting, deleteMeeting } from "./meetingSlice";

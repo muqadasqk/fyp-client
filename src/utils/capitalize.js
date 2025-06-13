@@ -1,6 +1,6 @@
-const capitalize = (str) => {
-    if (typeof str !== "string") return "";
-    return str.charAt(0).toUpperCase() + str.slice(1);
+const capitalize = (word) => {
+    if (typeof word != "string") return word;
+    return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
 export default capitalize;

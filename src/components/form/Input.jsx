@@ -1,4 +1,5 @@
 import { Button } from "@components";
+import { capitalize } from "@utils";
 import clsx from "clsx";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
@@ -16,11 +17,7 @@ const Input = ({ name, label, optional, type = "text", addOn, ...props }) => {
         <label htmlFor={name} className="font-medium flex justify-between items-center">
           <span>{label} {optional && <em className="text-gray-500">(Optional)</em>}</span>
 
-          {addOn && <div className="text-right">
-            <Button href="/forgot-password">
-              Forgot Password?
-            </Button>
-          </div>}
+          {addOn && <div className="text-right">{addOn}</div>}
         </label>
       )}
 
@@ -47,7 +44,7 @@ const Input = ({ name, label, optional, type = "text", addOn, ...props }) => {
       )}
 
       {errorMessage && (
-        <p className="mt-2 text-sm text-red-600 italic">{errorMessage}</p>
+        <p className="mt-2 text-sm text-red-600 italic">{capitalize(errorMessage)}</p>
       )}
     </div>
   );

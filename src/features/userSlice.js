@@ -9,10 +9,10 @@ const initialState = {
 }
 
 export const retrieveUsers = createAsyncThunk("user/retrieveUsers",
-    async ({ page, id, role }, { rejectWithValue }) => {
+    async ({ page, status, role }, { rejectWithValue }) => {
         page = page ?? {};
         try {
-            const { data } = await apiRequest.post(`/users/retrieve/${id ?? role}`, { page }, { showSuccessToast: false });
+            const { data } = await apiRequest.post(`/users/retrieve/${status ?? role}`, { page }, { showSuccessToast: false });
             return data;
         } catch (error) {
             return rejectWithValue(error.respone?.data);

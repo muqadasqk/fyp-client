@@ -1,42 +1,8 @@
+import clsx from "clsx";
 import { useState, useEffect } from "react";
 import { useLocation, NavLink } from "react-router-dom";
-import { FaFileAlt, FaHome, FaLightbulb, FaUsersCog } from "react-icons/fa";
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
-import clsx from "clsx";
-
-const admin = [
-    { icon: <FaHome />, text: "Dashboard", href: "/" },
-    {
-        icon: <FaUsersCog />,
-        text: "Manage Accounts",
-        children: [
-            { text: "Admins", href: "/accounts/admins" },
-            { text: "Supervisors", href: "/accounts/supervisors" },
-            { text: "Students", href: "/accounts/students" },
-            { text: "Pending", href: "/accounts/pending" },
-            { text: "Rejected", href: "/accounts/rejected" },
-        ],
-    },
-    {
-        icon: <FaFileAlt />,
-        text: "Manage Proposals",
-        children: [
-            { text: "Conditioanlly Accepted", href: "/proposals/conditionaly-accepted" },
-            { text: "Accepted", href: "/proposals/accepted" },
-            { text: "Pending", href: "/proposals/pending" },
-            { text: "Rejected", href: "/proposals/rejected" },
-        ],
-    },
-];
-
-const supervisor = [
-    { icon: <FaHome />, text: "Dashboard", href: "/" },
-];
-
-const student = [
-    { icon: <FaHome />, text: "Dashboard", href: "/" },
-    { icon: <FaLightbulb />, text: "My Ideas", href: "/my-ideas" },
-];
+import { admin, student, supervisor } from '../navigations';
 
 const Navigations = ({ role }) => {
     const links = { admin, supervisor, student }[role];
@@ -64,14 +30,14 @@ const Navigations = ({ role }) => {
                             <button
                                 onClick={() => handleToggle(idx)}
                                 className={clsx(
-                                    "w-full flex items-center justify-between px-4 py-2 rounded transition",
+                                    "w-full flex items-center justify-between px-4 py-2 rounded-t transition",
                                     open === idx
                                         ? "bg-theme-hover dark:bg-primary-hover dark:text-primary"
                                         : "bg-theme dark:bg-primary dark:text-primary hover:bg-theme-hover dark:hover:bg-primary-hover"
                                 )}
                             >
                                 <span className="inline-flex items-center gap-2">
-                                    {link.icon} {link.text}
+                                    {<link.icon />} {link.text}
                                 </span>
                                 {open === idx ? (
                                     <IoIosArrowDown className="text-sm" />
@@ -81,7 +47,7 @@ const Navigations = ({ role }) => {
                             </button>
 
                             {open === idx && (
-                                <div className="mt-1 bg-theme-secondary dark:bg-secondary rounded-md p-2">
+                                <div className="bg-theme-secondary dark:bg-secondary rounded-b p-2">
                                     {link.children.map((sublink) => (
                                         <NavLink
                                             key={sublink.href}
@@ -114,7 +80,7 @@ const Navigations = ({ role }) => {
                             }
                         >
                             <span className="inline-flex items-center gap-2">
-                                {link.icon} {link.text}
+                                {<link.icon />} {link.text}
                             </span>
                         </NavLink>
                     )}

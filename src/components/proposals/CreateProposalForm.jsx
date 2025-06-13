@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, Input, Button, Overlay, Select, TextArea } from "@components";
 import { createProposalSchema } from "@schemas";
 import { useDispatch, useSelector } from "react-redux";
-import { createProposal } from "@features";
+import { createProposal, retrieveUsers } from "@features";
 import { useEffect, useState } from "react";
 
 const CreateProposalForm = ({ closeForm, isLoading }) => {
@@ -18,6 +18,10 @@ const CreateProposalForm = ({ closeForm, isLoading }) => {
         const result = await dispatch(createProposal(data));
         if (createProposal.fulfilled.match(result)) closeForm(true);
     };
+
+    useEffect(() => {
+        dispatch(retrieveUsers({ page: {}, role: "student" }));
+    }, []);
 
     return (
         <Overlay

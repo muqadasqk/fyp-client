@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react'
 import { Button, ConfirmtionModal, HandleProposalStatusForm, Overlay } from '@components'
 import { readFile } from '@services'
 import { capitalize, formatDateTime } from '@utils'
-import { FaTrashAlt, FaUserTimes } from 'react-icons/fa';
+import { FaAnchor, FaTrash, FaTrashAlt } from 'react-icons/fa';
 import { deleteProposal, updateProposal } from '@features';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -53,8 +53,8 @@ const ViewProposalDetails = ({ proposal, closeForm }) => {
         <Fragment>
             {confirming === "delete" && (
                 <ConfirmtionModal
-                    modalTitle="Deleting User"
-                    prompt="Are you sure you want to delete this user?"
+                    modalTitle="Deleting Proposal"
+                    prompt="Are you sure you want to delete this proposal?"
                     promptText="This action cannot be undone. Please confirm to proceed."
                     icon={<FaTrashAlt className="text-2xl text-red-600" />}
                     buttonColor="button-danger"
@@ -103,11 +103,13 @@ const ViewProposalDetails = ({ proposal, closeForm }) => {
                     {user.role == "admin" && (
                         <div className="flex flex-wrap justify-end gap-3 border-t border-primary pt-4">
                             {proposal.status == "pending" && (
-                                <Button onClick={() => setConfirming("action")}>Take Action</Button>
+                                <Button onClick={() => setConfirming("action")}>
+                                    <FaAnchor /> Take Action
+                                </Button>
                             )}
 
                             <Button className="button-danger" onClick={() => setConfirming("delete")}>
-                                Delete
+                                <FaTrashAlt /> Delete
                             </Button>
                         </div>
                     )}
@@ -121,7 +123,7 @@ const ViewProposalDetails = ({ proposal, closeForm }) => {
 const PersonBlock = ({ title, person, image }) => {
     return (
         <div className="flex bg-primary border border-primary rounded-2xl overflow-hidden w-full max-w-md">
-            <div className="bg-secondary flex items-center justify-center w-36 h-36 shrink-0">
+            <div className="flex items-center justify-center w-36 h-36 shrink-0">
                 {image ? (
                     <img src={image} alt={`${title} picture`} className="w-32 h-32 object-cover rounded-full" />
                 ) : (
@@ -139,7 +141,7 @@ const PersonBlock = ({ title, person, image }) => {
                         {person.name && (
                             <div><span className="font-medium text-secondary">Name:</span> <span className="text-primary font-semibold">{person.name}</span></div>
                         )}
-                        {person.rollNo && (
+                        {title != "Supervisor" && person.rollNo && (
                             <div><span className="font-medium text-secondary">Roll No:</span> <span className="text-primary font-semibold">{person.rollNo}</span></div>
                         )}
                         {person.phone && (

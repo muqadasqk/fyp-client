@@ -1,29 +1,29 @@
-import { DashboardContent, DataTable, ViewProposalDetails } from '@components'
-import { retrieveProposals } from '@features'
+import { DashboardContent, DataTable, ViewProjectDetails } from '@components'
+import { retrieveProjects } from '@features'
 import { capitalize } from '@utils';
 import { useMemo, useState } from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
 import { useSelector } from 'react-redux'
 
-const ManageProposals = ({ status }) => {
-    const { proposals, pagination } = useSelector((state) => state.proposals);
+const ManageProjects = ({ status }) => {
+    const { projects, pagination } = useSelector((state) => state.projects);
     const [viewDetails, setViewDetails] = useState(null);
     const retrieve = useMemo(() => ({ status }), [status]);
 
     const handleViewDetails = (id) => {
-        setViewDetails(proposals.find(proposal => proposal._id == id));
+        setViewDetails(projects.find(project => project._id == id));
     }
 
     return (
-        <DashboardContent title={capitalize(`${status === "conditionallyAccepted" ? "Conditionally Accepted" : status} Proposals`)} description='View and manage proposal ideas'>
+        <DashboardContent title={capitalize(`${status === "underDevelopment" ? "Under Develpment" : status} Projects`)} description='View and manage projects'>
             {viewDetails && (
-                <ViewProposalDetails proposal={viewDetails} closeForm={() => setViewDetails(null)} />
+                <ViewProjectDetails project={viewDetails} closeForm={() => setViewDetails(null)} />
             )}
 
             <DataTable
-                onChange={retrieveProposals}
+                onChange={retrieveProjects}
                 retrieve={retrieve}
-                recordList={proposals}
+                recordList={projects}
                 paginationData={pagination}
                 recordFields={{
                     title: "Title",
@@ -46,4 +46,4 @@ const ManageProposals = ({ status }) => {
     )
 }
 
-export default ManageProposals
+export default ManageProjects

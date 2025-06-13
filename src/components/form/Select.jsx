@@ -1,3 +1,4 @@
+import { capEach, capitalize } from "@utils";
 import clsx from "clsx";
 import { useFormContext } from "react-hook-form";
 
@@ -44,19 +45,19 @@ const Select = ({
                 {...props}
 
             >
-                <option value="" disabled selected>
+                <option value="" disabled>
                     {placeholder ?? "Choose one..."}
                 </option>
                 {options.map(({ value, label }) => (
                     <option key={value} value={value}>
-                        {label}
+                        {capEach(label)}
                     </option>
                 ))}
             </select>
 
             {errors[name] && (
                 <small className="text-sm text-red-600 block mt-1 italic">
-                    {errors[name]?.message}
+                    {capitalize(errors[name]?.message)}
                 </small>
             )}
         </div>

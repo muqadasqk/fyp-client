@@ -7,7 +7,8 @@ import { Button } from "@components";
 const TableHeader = ({ fields, sortState, onSortToggle, hasActions }) => {
     return (
         <thead>
-            <tr className="bg-primary">
+            {/* <tr className="bg-theme dark:bg-primary-hover rounded"> */}
+            <tr className="bg-theme">
                 {Object.entries(fields).map(([key, label], index, arr) => (
                     <th
                         key={key}
@@ -87,7 +88,7 @@ const Table = ({ fields, records, actions, onSort, ...prop }) => {
                                                     title={`Click to ${label.toLowerCase()}`}
                                                     key={label}
                                                     onClick={() => onClick(record._id, label)}
-                                                    className="p-2 rounded"
+                                                    className="p-2 rounded button-secondary"
                                                 >
                                                     {icon && icon}
                                                 </Button>
@@ -100,10 +101,10 @@ const Table = ({ fields, records, actions, onSort, ...prop }) => {
                     )) : (
                         <tr>
                             <td
-                                className="px-4 py-2 text-primary text-sm text-center"
+                                className="px-4 py-2 text-secondary italic text-sm text-center"
                                 colSpan={Object.keys(fields).length + (actions ? 1 : 0)}
                             >
-                                Nothing to show up!
+                                Nothing to show!
                             </td>
                         </tr>
                     )}

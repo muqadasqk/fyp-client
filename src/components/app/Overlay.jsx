@@ -21,7 +21,7 @@ const Overlay = ({ children, title, width, onClose, zIndex = "z-40" }) => {
     <div
       onClick={handleClose}
       className={clsx(
-        "fixed inset-0 overflow-y-auto bg-black/30 transition-opacity duration-200", zIndex,
+        "fixed inset-0 overflow-y-auto bg-black/40 transition-opacity duration-200", zIndex,
         visible ? "opacity-100" : "opacity-0"
       )}
     >
@@ -35,7 +35,8 @@ const Overlay = ({ children, title, width, onClose, zIndex = "z-40" }) => {
         >
           <div className="relative p-6 flex items-center justify-center border-b border-primary pb-4">
             <h3 className="text-lg font-semibold text-primary">{title}</h3>
-            <button
+           {onClose && <button 
+              title="Close the modal"
               onClick={() => {
                 setVisible(false);
                 setTimeout(() => onClose(false), 200);
@@ -43,7 +44,7 @@ const Overlay = ({ children, title, width, onClose, zIndex = "z-40" }) => {
               className="absolute top-2 right-2 transition p-2 border border-transparent hover:border-primary rounded-full"
             >
               <FaTimes size={18} className="text-primary" />
-            </button>
+            </button>}
           </div>
 
           <div className="p-6">{children}</div>
