@@ -44,7 +44,7 @@ const TableHeader = ({ fields, sortState, onSortToggle, hasActions }) => {
     );
 };
 
-const Table = ({ fields, records, actions, onSort, ...prop }) => {
+const Table = ({ fields, records, actions, onSort, empty, ...prop }) => {
     const [sortState, setSortState] = useState({});
 
     const handleSortToggle = (field) => {
@@ -104,7 +104,7 @@ const Table = ({ fields, records, actions, onSort, ...prop }) => {
                                 className="px-4 py-2 text-secondary italic text-sm text-center"
                                 colSpan={Object.keys(fields).length + (actions ? 1 : 0)}
                             >
-                                Nothing to show!
+                                {empty ?? "Nothing to show!"}
                             </td>
                         </tr>
                     )}

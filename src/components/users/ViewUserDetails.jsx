@@ -65,7 +65,7 @@ const ViewUserDetails = ({ user, closeForm }) => {
         <Fragment>
             {confirming === "delete" && (
                 <ConfirmtionModal
-                    modalTitle="Deleting User"
+                    modalTitle={`Deleting ${capitalize(currentUser.role)} Account`}
                     prompt="Are you sure you want to delete this user?"
                     promptText="This action cannot be undone. Please confirm to proceed."
                     icon={<FaTrashAlt className="text-2xl text-red-600" />}
@@ -107,7 +107,7 @@ const ViewUserDetails = ({ user, closeForm }) => {
 
             {confirming === "lock" && (
                 <ConfirmtionModal
-                    modalTitle="Locking User Access"
+                    modalTitle={`Locking ${capitalize(currentUser.role)} Account Access`}
                     prompt="Are you sure you want to lock this user’s account?"
                     promptText="The user will no longer be able to access the FYP management system."
                     icon={<FaLock className="text-2xl text-blue-600" />}
@@ -121,7 +121,7 @@ const ViewUserDetails = ({ user, closeForm }) => {
 
             {confirming === "unlock" && (
                 <ConfirmtionModal
-                    modalTitle="Unlocking User Access"
+                    modalTitle={`Unlocking ${capitalize(currentUser.role)} Account Access`}
                     prompt="Do you want to unlock this user’s account?"
                     promptText="This will restore access to the FYP management system."
                     icon={<FaUnlock className="text-2xl text-blue-600" />}

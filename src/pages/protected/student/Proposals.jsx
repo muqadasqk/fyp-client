@@ -12,7 +12,7 @@ const Proposals = () => {
     const retrieve = useMemo(() => ({ proposalId: user._id }), [user._id]);
 
     return (
-        <DashboardContent title='Projects' description='View and manage your proposals'>
+        <DashboardContent title='My Ideas' description='View and manage your project ideas'>
             <Button type="button" className="mb-5" onClick={() => setPitchIdea(!pitchIdea)}>
                 <FaLightbulb /> Pitch an idea
             </Button>

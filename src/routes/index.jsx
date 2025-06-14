@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ProtectedRoutes, AuthGuard } from "@components";
 import { AuthLayout, DashboardLayout } from "@layouts";
-import { Signup, Signin, NotFound, Unauthorized, ForgotPassword, Dashboard, ManageAccounts, ProfileSettings, Proposals, ManageProposals, ManageProjects, ManagePresentations } from "@pages";
+import { Signup, Signin, NotFound, Unauthorized, ForgotPassword, Dashboard, ManageAccounts, ProfileSettings, Proposals, ManageProposals, ManageProjects, ManagePresentations, MyProject } from "@pages";
 
 const router = createBrowserRouter([
   { // unprotected routes
@@ -101,7 +101,8 @@ const router = createBrowserRouter([
       {
         element: <DashboardLayout />,
         children: [
-          { path: "/my-ideas", element: <Proposals /> }
+          { path: "/my-ideas", element: <Proposals /> },
+          { path: "/my-project", element: <MyProject /> }
         ],
       },
     ],

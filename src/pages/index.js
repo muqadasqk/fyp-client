@@ -15,6 +15,7 @@ export { default as ManagePresentations } from "./protected/admin/ManagePresenta
 
 // protected>student
 export { default as Proposals } from "./protected/student/Proposals";
+export { default as MyProject } from "./protected/student/MyProject";
 
 // static
 export { default as NotFound } from "./static/NotFound";

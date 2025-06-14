@@ -77,8 +77,8 @@ const Pagination = ({ data, set, onSort }) => {
                     onChange={(e) => onSort(e.target.value)}
                     defaultValue={10}
                 >
-                    {/* <option key={totalItems} value={totalItems}>All - {totalItems}</option> */}
-                    {[1, 10, 20, 50, 100, 500, 1000].map((range) => (
+                    <option key={totalItems} value={totalItems}>{totalItems}/page <em>All</em></option>
+                    {[1, 10, 20, 50, 100].map((range) => (
                         <option key={range} value={range}>{range}/page</option>
                     ))}
                 </select>

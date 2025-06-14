@@ -2,7 +2,7 @@ import { Pagination, SearchBar, Table } from '@components';
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 
-export const DataTable = ({ onChange, retrieve, recordList, paginationData, searchableFields, recordFields, actions }) => {
+export const DataTable = ({ onChange, retrieve, recordList, paginationData, searchableFields, recordFields, empty, actions }) => {
     const dispatch = useDispatch();
     const [page, setPage] = useState({ current: 1, size: 10, query: {}, sort: { createdAt: -1 } });
 
@@ -21,6 +21,7 @@ export const DataTable = ({ onChange, retrieve, recordList, paginationData, sear
             records={recordList}
             fields={recordFields}
             actions={actions}
+            empty={empty}
             onSort={(sort) => setPage((p) => ({ ...p, sort }))}
         />
 

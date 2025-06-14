@@ -33,8 +33,8 @@ const Overlay = ({ children, title, width, onClose, zIndex = "z-40" }) => {
             visible ? "scale-100 opacity-100" : "scale-95 opacity-0"
           )}
         >
-          <div className="relative p-6 flex items-center justify-center border-b border-primary pb-4">
-            <h3 className="text-lg font-semibold text-primary">{title}</h3>
+          <div className="relative p-3 pt-4 flex items-center justify-center border-b border-primary pb-4">
+            <h3 className="text-lg font-semibold text-primary m-0">{title}</h3>
            {onClose && <button 
               title="Close the modal"
               onClick={() => {

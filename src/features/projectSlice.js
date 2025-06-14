@@ -4,6 +4,7 @@ import { setErrors } from "./uiSlice";
 
 const initialState = {
     projects: [],
+    project: {},
     pagination: {},
     loading: false,
 }
@@ -58,7 +59,7 @@ export const supervisorProjects = createAsyncThunk("project/supervisorProjects",
     }
 )
 
-export const getOneProject = createAsyncThunk("project/getOneSpecific",
+export const retrieveSingleProject = createAsyncThunk("project/getOneSpecific",
     async (id, { rejectWithValue }) => {
         try {
             const { data } = await apiRequest.get(`/projects/${id}`, { showSuccessToast: false })
@@ -136,15 +137,15 @@ const projectSlice = createSlice({
                 state.loading = false
             })
 
-            .addCase(getOneProject.pending, (state) => {
+            .addCase(retrieveSingleProject.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(getOneProject.fulfilled, (state, action) => {
+            .addCase(retrieveSingleProject.fulfilled, (state, action) => {
                 state.loading = false;
-                state.projects = action.payload.projects;
+                state.project = action.payload.project;
 
             })
-            .addCase(getOneProject.rejected, (state) => {
+            .addCase(retrieveSingleProject.rejected, (state) => {
                 state.loading = false
             })
 

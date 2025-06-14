@@ -13,7 +13,8 @@ const initialState = {
 
 export const retrievePresentations = createAsyncThunk("presentation/retrievePresentations",
     async (page, { rejectWithValue }) => {
-        try {  const { data } = await apiRequest.post("/presentations/all",{ page },{ showSuccessToast: false });
+        try {
+            const { data } = await apiRequest.post("/presentations/all", { page }, { showSuccessToast: false });
             return data;
         } catch (error) {
             return rejectWithValue(error.response?.data);
@@ -24,13 +25,13 @@ export const retrievePresentations = createAsyncThunk("presentation/retrievePres
 export const createPresentation = createAsyncThunk("presentation/createPresentation",
     async (formData, { rejectWithValue, dispatch }) => {
         try {
-            const { data } = await apiRequest.post("/presentations", formData,{
-                headers:{"Content-Type":"application/json"}
+            const { data } = await apiRequest.post("/presentations", formData, {
+                headers: { "Content-Type": "application/json" }
             });
-          
+
             return data;
         } catch (error) {
-            dispatch(setErrors(error.response?.data?.errors)); 
+            dispatch(setErrors(error.response?.data?.errors));
             return rejectWithValue(error.response?.data);
         }
     }
@@ -48,10 +49,10 @@ export const updatePresentation = createAsyncThunk("presentation/updatePresentat
     }
 );
 
-export const projectSpecificPre = createAsyncThunk("presentation/proejctSpecificPre",
-    async (id, {rejectWithValue}) => {
+export const projectSpecificPresentations = createAsyncThunk("presentation/proejctSpecificPre",
+    async ({ projectId, page }, { rejectWithValue }) => {
         try {
-            const {data} = await apiRequest.post(`/presentations/p/${id}`, {showSuccessToast:false})
+            const { data } = await apiRequest.post(`/presentations/p/${projectId}`, { page }, { showSuccessToast: false });
             return data;
         } catch (error) {
             return rejectWithValue(error.response?.data)
@@ -89,7 +90,7 @@ const presentationSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            
+
             .addCase(retrievePresentations.pending, (state) => {
                 state.loading = true;
             })
@@ -128,14 +129,15 @@ const presentationSlice = createSlice({
                 state.loading = false;
             })
 
-            .addCase(projectSpecificPre.pending, (state) => {
+            .addCase(projectSpecificPresentations.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(projectSpecificPre.fulfilled, (state, action) => {
+            .addCase(projectSpecificPresentations.fulfilled, (state, action) => {
                 state.loading = false;
-                state.projects = action.payload.projects;
+                state.pagination = action.payload.pagination;
+                state.presentations = action.payload.presentations;
             })
-            .addCase(projectSpecificPre.rejected, (state) => {
+            .addCase(projectSpecificPresentations.rejected, (state) => {
                 state.loading = false;
             })
 
@@ -150,7 +152,7 @@ const presentationSlice = createSlice({
                 state.loading = false;
             })
 
-            
+
             .addCase(deletePresentation.pending, (state) => {
                 state.loading = true;
             })
