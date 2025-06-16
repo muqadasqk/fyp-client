@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ProtectedRoutes, AuthGuard } from "@components";
 import { AuthLayout, DashboardLayout } from "@layouts";
-import { Signup, Signin, NotFound, Unauthorized, ForgotPassword, Dashboard, ManageAccounts, ProfileSettings, Proposals, ManageProposals, ManageProjects, ManagePresentations, MyProject } from "@pages";
+import { Signup, Signin, NotFound, Unauthorized, ForgotPassword, Dashboard, ManageAccounts, ProfileSettings, Proposals, ManageProposals, ManageProjects, ManagePresentations, MyProject, ManageMeetings } from "@pages";
 
 const router = createBrowserRouter([
   { // unprotected routes
@@ -30,6 +30,42 @@ const router = createBrowserRouter([
         ],
       },
     ],
+  },
+
+  // role-base access control routes (admin, supervisor)
+  {
+    path: "/",
+    element: <ProtectedRoutes allowedRoles={["admin", "supervisor"]} />,
+    children: [
+      {
+        element: <DashboardLayout />,
+        children: [
+          {
+            path: "/projects",
+            children: [
+              { path: 'all', element: <ManageProjects status="all" key="all" /> },
+              { path: 'initialized', element: <ManageProjects status="initialized" key="initialized" /> },
+              { path: 'under-development', element: <ManageProjects status="underDevelopment" key="underDevelopment" /> },
+              { path: 'completed', element: <ManageProjects status="completed" key="completed" /> },
+            ]
+          },
+        ],
+      },
+      {
+        element: <DashboardLayout />,
+        children: [
+          {
+            path: "/presentations",
+            children: [
+              { path: 'all', element: <ManagePresentations status="all" key="all" /> },
+              { path: 'pending-review', element: <ManagePresentations status="pendingReview" key="pendingReview" /> },
+              { path: 'approved', element: <ManagePresentations status="approved" key="approved" /> },
+              { path: 'rejected', element: <ManagePresentations status="rejected" key="rejected" /> },
+            ]
+          },
+        ],
+      },
+    ]
   },
 
   { // role-base access control routes (admin only)
@@ -65,28 +101,22 @@ const router = createBrowserRouter([
           },
         ],
       },
+    ],
+  },
+
+  { // role-base access control routes (supervisor only)
+    path: "/",
+    element: <ProtectedRoutes allowedRoles={["supervisor"]} />,
+    children: [
       {
         element: <DashboardLayout />,
         children: [
           {
-            path: "/projects",
+            path: "/meetings",
             children: [
-              { path: 'initialized', element: <ManageProjects status="initialized" key="initialized" /> },
-              { path: 'under-development', element: <ManageProjects status="underDevelopment" key="underDevelopment" /> },
-              { path: 'completed', element: <ManageProjects status="completed" key="completed" /> },
-            ]
-          },
-        ],
-      },
-      {
-        element: <DashboardLayout />,
-        children: [
-          {
-            path: "/presentations",
-            children: [
-              { path: 'pending-review', element: <ManagePresentations status="pendingReview" key="pendingReview" /> },
-              { path: 'approved', element: <ManagePresentations status="approved" key="approved" /> },
-              { path: 'rejected', element: <ManagePresentations status="rejected" key="rejected" /> },
+              { path: 'all', element: <ManageMeetings status="all" key="all" /> },
+              { path: 'past', element: <ManageMeetings status="past" key="past" /> },
+              { path: 'upcoming', element: <ManageMeetings status="upcoming" key="upcoming" /> },
             ]
           },
         ],

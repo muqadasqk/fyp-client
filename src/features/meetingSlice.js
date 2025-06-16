@@ -6,13 +6,12 @@ const initialState = {
     meetings: [],
     pagination: {},
     loading: false,
-    projects: [],
     meeting: null
 }
 export const retrieveMeetings = createAsyncThunk("meeting/retrieveMeetings",
-    async (page, { rejectWithValue }) => {
+    async ({ page, status }, { rejectWithValue }) => {
         try {
-            const { data } = await apiRequest.post("/meetings/all", { page }, { showSuccessToast: false });
+            const { data } = await apiRequest.post(`/meetings/retrieve/${status}`, { page }, { showSuccessToast: false });
             return data
         } catch (error) {
             return rejectWithValue(error.response?.data)
@@ -47,9 +46,9 @@ export const updateMeeting = createAsyncThunk("meeting/updateMeeting",
 )
 
 export const projectSpecificMeetings = createAsyncThunk("meeting/projectSpecificMeetings",
-    async (id, { rejectWithValue }) => {
+    async ({ projectId, page }, { rejectWithValue }) => {
         try {
-            const { data } = await apiRequest.post(`/meetings/p/${id}`, { showSuccessToast: false });
+            const { data } = await apiRequest.post(`/meetings/p/${projectId}`, { page }, { showSuccessToast: false });
             return data
         } catch (error) {
             return rejectWithValue(error.response?.data)
@@ -122,7 +121,8 @@ const meetingSlice = createSlice({
             })
             .addCase(projectSpecificMeetings.fulfilled, (state, action) => {
                 state.loading = false;
-                state.projects = action.payload.meeting
+                state.meetings = action.payload.meetings;
+                state.pagination = action.payload.pagination;
             })
             .addCase(projectSpecificMeetings.rejected, (state) => {
                 state.loading = false;

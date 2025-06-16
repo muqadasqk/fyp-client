@@ -1,7 +1,15 @@
 import { Helmet } from "react-helmet-async";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setMetadata } from "@features";
 
 const DashboardContent = ({ title = "FYP Management System", description = "", children }) => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(setMetadata({ title, description }));
+    }, [title, description]);
+
     return (
         <Fragment>
             <Helmet>

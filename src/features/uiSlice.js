@@ -3,6 +3,8 @@ import { readLocalStorage, writeLocalStorage } from '@utils';
 
 const initialState = {
   theme: readLocalStorage("theme") ?? "system",
+  title: null,
+  description: null,
   isLoading: false,
   errors: {}
 };
@@ -18,6 +20,11 @@ const uiSlice = createSlice({
     setLoading: (state, action) => {
       state.isLoading = action.payload;
     },
+    setMetadata: (state, action) => {
+      const { title = null, description = null } = action.payload;
+      state.title = title;
+      state.description = description;
+    },
     setErrors: (state, action) => {
       state.errors = action.payload;
     },
@@ -27,6 +34,6 @@ const uiSlice = createSlice({
   },
 });
 
-export const { setTheme, setLoading, setErrors, clearErrors } = uiSlice.actions;
+export const { setTheme, setLoading, setMetadata, setErrors, clearErrors } = uiSlice.actions;
 export default uiSlice.reducer;
 

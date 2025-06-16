@@ -5,13 +5,16 @@ export { default as ForgotPassword } from "./auth/ForgotPassword";
 
 // protected
 export { default as Dashboard } from "./protected/Dashboard";
+export { default as ManageProjects } from "./protected/ManageProjects";
+export { default as ManagePresentations } from "./protected/ManagePresentations";
 export { default as ProfileSettings } from "./protected/ProfileSettings";
 
 // protected>admin
 export { default as ManageAccounts } from "./protected/admin/ManageAccounts";
 export { default as ManageProposals } from "./protected/admin/ManageProposals";
-export { default as ManageProjects } from "./protected/admin/ManageProjects";
-export { default as ManagePresentations } from "./protected/admin/ManagePresentations";
+
+// protected>supervisor
+export { default as ManageMeetings } from "./protected/supervisor/ManageMeetings"
 
 // protected>student
 export { default as Proposals } from "./protected/student/Proposals";

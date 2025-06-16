@@ -63,10 +63,10 @@ export const uploadProjectFile = createAsyncThunk("project/uploadProjectFile",
     }
 )
 
-export const supervisorProjects = createAsyncThunk("project/supervisorProjects",
-    async (id, { rejectWithValue }) => {
+export const retrieveSupervisorProjects = createAsyncThunk("project/retrieveSupervisorProjects",
+    async ({ page, supervisorId, status }, { rejectWithValue }) => {
         try {
-            const { data } = await apiRequest.post(`/projects/s/${id}`, { showSuccessToast: false })
+            const { data } = await apiRequest.post(`/projects/s/${supervisorId}/${status}`, { page }, { showSuccessToast: false })
             return data
         } catch (error) {
             return rejectWithValue(error.response?.data)
@@ -151,15 +151,15 @@ const projectSlice = createSlice({
                 state.loading = false;
             })
 
-            .addCase(supervisorProjects.pending, (state) => {
+            .addCase(retrieveSupervisorProjects.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(supervisorProjects.fulfilled, (state, action) => {
+            .addCase(retrieveSupervisorProjects.fulfilled, (state, action) => {
                 state.loading = false;
-                state.supervisor = action.payload.projects;
-
+                state.projects = action.payload.projects;
+                state.pagination = action.payload.pagination;
             })
-            .addCase(supervisorProjects.rejected, (state) => {
+            .addCase(retrieveSupervisorProjects.rejected, (state) => {
                 state.loading = false
             })
 

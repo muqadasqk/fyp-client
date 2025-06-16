@@ -32,7 +32,7 @@ const ManageProposals = ({ status }) => {
                     status: "Status",
                 }}
                 actions={[
-                    { label: "view details", icon: <FaInfoCircle />, ShowWhen: { status: true }, onClick: handleViewDetails },
+                    { label: "Details", icon: <FaInfoCircle />, ShowWhen: { status: true }, onClick: handleViewDetails },
                 ]}
                 searchableFields={{
                     title: "Title",

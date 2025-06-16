@@ -80,8 +80,9 @@ const Table = ({ fields, records, actions, onSort, empty, ...prop }) => {
                                             "px-4 py-0 text-sm text-primary",
                                             i === 0 && "rounded-l-xl",
                                             i === arr.length - 1 && !actions && "rounded-r-xl",
-                                            "bg-inherit"
+                                            "bg-inherit truncate overflow-hidden whitespace-nowrap max-w-[170px]"
                                         )}
+                                        title={readObjectValueByPath(record, field) || "N/A"}
                                     >
                                         {readObjectValueByPath(record, field) || "N/A"}
                                     </td>

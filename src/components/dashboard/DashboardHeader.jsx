@@ -4,10 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { FaBars, FaUser, FaSignOutAlt, FaBell, FaSun, FaMoon, } from "react-icons/fa";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { formatFilePath } from "@utils";
+import { useMemo } from "react";
 
 const DashboardHeader = ({ toggleSidebar }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+  const { title } = useSelector((state) => state.ui);
 
   const notifications = [
     "You have a new message",
@@ -42,7 +44,7 @@ const DashboardHeader = ({ toggleSidebar }) => {
             <FaBars className="h-7 w-7" />
           </button>
 
-          <p className="pl-3">{document.title}</p>
+          <p className="pl-3">{title}</p>
         </div>
 
         <div className="flex items-center space-x-4">

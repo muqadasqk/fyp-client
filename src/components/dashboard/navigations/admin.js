@@ -43,8 +43,9 @@ const admin = [
 
         hasDropdown: true,
         children: [
-            { label: "Under Development", href: "/under-development" },
+            { label: "All", href: "/all" },
             { label: "Initialized", href: "/initialized" },
+            { label: "Under Dev.", href: "/under-development" },
             { label: "Completed", href: "/completed" },
         ],
     },
@@ -55,7 +56,8 @@ const admin = [
 
         hasDropdown: true,
         children: [
-            { label: "Pending Review", href: "/pending-review" },
+            { label: "All", href: "/all" },
+            { label: "Reviewing", href: "/pending-review" },
             { label: "Approved", href: "/approved" },
             { label: "Rejected", href: "/rejected" },
         ],

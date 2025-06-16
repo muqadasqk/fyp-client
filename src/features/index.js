@@ -1,6 +1,6 @@
 // ui
 export { default as uiReducer } from "./uiSlice"
-export { setTheme, setLoading, setErrors, clearErrors } from "./uiSlice"
+export { setTheme, setLoading, setMetadata, setErrors, clearErrors } from "./uiSlice"
 
 // auth
 export { default as authReducer } from "./authSlice";
@@ -16,7 +16,7 @@ export { retrieveProposals, createProposal, updateProposal, retrieveManyProposal
 
 //projects
 export { default as projectReducer } from "./projectSlice";
-export { retrieveProjects, createProject, updateProject, uploadProjectFile, supervisorProjects, retrieveSingleProject, deleteProject } from "./projectSlice";
+export { retrieveProjects, createProject, updateProject, uploadProjectFile, retrieveSupervisorProjects, retrieveSingleProject, deleteProject } from "./projectSlice";
 
 //presentations
 export { default as presentationReducer } from "./presentationSlice";

@@ -12,9 +12,9 @@ const initialState = {
 };
 
 export const retrievePresentations = createAsyncThunk("presentation/retrievePresentations",
-    async (page, { rejectWithValue }) => {
+    async ({ page, status }, { rejectWithValue }) => {
         try {
-            const { data } = await apiRequest.post("/presentations/all", { page }, { showSuccessToast: false });
+            const { data } = await apiRequest.post(`/presentations/retrieve/${status}`, { page }, { showSuccessToast: false });
             return data;
         } catch (error) {
             return rejectWithValue(error.response?.data);
@@ -49,7 +49,7 @@ export const updatePresentation = createAsyncThunk("presentation/updatePresentat
     }
 );
 
-export const projectSpecificPresentations = createAsyncThunk("presentation/proejctSpecificPre",
+export const projectSpecificPresentations = createAsyncThunk("presentation/projectSpecificPresentations",
     async ({ projectId, page }, { rejectWithValue }) => {
         try {
             const { data } = await apiRequest.post(`/presentations/p/${projectId}`, { page }, { showSuccessToast: false });

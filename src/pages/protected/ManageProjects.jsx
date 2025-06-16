@@ -1,14 +1,21 @@
 import { DashboardContent, DataTable, ViewProjectDetails } from '@components'
-import { retrieveProjects } from '@features'
+import { retrieveProjects, retrieveSupervisorProjects } from '@features'
 import { capitalize } from '@utils';
 import { useMemo, useState } from 'react';
-import { FaInfoCircle } from 'react-icons/fa';
+import { FaEye, FaInfoCircle } from 'react-icons/fa';
 import { useSelector } from 'react-redux'
 
 const ManageProjects = ({ status }) => {
     const { projects, pagination } = useSelector((state) => state.projects);
+    const { user } = useSelector((state) => state.auth);
     const [viewDetails, setViewDetails] = useState(null);
-    const retrieve = useMemo(() => ({ status }), [status]);
+    const retrieve = useMemo(() => {
+        if (user.role == "supervisor") {
+            return { status, supervisorId: user._id };
+        }
+
+        return { status };
+    }, [status, user]);
 
     const handleViewDetails = (id) => {
         setViewDetails(projects.find(project => project._id == id));
@@ -21,7 +28,7 @@ const ManageProjects = ({ status }) => {
             )}
 
             <DataTable
-                onChange={retrieveProjects}
+                onChange={user.role == "supervisor" ? retrieveSupervisorProjects : retrieveProjects}
                 retrieve={retrieve}
                 recordList={projects}
                 paginationData={pagination}
@@ -32,7 +39,7 @@ const ManageProjects = ({ status }) => {
                     status: "Status",
                 }}
                 actions={[
-                    { label: "view details", icon: <FaInfoCircle />, ShowWhen: { status: true }, onClick: handleViewDetails },
+                    { label: "Details", icon: <FaEye />, ShowWhen: { status: true }, onClick: handleViewDetails },
                 ]}
                 searchableFields={{
                     title: "Title",
