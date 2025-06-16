@@ -16,7 +16,7 @@ export { retrieveProposals, createProposal, updateProposal, retrieveManyProposal
 
 //projects
 export { default as projectReducer } from "./projectSlice";
-export { retrieveProjects, createProject, updateProject, supervisorProjects, retrieveSingleProject, deleteProject } from "./projectSlice";
+export { retrieveProjects, createProject, updateProject, uploadProjectFile, supervisorProjects, retrieveSingleProject, deleteProject } from "./projectSlice";
 
 //presentations
 export { default as presentationReducer } from "./presentationSlice";
@@ -24,4 +24,4 @@ export { retrievePresentations, createPresentation, updatePresentation, projectS
 
 //meetings
 export { default as meetingsReducer } from "./meetingSlice";
-export { retrieveMeetings, createMeeting, updateMeeting, projectSpecificMeeting, getOneMeeting, deleteMeeting } from "./meetingSlice";
+export { retrieveMeetings, createMeeting, updateMeeting, projectSpecificMeetings, getOneMeeting, deleteMeeting } from "./meetingSlice";

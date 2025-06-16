@@ -14,12 +14,10 @@ const Button = ({ isLoading, href, children, className, ...props }) => {
     }
 
     return (
-        <button disabled={isLoading} className={clsx(baseClasses, className)} {...props}>
-            {isLoading ? (
+        <button disabled={isLoading} className={clsx(baseClasses, className, { "pointer-events-none": isLoading })} {...props}>
+            {isLoading && (
                 <img src={spinner} width={25} alt="loading" className="animate-spin" />
-            ) : (
-                children
-            )}
+            )} {children}
         </button>
     );
 };

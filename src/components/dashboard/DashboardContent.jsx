@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet-async";
-import { Spinner } from "@components";
 import { Fragment } from "react";
-const DashboardContent = ({ title = "", description = "", isLoading, children }) => {
+
+const DashboardContent = ({ title = "FYP Management System", description = "", children }) => {
     return (
         <Fragment>
             <Helmet>
@@ -10,13 +10,7 @@ const DashboardContent = ({ title = "", description = "", isLoading, children })
                 <meta name="description" content={description} />
             </Helmet>
 
-            {isLoading && <Spinner size={70} />}
-
-            {/* <div className="m-3">
-                <h6 className="text-secondary">{title}</h6>
-            </div> */}
-
-            <div className="m-5" >
+            <div className="m-5 mb-20" >
                 <div className="relative">{children}</div>
             </div>
         </Fragment>

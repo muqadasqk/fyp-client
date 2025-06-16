@@ -17,7 +17,7 @@ const CreateUserForm = ({ role, closeForm, isLoading }) => {
     }
 
     return (
-        <Overlay dasboardSpecific onClose={() => closeForm(true)} title={`Create ${role}`} width="w-[90%] sm:w-[70%] md:w-[50%]">
+        <Overlay dasboardSpecific onClose={() => closeForm(true)} title={`Create ${role} account`} width="w-[90%] sm:w-[70%] md:w-[50%]">
             <div className="flex">
                 <Form onSubmit={onSubmit} resolver={zodResolver(createUserSchema)} encType="multipart/form-data">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:gap-4 w-full">

@@ -57,7 +57,7 @@ const router = createBrowserRouter([
           {
             path: "/proposals",
             children: [
-              { path: 'conditionaly-accepted', element: <ManageProposals status="conditionallyAccepted" key="conditionallyAccepted" /> },
+              { path: 'conditionally-accepted', element: <ManageProposals status="conditionallyAccepted" key="conditionallyAccepted" /> },
               { path: 'accepted', element: <ManageProposals status="accepted" key="accepted" /> },
               { path: 'pending', element: <ManageProposals status="pending" key="pending" /> },
               { path: 'rejected', element: <ManageProposals status="rejected" key="rejected" /> },

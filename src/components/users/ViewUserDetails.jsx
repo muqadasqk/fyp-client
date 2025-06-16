@@ -65,10 +65,9 @@ const ViewUserDetails = ({ user, closeForm }) => {
         <Fragment>
             {confirming === "delete" && (
                 <ConfirmtionModal
-                    modalTitle={`Deleting ${capitalize(currentUser.role)} Account`}
-                    prompt="Are you sure you want to delete this user?"
+                    prompt={`Deleting ${currentUser.role} account?`}
                     promptText="This action cannot be undone. Please confirm to proceed."
-                    icon={<FaTrashAlt className="text-2xl text-red-600" />}
+                    icon={<FaTrashAlt />}
                     buttonColor="button-danger"
                     confirmBtnText="Delete"
                     model="users"
@@ -79,10 +78,9 @@ const ViewUserDetails = ({ user, closeForm }) => {
 
             {confirming === "reject" && (
                 <ConfirmtionModal
-                    modalTitle="Rejecting Registration"
-                    prompt="Are you sure you want to reject this user's registration?"
+                    prompt={`Rejecting ${currentUser.role} registration`}
                     promptText="This action will deny access. Please confirm to proceed."
-                    icon={<FaUserTimes className="text-2xl text-orange-500" />}
+                    icon={<FaUserTimes />}
                     buttonColor="button-warning"
                     confirmBtnText="Reject"
                     model="users"
@@ -93,10 +91,9 @@ const ViewUserDetails = ({ user, closeForm }) => {
 
             {confirming === "approve" && (
                 <ConfirmtionModal
-                    modalTitle="Approving Registration"
-                    prompt="Do you want to approve this user’s registration?"
-                    promptText="This will grant the user access to the FYP management system."
-                    icon={<FaUserCheck className="text-2xl text-green-600" />}
+                    prompt={`Approving ${currentUser.role} registration`}
+                    promptText={`This will grant this ${currentUser.role} to access the FYP management system.`}
+                    icon={<FaUserCheck />}
                     buttonColor="button-success"
                     confirmBtnText="Approve"
                     model="users"
@@ -107,12 +104,10 @@ const ViewUserDetails = ({ user, closeForm }) => {
 
             {confirming === "lock" && (
                 <ConfirmtionModal
-                    modalTitle={`Locking ${capitalize(currentUser.role)} Account Access`}
-                    prompt="Are you sure you want to lock this user’s account?"
-                    promptText="The user will no longer be able to access the FYP management system."
-                    icon={<FaLock className="text-2xl text-blue-600" />}
-                    // buttonColor="button-warning"
-                    confirmBtnText="Lock"
+                    prompt={`Restricting ${currentUser.role} account access`}
+                    promptText={`This ${currentUser.role} will no longer be able to access the FYP management system.`}
+                    icon={<FaLock />}
+                    confirmBtnText="Restrict Access"
                     model="users"
                     onConfirm={() => handleLockUnlock(currentUser._id, 20003)}
                     onClose={setConfirming}
@@ -121,12 +116,10 @@ const ViewUserDetails = ({ user, closeForm }) => {
 
             {confirming === "unlock" && (
                 <ConfirmtionModal
-                    modalTitle={`Unlocking ${capitalize(currentUser.role)} Account Access`}
-                    prompt="Do you want to unlock this user’s account?"
-                    promptText="This will restore access to the FYP management system."
-                    icon={<FaUnlock className="text-2xl text-blue-600" />}
-                    // buttonColor="button-warning"
-                    confirmBtnText="Unlock"
+                    prompt={`Restore access for the ${currentUser.role} account.`}
+                    promptText={`This ${currentUser.role} will regain access to the FYP management system.`}
+                    icon={<FaUnlock />}
+                    confirmBtnText="Restore Access"
                     model="users"
                     onConfirm={() => handleLockUnlock(currentUser._id, 20004)}
                     onClose={setConfirming}
@@ -167,28 +160,28 @@ const ViewUserDetails = ({ user, closeForm }) => {
                     <div className="flex flex-wrap justify-end gap-3 border-t border-primary pt-4">
                         {currentUser.status == "approvalPending" && (
                             <>
-                                <Button className="button-success" onClick={() => setConfirming("approve")}>
+                                <Button className="text-sm button-success" onClick={() => setConfirming("approve")}>
                                     <FaUserCheck /> Approve
                                 </Button>
-                                <Button className="button-warning" onClick={() => setConfirming("reject")}>
+                                <Button className="text-sm button-warning" onClick={() => setConfirming("reject")}>
                                     <FaUserTimes /> Reject
                                 </Button>
                             </>
                         )}
 
                         {currentUser.status == "active" && (
-                            <Button onClick={() => setConfirming("lock")}>
-                                <FaLock /> Lock Access
+                            <Button className="text-sm" onClick={() => setConfirming("lock")}>
+                                <FaLock /> Restrict Access
                             </Button>
                         )}
 
                         {currentUser.status == "inactive" && (
-                            <Button onClick={() => setConfirming("unlock")}>
-                                <FaUnlock /> Unlock Access
+                            <Button className="text-sm" onClick={() => setConfirming("unlock")}>
+                                <FaUnlock /> Restore Access
                             </Button>
                         )}
 
-                        <Button className="button-danger" onClick={() => setConfirming("delete")}>
+                        <Button className="text-sm button-danger" onClick={() => setConfirming("delete")}>
                             <FaTrashAlt /> Delete
                         </Button>
                     </div>

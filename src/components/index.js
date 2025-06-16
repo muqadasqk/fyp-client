@@ -1,7 +1,7 @@
 // application components
 export { default as Button } from "./app/Button";
 export { default as Spinner } from "./app/Spinner";
-export { default as Overlay } from "./app/Overlay";
+export { default as Overlay, closeModal } from "./app/Overlay";
 export { default as DataTable } from "./listing/DataTable";
 export { default as Table } from "./listing/Table";
 export { default as Pagination } from "./listing/Pagination";

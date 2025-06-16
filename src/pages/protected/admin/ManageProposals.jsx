@@ -36,7 +36,6 @@ const ManageProposals = ({ status }) => {
                 ]}
                 searchableFields={{
                     title: "Title",
-                    abstract: "Abstracts",
                     type: "Type",
                     category: "Category",
                     status: "Status",

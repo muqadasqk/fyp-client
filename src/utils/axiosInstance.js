@@ -4,7 +4,7 @@ import { readLocalStorage, showErrorToast, showSuccessToast } from "@utils";
 
 // create axios instance
 const axiosInstance = axios.create({
-    baseURL: API_BASE_URL,
+    baseURL: API_BASE_URL + "/api",
     timeout: 5000,
     headers: { "Content-Type": "application/json" },
     showToast: true,

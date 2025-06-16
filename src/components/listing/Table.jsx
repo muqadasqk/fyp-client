@@ -6,37 +6,36 @@ import { Button } from "@components";
 
 const TableHeader = ({ fields, sortState, onSortToggle, hasActions }) => {
     return (
-        <thead>
-            {/* <tr className="bg-theme dark:bg-primary-hover rounded"> */}
-            <tr className="bg-theme">
+        <thead className="bg-theme">
+            <tr>
                 {Object.entries(fields).map(([key, label], index, arr) => (
                     <th
                         key={key}
                         className={clsx(
-                            "px-6 py-3 text-left text-xs font-medium uppercase truncate",
-                            index === 0 && "rounded-tl-md",
-                            index === arr.length - 1 && !hasActions && "rounded-tr-md"
+                            "px-4 py-3 font-medium uppercase whitespace-nowrap",
+                            // index === 0 && "rounded-tl-lg",
+                            // index === arr.length - 1 && !hasActions && "rounded-tr-lg"
                         )}
                     >
                         <div
-                            className="flex items-center space-x-1 cursor-pointer"
+                            className="flex items-center space-x-1 cursor-pointer select-none"
                             onClick={() => onSortToggle(key)}
                         >
-                            <span>{label}</span>
-                            <div className="flex flex-col text-gray-400 text-[10px]">
-                                {sortState[key] !== 'asc' && (
-                                    <FaChevronUp className={clsx({ "text-default": key === Object.keys(sortState)[0] })} />
+                            <span className="">{label}</span>
+                            <div className="flex flex-col text-[10px]">
+                                {sortState[key] !== "asc" && (
+                                    <FaChevronUp />
                                 )}
-                                {sortState[key] !== 'desc' && (
-                                    <FaChevronDown className={clsx({ "text-default": key === Object.keys(sortState)[0] })} />
+                                {sortState[key] !== "desc" && (
+                                    <FaChevronDown />
                                 )}
                             </div>
                         </div>
                     </th>
                 ))}
                 {hasActions && (
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase truncate rounded-tr-md">
-                        Action
+                    <th className="px-4 py-3 font-medium uppercase rounded-tr-lg">
+                        ACTION
                     </th>
                 )}
             </tr>
@@ -48,21 +47,15 @@ const Table = ({ fields, records, actions, onSort, empty, ...prop }) => {
     const [sortState, setSortState] = useState({});
 
     const handleSortToggle = (field) => {
-        let direction = 'desc';
-
-        if (sortState[field] === 'desc') {
-            direction = 'asc';
-        } else if (sortState[field] === 'asc') {
-            direction = 'desc';
-        }
-
-        setSortState({ [field]: direction });
-        onSort({ [field]: direction });
+        const current = sortState[field];
+        const next = current === "asc" ? "desc" : "asc";
+        setSortState({ [field]: next });
+        onSort({ [field]: next });
     };
 
     return (
-        <div className="table-container w-full overflow-x-auto hide-scrollbar">
-            <table {...prop} className="min-w-full">
+        <div className="overflow-x-auto rounded-lg bg-primary">
+            <table {...prop} className="min-w-full text-sm text-left">
                 <TableHeader
                     fields={fields}
                     sortState={sortState}
@@ -70,45 +63,61 @@ const Table = ({ fields, records, actions, onSort, empty, ...prop }) => {
                     hasActions={!!actions}
                 />
 
-                <tbody className="divide-y dark:divide-[rgba(255,255,255,0.03)]">
-                    {records.length >= 1 ? records.map((record) => (
-                        <tr key={record._id} className="hover:bg-primary-hover">
-                            {Object.keys(fields).map((field) => (
-                                <td key={field} className="py-2 px-4 whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px]">
-                                    {readObjectValueByPath(record, field) ?? "N/A"}
-                                </td>
-                            ))}
-                            {actions && (
-                                <td className="py-2 px-4 whitespace-nowrap">
-                                    {actions.map(({ label, icon = null, ShowWhen, onClick }) => {
-                                        const k = Object.keys(ShowWhen)[0];
-                                        if (record[k] === ShowWhen[k] || ShowWhen[k] === true) {
-                                            return (
-                                                <Button
-                                                    title={`Click to ${label.toLowerCase()}`}
-                                                    key={label}
-                                                    onClick={() => onClick(record._id, label)}
-                                                    className="p-2 rounded button-secondary"
-                                                >
-                                                    {icon && icon}
-                                                </Button>
-                                            );
-                                        }
-                                    })}
-                                </td>
-                            )}
-                        </tr>
-                    )) : (
+                <tbody className="divide-y dark:divide-[rgba(255,255,255,0.05)]">
+                    {records.length > 0 ? (
+                        records.map((record, rowIndex) => (
+                            <tr
+                                key={record._id}
+                                className={clsx(
+                                    "transition-all duration-200 group hover:bg-primary-hover",
+                                    rowIndex % 2 === 0 ? "bg-primary" : "bg-primary-hover"
+                                )}
+                            >
+                                {Object.keys(fields).map((field, i, arr) => (
+                                    <td
+                                        key={field}
+                                        className={clsx(
+                                            "px-4 py-0 text-sm text-primary",
+                                            i === 0 && "rounded-l-xl",
+                                            i === arr.length - 1 && !actions && "rounded-r-xl",
+                                            "bg-inherit"
+                                        )}
+                                    >
+                                        {readObjectValueByPath(record, field) || "N/A"}
+                                    </td>
+                                ))}
+                                {actions && (
+                                    <td className="px-4 py-3 whitespace-nowrap flex items-center gap-2 rounded-r-xl bg-inherit">
+                                        {actions.map(({ label, icon, ShowWhen, onClick }) => {
+                                            const key = Object.keys(ShowWhen)[0];
+                                            if (record[key] == ShowWhen[key] || ShowWhen[key] === true) {
+                                                return (
+                                                    <Button
+                                                        key={label}
+                                                        onClick={() => onClick(record._id, label)}
+                                                        className="text-sm button-secondary hover:bg-theme"
+                                                    >
+                                                        {icon} {label}
+                                                    </Button>
+                                                );
+                                            }
+                                        })}
+                                    </td>
+                                )}
+                            </tr>
+                        ))
+                    ) : (
                         <tr>
                             <td
-                                className="px-4 py-2 text-secondary italic text-sm text-center"
                                 colSpan={Object.keys(fields).length + (actions ? 1 : 0)}
+                                className="px-4 py-5 text-center italic text-secondary"
                             >
                                 {empty ?? "Nothing to show!"}
                             </td>
                         </tr>
                     )}
                 </tbody>
+
             </table>
         </div>
     );

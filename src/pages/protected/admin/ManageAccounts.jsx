@@ -1,9 +1,9 @@
 import { DataTable, ViewUserDetails } from "@components";
 import { Button, CreateUserForm, DashboardContent } from "@components";
 import { retrieveUsers } from "@features";
-import { capitalize } from "@utils";
+import { capitalize, splitCamelCase } from "@utils";
 import { useMemo, useState } from "react";
-import { FaInfoCircle } from "react-icons/fa";
+import { FaEye, FaUserPlus } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
 const ManageAccounts = ({ roleOrStatus }) => {
@@ -17,12 +17,13 @@ const ManageAccounts = ({ roleOrStatus }) => {
     }
 
     return (
-        <DashboardContent isLoading={loading} title={capitalize(`${roleOrStatus == "approvalPending" ? "Pending" : roleOrStatus} Accounts`)} description="Manage Supervisor and Student Accounts | Approve/Reject account requests">
+        <DashboardContent title={capitalize(`${roleOrStatus == "approvalPending" ? "Pending" : roleOrStatus} Accounts`)} description="Manage your accounts here.">
             {!["approvalPending", "rejected"].includes(roleOrStatus) && (
                 <Button type="button" className="mb-5" onClick={() => setRole(roleOrStatus)}>
-                    Create new {roleOrStatus}
+                    <FaUserPlus /> Create {roleOrStatus} account
                 </Button>
             )}
+
             {role && <CreateUserForm isLoading={loading} role={role} closeForm={() => setRole(null)} />}
             {viewDetails && <ViewUserDetails user={viewDetails} closeForm={() => setViewDetails(null)} />}
 
@@ -31,22 +32,26 @@ const ManageAccounts = ({ roleOrStatus }) => {
                 recordList={users}
                 retrieve={retrieve}
                 paginationData={pagination}
+                empty={`No ${splitCamelCase(roleOrStatus).toLowerCase()} accounts found.`}
                 recordFields={{
                     name: "Full Name",
                     email: "Email Address",
-                    role: "Role",
+                    ...(roleOrStatus == "student" ? { rollNo: "Roll No." } : {}),
+                    cnic: "CNIC No.",
+                    ...(!["admin", "supervisor", "student"].includes(roleOrStatus) ? { role: "Role" } : {})
                 }}
-                actions={[
-                    { label: "View Details", icon: <FaInfoCircle />, ShowWhen: { status: true }, onClick: handleViewDetails }
-                ]}
+                actions={[{
+                    label: "View",
+                    icon: <FaEye />,
+                    ShowWhen: { status: true },
+                    onClick: handleViewDetails
+                }]}
                 searchableFields={{
                     name: "Name",
                     email: "Email",
-                    phone: "Phone",
-                    nic: "CNIC No.",
-                    rollNo: "Roll No.",
-                    role: "Role",
-                    status: "Account Status",
+                    ...(roleOrStatus == "student" ? { rollNo: "Roll No." } : {}),
+                    cnic: "CNIC No.",
+                    ...(!["admin", "supervisor", "student"].includes(roleOrStatus) ? { role: "Role" } : {})
                 }}
             />
         </DashboardContent>

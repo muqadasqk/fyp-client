@@ -1,45 +1,63 @@
+import { has } from "lodash";
 import { FaChalkboardTeacher, FaFileSignature, FaProjectDiagram, FaTachometerAlt, FaUserShield } from "react-icons/fa";
 
 const admin = [
-    { icon: FaTachometerAlt, text: "Dashboard", href: "/" },
+    {
+        icon: FaTachometerAlt,
+        label: "Dashboard",
+        href: "/",
+        hasDropdown: false
+    },
     {
         icon: FaUserShield,
-        text: "Manage Accounts",
+        label: "Manage Accounts",
+        href: "/accounts",
+
+        hasDropdown: true,
         children: [
-            { text: "Admins", href: "/accounts/admins" },
-            { text: "Supervisors", href: "/accounts/supervisors" },
-            { text: "Students", href: "/accounts/students" },
-            { text: "Pending", href: "/accounts/pending" },
-            { text: "Rejected", href: "/accounts/rejected" },
+            { label: "Admins", href: "/admins" },
+            { label: "Supervisors", href: "/supervisors" },
+            { label: "Students", href: "/students" },
+            { label: "Pending", href: "/pending" },
+            { label: "Rejected", href: "/rejected" },
         ],
     },
     {
         icon: FaFileSignature,
-        text: "Manage Proposals",
+        label: "Manage Proposals",
+        href: "/proposals",
+
+        hasDropdown: true,
         children: [
-            { text: "Conditioanlly Accepted", href: "/proposals/conditionaly-accepted" },
-            { text: "Accepted", href: "/proposals/accepted" },
-            { text: "Pending", href: "/proposals/pending" },
-            { text: "Rejected", href: "/proposals/rejected" },
-            { text: "All Previous", href: "/proposals/all-previous" },
+            { label: "Cond. Accepted", href: "/conditionally-accepted" },
+            { label: "Accepted", href: "/accepted" },
+            { label: "Pending", href: "/pending" },
+            { label: "Rejected", href: "/rejected" },
+            { label: "All Previous", href: "/all-previous" },
         ],
     },
     {
         icon: FaProjectDiagram,
-        text: "Manage Projects",
+        label: "Manage Projects",
+        href: "/projects",
+
+        hasDropdown: true,
         children: [
-            { text: "Initialized", href: "/projects/initialized" },
-            { text: "Under Development", href: "/projects/under-development" },
-            { text: "Completed", href: "/projects/completed" },
+            { label: "Under Development", href: "/under-development" },
+            { label: "Initialized", href: "/initialized" },
+            { label: "Completed", href: "/completed" },
         ],
     },
     {
         icon: FaChalkboardTeacher,
-        text: "Manage Presentations",
+        label: "Manage Presentations",
+        href: "/presentations",
+
+        hasDropdown: true,
         children: [
-            { text: "Pending Review", href: "/presentations/pending-review" },
-            { text: "Approved", href: "/presentations/approved" },
-            { text: "Rejected", href: "/presentations/rejected" },
+            { label: "Pending Review", href: "/pending-review" },
+            { label: "Approved", href: "/approved" },
+            { label: "Rejected", href: "/rejected" },
         ],
     },
 ];

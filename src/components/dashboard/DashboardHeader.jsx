@@ -3,17 +3,11 @@ import { signout } from "@features";
 import { useDispatch, useSelector } from "react-redux";
 import { FaBars, FaUser, FaSignOutAlt, FaBell, FaSun, FaMoon, } from "react-icons/fa";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
-import { useEffect, useState } from "react";
-import { readFile } from "@services";
+import { formatFilePath } from "@utils";
 
 const DashboardHeader = ({ toggleSidebar }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const [dpSrc, setDpSrc] = useState(undefined);
-
-  useEffect(() => {
-    !!user && (async () => setDpSrc(await readFile(user.image)))();
-  }, [user]);
 
   const notifications = [
     "You have a new message",
@@ -47,7 +41,7 @@ const DashboardHeader = ({ toggleSidebar }) => {
           >
             <FaBars className="h-7 w-7" />
           </button>
-          
+
           <p className="pl-3">{document.title}</p>
         </div>
 
@@ -84,7 +78,7 @@ const DashboardHeader = ({ toggleSidebar }) => {
               <div
                 className="w-18 h-18 rounded-full flex items-center justify-center font-semibold"
               >
-                <img src={dpSrc} className="w-8 h-8 rounded-full object-cover object-center" />
+                <img src={formatFilePath(user?.image)} className="w-8 h-8 rounded-full object-cover object-center" />
               </div>
             </PopoverButton>
 

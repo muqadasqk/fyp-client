@@ -48,6 +48,21 @@ export const updateProject = createAsyncThunk("project/updateproject",
     }
 )
 
+export const uploadProjectFile = createAsyncThunk("project/uploadProjectFile",
+    async ({ projectId, formData }, { rejectWithValue, dispatch }) => {
+        try {
+            console.log("Form Data: ", formData.entries());
+            const { data } = await apiRequest.patch(`/projects/proposal-file/${projectId}`, formData, {
+                headers: { "Content-Type": "multipart/form-data" }
+            });
+            return data
+        } catch (error) {
+            dispatch(setErrors(error.response?.data?.errors));
+            return rejectWithValue(error.response?.data)
+        }
+    }
+)
+
 export const supervisorProjects = createAsyncThunk("project/supervisorProjects",
     async (id, { rejectWithValue }) => {
         try {
@@ -122,6 +137,17 @@ const projectSlice = createSlice({
                 state.loading = false;
             })
             .addCase(updateProject.rejected, (state) => {
+                state.loading = false;
+            })
+
+            .addCase(uploadProjectFile.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(uploadProjectFile.fulfilled, (state, action) => {
+                state.project = action.payload.project;
+                state.loading = false;
+            })
+            .addCase(uploadProjectFile.rejected, (state) => {
                 state.loading = false;
             })
 

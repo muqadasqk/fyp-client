@@ -8,3 +8,4 @@ export { default as cropImage } from "./cropImage";
 export { default as formatDateTime } from "./formatDateTime";
 export { default as firstLetter } from "./firstLetter";
 export { default as splitCamelCase } from "./splitCamelCase";
+export { default as formatFilePath } from "./formatFilePath";
