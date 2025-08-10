@@ -1,6 +1,6 @@
 import { DashboardContent, DataTable, ViewProjectDetails } from '@components'
 import { retrieveProjects, retrieveSupervisorProjects } from '@features'
-import { capitalize } from '@utils';
+import { capitalize, splitCamelCase } from '@utils';
 import { useMemo, useState } from 'react';
 import { FaEye, FaInfoCircle } from 'react-icons/fa';
 import { useSelector } from 'react-redux'
@@ -22,9 +22,15 @@ const ManageProjects = ({ status }) => {
     }
 
     return (
-        <DashboardContent title={capitalize(`${status === "underDevelopment" ? "Under Develpment" : status} Projects`)} description='View and manage projects'>
+        <DashboardContent title={capitalize(`${splitCamelCase(status)} Projects`)} description='View and manage projects'>
+            <div className="flex justify-between items-center gap-5 p-2 mb-2">
+                <h4 className="font-black text-theme mb-0">
+                    {user.role == "supervisor" ? "Manage Supervised Projects" : `Manage ${status != "all" ? splitCamelCase(status) : ''} Projects`}
+                </h4>
+            </div>
+
             {viewDetails && (
-                <ViewProjectDetails project={viewDetails} closeForm={() => setViewDetails(null)} />
+                <ViewProjectDetails status={status} project={viewDetails} closeForm={() => setViewDetails(null)} />
             )}
 
             <DataTable
@@ -34,20 +40,24 @@ const ManageProjects = ({ status }) => {
                 paginationData={pagination}
                 recordFields={{
                     title: "Title",
-                    type: "Type",
+                    department: "department",
+                    batch: "batch",
                     category: "Category",
-                    status: "Status",
+                    type: "Type",
+                    ...(status == "all" ? { status: "Status" } : {})
                 }}
                 actions={[
                     { label: "Details", icon: <FaEye />, ShowWhen: { status: true }, onClick: handleViewDetails },
                 ]}
                 searchableFields={{
                     title: "Title",
-                    abstract: "Abstracts",
-                    type: "Type",
+                    department: "department",
+                    batch: "batch",
                     category: "Category",
-                    status: "Status",
+                    type: "Type",
+                    ...(status == "all" ? { status: "Status" } : {})
                 }}
+                empty={`No ${splitCamelCase(status).toLowerCase()} projects found.`}
             />
         </DashboardContent >
     )

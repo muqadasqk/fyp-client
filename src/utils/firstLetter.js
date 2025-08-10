@@ -1,12 +1,16 @@
-const firstLetter = (...words) => {
-    return words
-        .filter(word => typeof word === 'string' && word.length > 0)
-        .map(word => {
-            return word.split(' ')
-                .map(part => part.charAt(0).toUpperCase())
-                .join('');
-        })
-        .join('');
-}
+const firstAndLastInitial = (...words) => {
+    const fullName = words
+        .filter(word => typeof word == 'string' && word.trim().length > 0)
+        .join(' ')
+        .trim();
 
-export default firstLetter;
+    if (!fullName) return '';
+
+    const parts = fullName.split(/\s+/);
+    const first = parts[0]?.charAt(0).toUpperCase() || '';
+    const last = parts.length > 1 ? parts[parts.length - 1].charAt(0).toUpperCase() : '';
+
+    return first + last;
+};
+
+export default firstAndLastInitial;

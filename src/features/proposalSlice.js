@@ -67,7 +67,6 @@ export const deleteProposal = createAsyncThunk("proposal/deleteProposal",
     }
 )
 
-
 const proposalSlice = createSlice({
     name: "proposals",
     initialState: initialState,
@@ -102,13 +101,7 @@ const proposalSlice = createSlice({
             })
             .addCase(updateProposal.fulfilled, (state, action) => {
                 state.loading = false;
-                const { id, statusCode } = action.meta.arg;
-                const index = state.proposals.findIndex((proposal) => proposal._id === id);
-                if (index !== -1) {
-                    if (statusCode !== 20003) {
-                        state.proposals[index] = { ...action.payload.proposal };
-                    }
-                }
+                state.proposals = state.proposals.filter(p => p._id != action.meta.arg.id);
             })
             .addCase(updateProposal.rejected, (state) => {
                 state.loading = false

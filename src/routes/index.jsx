@@ -1,10 +1,12 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ProtectedRoutes, AuthGuard } from "@components";
 import { AuthLayout, DashboardLayout } from "@layouts";
-import { Signup, Signin, NotFound, Unauthorized, ForgotPassword, Dashboard, ManageAccounts, ProfileSettings, Proposals, ManageProposals, ManageProjects, ManagePresentations, MyProject, ManageMeetings } from "@pages";
+import { Signup, Signin, NotFound, Unauthorized, ForgotPassword, Dashboard, ManageAccounts, ProfileSettings, MyIdeas, ManageProposals, ManageProjects, ManagePresentations, MyProject, ManageMeetings, MyPresentations, MyMeetings, PastProjects, ConfirmAccount, ResetPassword, Signout } from "@pages";
+import { confirmAccountLoader, dashboardLoader, pitchIdeaButtonLoader, projectLoader } from "@loaders";
 
 const router = createBrowserRouter([
-  { // unprotected routes
+  /** auth routes */
+  {
     element: <AuthGuard />,
     children: [
       {
@@ -12,27 +14,41 @@ const router = createBrowserRouter([
         children: [
           { path: "/signup", element: <Signup /> },
           { path: "/signin", element: <Signin /> },
+          {
+            path: "/account-confirmation",
+            loader: confirmAccountLoader,
+            element: <ConfirmAccount />
+          },
           { path: "/forgot-password", element: <ForgotPassword /> },
+          { path: "/reset-password", element: <ResetPassword /> },
         ],
       }
     ]
   },
 
-  { // protected routes
+  /** protected routes */
+  {
     path: "/",
     element: <ProtectedRoutes />,
     children: [
       {
         element: <DashboardLayout />,
         children: [
-          { index: true, element: <Dashboard /> },
+          { index: true, loader: dashboardLoader, element: <Dashboard /> },
           { path: "/profile", element: <ProfileSettings /> },
+          {
+            path: "/previous-projects", children: [
+              { index: true, element: <PastProjects status="past" key="past" /> },
+              { path: "my-supervised", element: <PastProjects status="supervised" key="supervised" /> }
+            ]
+          },
         ],
       },
+      { path: "signout/:token", element: <Signout /> },
     ],
   },
 
-  // role-base access control routes (admin, supervisor)
+  /**  role-base access control routes (admin, supervisor) */
   {
     path: "/",
     element: <ProtectedRoutes allowedRoles={["admin", "supervisor"]} />,
@@ -43,7 +59,7 @@ const router = createBrowserRouter([
           {
             path: "/projects",
             children: [
-              { path: 'all', element: <ManageProjects status="all" key="all" /> },
+              { index: true, element: <ManageProjects status="all" key="all" /> },
               { path: 'initialized', element: <ManageProjects status="initialized" key="initialized" /> },
               { path: 'under-development', element: <ManageProjects status="underDevelopment" key="underDevelopment" /> },
               { path: 'completed', element: <ManageProjects status="completed" key="completed" /> },
@@ -57,7 +73,7 @@ const router = createBrowserRouter([
           {
             path: "/presentations",
             children: [
-              { path: 'all', element: <ManagePresentations status="all" key="all" /> },
+              { index: true, element: <ManagePresentations status="all" key="all" /> },
               { path: 'pending-review', element: <ManagePresentations status="pendingReview" key="pendingReview" /> },
               { path: 'approved', element: <ManagePresentations status="approved" key="approved" /> },
               { path: 'rejected', element: <ManagePresentations status="rejected" key="rejected" /> },
@@ -68,7 +84,8 @@ const router = createBrowserRouter([
     ]
   },
 
-  { // role-base access control routes (admin only)
+  /** role-base access control routes (admin only) */
+  {
     path: "/",
     element: <ProtectedRoutes allowedRoles={["admin"]} />,
     children: [
@@ -93,8 +110,9 @@ const router = createBrowserRouter([
           {
             path: "/proposals",
             children: [
-              { path: 'conditionally-accepted', element: <ManageProposals status="conditionallyAccepted" key="conditionallyAccepted" /> },
+              { index: true, element: <ManageProposals status="all" key="all" /> },
               { path: 'accepted', element: <ManageProposals status="accepted" key="accepted" /> },
+              { path: 'conditionally-accepted', element: <ManageProposals status="conditionallyAccepted" key="conditionallyAccepted" /> },
               { path: 'pending', element: <ManageProposals status="pending" key="pending" /> },
               { path: 'rejected', element: <ManageProposals status="rejected" key="rejected" /> },
             ]
@@ -104,7 +122,8 @@ const router = createBrowserRouter([
     ],
   },
 
-  { // role-base access control routes (supervisor only)
+  /** role-base access control routes (supervisor only) */
+  {
     path: "/",
     element: <ProtectedRoutes allowedRoles={["supervisor"]} />,
     children: [
@@ -114,9 +133,9 @@ const router = createBrowserRouter([
           {
             path: "/meetings",
             children: [
-              { path: 'all', element: <ManageMeetings status="all" key="all" /> },
+              { index: true, element: <ManageMeetings status="all" key="all" /> },
               { path: 'past', element: <ManageMeetings status="past" key="past" /> },
-              { path: 'upcoming', element: <ManageMeetings status="upcoming" key="upcoming" /> },
+              { path: 'scheduled', element: <ManageMeetings status="scheduled" key="scheduled" /> },
             ]
           },
         ],
@@ -124,25 +143,26 @@ const router = createBrowserRouter([
     ],
   },
 
-  { // role-base access control routes (student only)
+  /** role-base access control routes (student only) */
+  {
     path: "/",
     element: <ProtectedRoutes allowedRoles={["student"]} />,
     children: [
       {
         element: <DashboardLayout />,
         children: [
-          { path: "/my-ideas", element: <Proposals /> },
-          { path: "/my-project", element: <MyProject /> }
+          { path: "/my-ideas", loader: pitchIdeaButtonLoader, element: <MyIdeas /> },
+          { path: "/my-project", loader: projectLoader, element: <MyProject /> },
+          { path: "/my-presentations", loader: projectLoader, element: <MyPresentations /> },
+          { path: "/my-meetings", loader: projectLoader, element: <MyMeetings /> },
         ],
       },
     ],
   },
 
-  // unknown routes
+  /** unknown routes */
   { path: "/unauthorized", element: <Unauthorized /> },
   { path: "*", element: <NotFound /> }
 ]);
 
-const Routes = () => <RouterProvider router={router} />;
-
-export default Routes;
+export default () => <RouterProvider router={router} />;

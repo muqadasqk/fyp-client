@@ -18,11 +18,15 @@ const ManageAccounts = ({ roleOrStatus }) => {
 
     return (
         <DashboardContent title={capitalize(`${roleOrStatus == "approvalPending" ? "Pending" : roleOrStatus} Accounts`)} description="Manage your accounts here.">
-            {!["approvalPending", "rejected"].includes(roleOrStatus) && (
-                <Button type="button" className="mb-5" onClick={() => setRole(roleOrStatus)}>
-                    <FaUserPlus /> Create {roleOrStatus} account
-                </Button>
-            )}
+            <div className="flex justify-between items-center gap-5 p-2 mb-2">
+                <h4 className="font-black text-theme mb-0">Manage {splitCamelCase(roleOrStatus)} Accounts</h4>
+
+                {!["approvalPending", "rejected"].includes(roleOrStatus) && (
+                    <Button type="button" className="text-sm" onClick={() => setRole(roleOrStatus)}>
+                        <FaUserPlus /> Create {capitalize(roleOrStatus)} Account
+                    </Button>
+                )}
+            </div>
 
             {role && <CreateUserForm isLoading={loading} role={role} closeForm={() => setRole(null)} />}
             {viewDetails && <ViewUserDetails user={viewDetails} closeForm={() => setViewDetails(null)} />}

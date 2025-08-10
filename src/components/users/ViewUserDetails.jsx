@@ -1,10 +1,11 @@
 import { Fragment, useEffect, useState } from 'react'
 import { Button, ConfirmtionModal, Overlay } from '@components'
-import { capEach, capitalize, firstLetter, formatDateTime } from '@utils'
+import { capEach, capitalize, firstLetter, formatDateTime, splitCamelCase } from '@utils'
 import { readFile } from '@services'
 import { deleteUser, updateStatus } from '@features'
 import { FaLock, FaTrashAlt, FaUnlock, FaUserCheck, FaUserTimes } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
+import { departments } from '@data'
 
 const ViewUserDetails = ({ user, closeForm }) => {
     const dispatch = useDispatch()
@@ -57,7 +58,7 @@ const ViewUserDetails = ({ user, closeForm }) => {
     const FieldBlock = ({ label, value }) => (
         <div className="flex flex-col">
             <span className="text-xs text-secondary font-medium">{label}</span>
-            <span className="text-sm text-primary font-semibold">{!!value ? value : 'N/A'}</span>
+            <span className="text-sm text-primary font-semibold">{!!value ? value : '-'}</span>
         </div>
     )
 
@@ -65,6 +66,7 @@ const ViewUserDetails = ({ user, closeForm }) => {
         <Fragment>
             {confirming === "delete" && (
                 <ConfirmtionModal
+                    modalTitle="Delete Account"
                     prompt={`Deleting ${currentUser.role} account?`}
                     promptText="This action cannot be undone. Please confirm to proceed."
                     icon={<FaTrashAlt />}
@@ -78,10 +80,11 @@ const ViewUserDetails = ({ user, closeForm }) => {
 
             {confirming === "reject" && (
                 <ConfirmtionModal
+                    modalTitle="Reject Registration"
                     prompt={`Rejecting ${currentUser.role} registration`}
                     promptText="This action will deny access. Please confirm to proceed."
                     icon={<FaUserTimes />}
-                    buttonColor="button-warning"
+                    buttonColor="button-danger"
                     confirmBtnText="Reject"
                     model="users"
                     onConfirm={() => handleApproveReject(currentUser._id, 20002)}
@@ -91,6 +94,7 @@ const ViewUserDetails = ({ user, closeForm }) => {
 
             {confirming === "approve" && (
                 <ConfirmtionModal
+                    modalTitle="Approve Registration"
                     prompt={`Approving ${currentUser.role} registration`}
                     promptText={`This will grant this ${currentUser.role} to access the FYP management system.`}
                     icon={<FaUserCheck />}
@@ -104,6 +108,7 @@ const ViewUserDetails = ({ user, closeForm }) => {
 
             {confirming === "lock" && (
                 <ConfirmtionModal
+                    modalTitle="Restrict Access"
                     prompt={`Restricting ${currentUser.role} account access`}
                     promptText={`This ${currentUser.role} will no longer be able to access the FYP management system.`}
                     icon={<FaLock />}
@@ -116,6 +121,7 @@ const ViewUserDetails = ({ user, closeForm }) => {
 
             {confirming === "unlock" && (
                 <ConfirmtionModal
+                    modalTitle="Restore Access"
                     prompt={`Restore access for the ${currentUser.role} account.`}
                     promptText={`This ${currentUser.role} will regain access to the FYP management system.`}
                     icon={<FaUnlock />}
@@ -133,7 +139,7 @@ const ViewUserDetails = ({ user, closeForm }) => {
             >
                 <div className="flex flex-col gap-6">
                     <div className="flex flex-col sm:flex-row gap-4 bg-primary rounded-2xl items-stretch">
-                        <div className="flex flex-col items-center gap-2 self-center sm:pr-2">
+                        <div className="flex flex-col items-center gap-2 self-start sm:pr-2">
                             {src ? (
                                 <img src={src} alt="User" className="w-32 h-32 rounded-full object-cover" />
                             ) : (
@@ -149,21 +155,32 @@ const ViewUserDetails = ({ user, closeForm }) => {
 
                         <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <FieldBlock label="Email" value={currentUser.email} />
-                            <FieldBlock label="Phone" value={currentUser.phone} />
-                            <FieldBlock label="CNIC" value={currentUser.cnic} />
-                            <FieldBlock label="Status" value={capitalize(currentUser.status)} />
+                            <FieldBlock label="Phone" value={currentUser?.phone ?? '"-'} />
+                            <FieldBlock label="CNIC" value={currentUser?.cnic ?? "-"} />
+                            {user?.role != "admin" && (
+                                <Fragment>
+                                    <FieldBlock label="Department" value={departments?.find(d => d.abbreviation == currentUser.department)?.name ?? "-"} />
+                                    {user?.role == "student" && (
+                                        <>
+                                            <FieldBlock label="Batch" value={currentUser?.batch ?? "-"} />
+                                            <FieldBlock label="Shift" value={capitalize(currentUser?.shift ?? "-")} />
+                                        </>
+                                    )}
+                                </Fragment>
+                            )}
+                            <FieldBlock label="Status" value={splitCamelCase(currentUser?.status ?? '-')} />
                             <FieldBlock label="Verified At" value={formatDateTime(currentUser.verifiedAt)} />
                             <FieldBlock label="Registered At" value={formatDateTime(currentUser.createdAt)} />
                         </div>
                     </div>
 
-                    <div className="flex flex-wrap justify-end gap-3 border-t border-primary pt-4">
+                    <div className="flex flex-wrap justify-end gap-3">
                         {currentUser.status == "approvalPending" && (
                             <>
                                 <Button className="text-sm button-success" onClick={() => setConfirming("approve")}>
                                     <FaUserCheck /> Approve
                                 </Button>
-                                <Button className="text-sm button-warning" onClick={() => setConfirming("reject")}>
+                                <Button className="text-sm button-danger" onClick={() => setConfirming("reject")}>
                                     <FaUserTimes /> Reject
                                 </Button>
                             </>
@@ -181,9 +198,11 @@ const ViewUserDetails = ({ user, closeForm }) => {
                             </Button>
                         )}
 
-                        <Button className="text-sm button-danger" onClick={() => setConfirming("delete")}>
-                            <FaTrashAlt /> Delete
-                        </Button>
+                        {!["approvalPending"].includes(user?.status) && (
+                            <Button className="text-sm button-danger" onClick={() => setConfirming("delete")}>
+                                <FaTrashAlt /> Delete
+                            </Button>
+                        )}
                     </div>
                 </div>
             </Overlay>

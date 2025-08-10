@@ -1,36 +1,47 @@
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, Button, Overlay, Select, TextArea, Input } from "@components";
-import { AcceptStatusHandleSchema, RejectStatusHandleSchema } from "@schemas";
+import { proposalEvaluationSchema, RejectStatusHandleSchema } from "@schemas";
 import { useDispatch, useSelector } from "react-redux";
-import { retrieveUsers } from "@features";
+import { retrieveProjects, retrieveUsers } from "@features";
 
-const HandleProposalStatusForm = ({ closeForm, handleAction }) => {
+const EvaluateProposal = ({ proposal, closeForm, handleEvaluation }) => {
     const dispatch = useDispatch();
     const { users } = useSelector((state) => state.users);
+    const { projects } = useSelector((state) => state.projects);
     const { loading } = useSelector((state) => state.proposals);
-    const supervisors = users.filter((user) => user.status == "active");
+    const supervisors = users.filter(s => s?.department == proposal?.department);
     const [status, setStatus] = useState();
+    const [newPID, setNeePID] = useState('');
 
     useEffect(() => {
         dispatch(retrieveUsers({ role: "supervisor" }));
+        dispatch(retrieveProjects({
+            page: { current: 1, size: 100, query: { department: proposal?.department }, sort: { createdAt: -1 } }, status: "all"
+        }));
     }, [])
+
+    useEffect(() => {
+        setNeePID(`${proposal?.department}-${String(Math.max(
+            0, ...projects?.map(p => Number(String(p?.pid).replace(/^[a-zA-Z]{2}-/, ''))).filter(n => !isNaN(n)) || []
+        ) + 1).padStart(3, '0')}`);
+    }, [projects])
 
     return (
         <Overlay
-            title="Handle Proposal Acceptance"
+            title="Evaluate Proposal"
             width="w-[90%] sm:w-[70%] md:w-[50%]"
             zIndex="z-50"
             onClose={() => closeForm(true)}
         >
             <div className="flex">
-                <Form onSubmit={handleAction} resolver={zodResolver((!status || status == "20003") ? RejectStatusHandleSchema : AcceptStatusHandleSchema)}>
+                <Form onSubmit={handleEvaluation} resolver={zodResolver((!status || status == "20003") ? RejectStatusHandleSchema : proposalEvaluationSchema(proposal?.department ?? "XX"))}>
                     <div className="grid grid-cols-1 md:grid-cols-1 lg:gap-4 w-full">
                         <div className="flex flex-col">
                             <Select
                                 name="statusCode"
-                                label="Proposal Status"
-                                placeholder="Please choose a status"
+                                label="Decision"
+                                placeholder="Please choose a decision"
                                 onChange={({ target }) => setStatus(target.value)}
                                 options={[
                                     { value: "20001", label: "Accept" },
@@ -55,8 +66,10 @@ const HandleProposalStatusForm = ({ closeForm, handleAction }) => {
 
                             <Input
                                 name="pid"
+                                value={newPID}
                                 label="Create Project ID"
-                                placeholder="Create Project ID  e.g., SW001"
+                                placeholder={`Create Project ID  e.g., ${proposal?.department ?? "SW"}-001`}
+                                onChange={({ target }) => setNeePID(target.value)}
                             />
                         </div>
                     )}
@@ -70,11 +83,11 @@ const HandleProposalStatusForm = ({ closeForm, handleAction }) => {
                         />
                     </div>
 
-                    <Button type="submit" isLoading={loading} className="w-full mt-3">Finish</Button>
+                    <Button type="submit" isLoading={loading} className="w-full text-sm">Proceed</Button>
                 </Form>
             </div>
         </Overlay>
     )
 };
 
-export default HandleProposalStatusForm;
+export default EvaluateProposal;

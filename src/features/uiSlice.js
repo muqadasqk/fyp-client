@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { readLocalStorage, writeLocalStorage } from '@utils';
 
 const initialState = {
-  theme: readLocalStorage("theme") ?? "system",
+  theme: readLocalStorage("theme") ?? "light",
   title: null,
   description: null,
   isLoading: false,
@@ -16,6 +16,10 @@ const uiSlice = createSlice({
     setTheme: (state, action) => {
       state.theme = action.payload;
       writeLocalStorage("theme", action.payload);
+
+      if (typeof document != "undefined") {
+        document.documentElement.classList.toggle("dark", action.payload == "dark");
+      }
     },
     setLoading: (state, action) => {
       state.isLoading = action.payload;

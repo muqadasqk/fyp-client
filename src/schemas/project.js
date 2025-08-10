@@ -23,4 +23,24 @@ const uploadProposalFileSchema = z.object({
         ),
 });
 
-export { uploadProposalFileSchema };
+const manageTeamSchema = z.object({
+    supervisor: z
+        .string()
+        .min(1, { message: "The supervisor cannot be removed" }),
+
+    lead: z
+        .string()
+        .min(1, { message: "Project lead cannot be removed" }),
+
+    memberOne: z
+        .string()
+        .optional()
+        .or(z.literal("")),
+
+    memberTwo: z
+        .string()
+        .optional()
+        .or(z.literal("")),
+});
+
+export { uploadProposalFileSchema, manageTeamSchema };

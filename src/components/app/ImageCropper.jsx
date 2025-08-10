@@ -1,9 +1,9 @@
-import { Button, Overlay } from '@components';
-import { cropImage } from '@utils';
+import { Button, Overlay, closeModal } from '@components';
+import { cropImage, showErrorToast } from '@utils';
 import React, { useState, useCallback } from 'react';
 import Cropper from 'react-easy-crop';
 
-const ImageCropper = ({ onCropDone, image }) => {
+const ImageCropper = ({ onCrop, image, onClose, buttonText = "Crop", moodalTitle = "Adjust an Image", isLoading = false }) => {
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
@@ -23,15 +23,19 @@ const ImageCropper = ({ onCropDone, image }) => {
     const handleCrop = async () => {
         try {
             const croppedImageUrl = await cropImage(imageSrc, croppedAreaPixels);
-            onCropDone(croppedImageUrl);
+            onCrop(croppedImageUrl);
         } catch (e) {
-            console.error("Crop failed:", e);
+            showErrorToast(e.message);
         }
     };
 
+    const handleModalClose = () => {
+        onClose(); closeModal();
+    }
+
     return (
-        <Overlay title="Crop your profile image">
-            <div className="relative h-96 bg-primary mt-4">
+        <Overlay title={moodalTitle} onClose={handleModalClose} dismisible={false}>
+            <div className="relative h-96 bg-primary">
                 <Cropper
                     image={imageSrc}
                     crop={crop}
@@ -42,7 +46,7 @@ const ImageCropper = ({ onCropDone, image }) => {
                     onCropComplete={onCropComplete}
                 />
             </div>
-            <Button onClick={handleCrop} className="w-full mt-2">Save crop</Button>
+            <Button isLoading={isLoading} onClick={handleCrop} className="w-full mt-2 text-sm">{buttonText}</Button>
         </Overlay>
     );
 };

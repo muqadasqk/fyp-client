@@ -1,10 +1,8 @@
-import { ThemeSwitcher } from "@components";
 import { Outlet } from "react-router-dom";
 
 const AuthLayout = () => {
     return (
-        <div className="min-h-[85vh] sm:min-h-screen flex flex-col items-center justify-center">
-            <div className="fixed top-1 left-1 "><ThemeSwitcher /></div>
+        <div className="min-h-[85vh] bg-primary sm:bg-secondary sm:min-h-screen flex flex-col items-center justify-center sm:text-sm">
             <Outlet />
         </div>
     );

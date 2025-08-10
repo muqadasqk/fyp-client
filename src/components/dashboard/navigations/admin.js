@@ -1,5 +1,4 @@
-import { has } from "lodash";
-import { FaChalkboardTeacher, FaFileSignature, FaProjectDiagram, FaTachometerAlt, FaUserShield } from "react-icons/fa";
+import { FaChalkboardTeacher, FaFileSignature, FaIdeal, FaProjectDiagram, FaTachometerAlt, FaUserEdit, FaUserShield } from "react-icons/fa";
 
 const admin = [
     {
@@ -29,11 +28,11 @@ const admin = [
 
         hasDropdown: true,
         children: [
-            { label: "Cond. Accepted", href: "/conditionally-accepted" },
+            { label: "All", href: "" },
             { label: "Accepted", href: "/accepted" },
+            { label: "Cond. Accepted", href: "/conditionally-accepted" },
             { label: "Pending", href: "/pending" },
             { label: "Rejected", href: "/rejected" },
-            { label: "All Previous", href: "/all-previous" },
         ],
     },
     {
@@ -43,7 +42,7 @@ const admin = [
 
         hasDropdown: true,
         children: [
-            { label: "All", href: "/all" },
+            { label: "All", href: "" },
             { label: "Initialized", href: "/initialized" },
             { label: "Under Dev.", href: "/under-development" },
             { label: "Completed", href: "/completed" },
@@ -56,11 +55,23 @@ const admin = [
 
         hasDropdown: true,
         children: [
-            { label: "All", href: "/all" },
+            { label: "All", href: "" },
             { label: "Reviewing", href: "/pending-review" },
             { label: "Approved", href: "/approved" },
             { label: "Rejected", href: "/rejected" },
         ],
+    },
+    {
+        icon: FaIdeal,
+        label: "Previous Projects",
+        href: "/previous-projects",
+        hasDropdown: false
+    },
+    {
+        icon: FaUserEdit,
+        label: "Profile Settings",
+        href: "/profile",
+        hasDropdown: false
     },
 ];
 

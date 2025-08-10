@@ -1,112 +1,57 @@
-import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AuthContent, Button, Form, Input } from "@components";
-import { sendOtpSchema, verifyOtpSchema, resetPasswordSchema } from "@schemas";
+import { requestResetPasswordSchema } from "@schemas";
 import { useDispatch, useSelector } from "react-redux";
-import { resetPassword, sendOtp, verifyOtp } from "@features";
+import { requestResetPassword } from "@features";
+import { Fragment, useState } from "react";
+import { FaArrowLeft, FaBackspace, FaBackward, FaCheck, FaCheckCircle } from "react-icons/fa";
 
 const ForgotPassword = () => {
     const dispatch = useDispatch();
-    const { loading, emailForOtp, resetPasswordToken } = useSelector((state) => state.auth);
-
-    const handleSendOtp = async (data) => {
-        data.append("subject", "Forgot Password | Account Email Verification");
-        dispatch(sendOtp(data));
-    };
-
-    if (resetPasswordToken) return <SetPasswordForm />
-    if (emailForOtp) return <VerifyOtpForm />
-
-    return (
-        <AuthContent title="Forgot Password" description="Enter email address associated with you account" className="md:w-[50%%] lg:w-[35%]">
-            <Form onSubmit={handleSendOtp} resolver={zodResolver(sendOtpSchema)}>
-                <Input label="Email Address" name="email" placeholder="Enter your account email" />
-                <Button type="submit" isLoading={loading} className="w-full mt-2">Send OTP</Button>
-            </Form>
-
-            <div className="mt-4 text-center text-secondary">
-                Want to signin your account? <Button href="/signin">Sign In</Button>
-            </div>
-        </AuthContent>
-    )
-};
-
-const VerifyOtpForm = () => {
-    const dispatch = useDispatch();
-    const { loading, emailForOtp } = useSelector((state) => state.auth);
-
-    const handleVerifyOtp = async (data) => {
-        data.append("email", emailForOtp);
-        dispatch(verifyOtp(data));
-    };
-
-    const handleResendOtp = () => {
-        const requestBody = {
-            email: emailForOtp,
-            subject: "Forgot Password | Account Email Verification",
-        }
-        dispatch(sendOtp(requestBody));
-    }
-
-    return (
-        <AuthContent title="Verify OTP" description="Verify the OTP code we just sent to your email address" className="md:w-[50%%] lg:w-[35%]" >
-            <Form onSubmit={handleVerifyOtp} resolver={zodResolver(verifyOtpSchema)}>
-                <Input
-                    type="number"
-                    name="otp"
-                    label="One Time Passcode"
-                    placeholder="Enter a 6-digit OTP here"
-                />
-                <Button type="submit" isLoading={loading} className="w-full mt-2">Verify OTP</Button>
-            </Form>
-
-            <div className="mt-4 text-center text-secondary">
-                Didn't receive an OTP? <Button href="./" onClick={handleResendOtp}>Resend Now</Button>
-            </div>
-
-            <div className="mt-1 text-center text-secondary">
-                Want to signin your account? <Button href="/signin">Sign In</Button>
-            </div>
-        </AuthContent>
-    )
-};
-
-const SetPasswordForm = () => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const [isLinkSent, setIsLinkSent] = useState(false);
     const { loading } = useSelector((state) => state.auth);
 
-    const handleSetPassword = async (data) => {
-        const result = await dispatch(resetPassword(data));
-        if (resetPassword.fulfilled.match(result)) {
-            navigate("/signin", { replace: true });
+    const handleSendOtp = async (data) => {
+        const result = await dispatch(requestResetPassword(data));
+        if (requestResetPassword.fulfilled.match(result)) {
+            setIsLinkSent(true);
         }
     };
 
     return (
-        <AuthContent title="Set a new Password" description="Set a new strong password for your account" className="md:w-[50%] lg:w-[35%]">
-            <Form onSubmit={handleSetPassword} resolver={zodResolver(resetPasswordSchema)}>
-                <Input
-                    type="password"
-                    name="password"
-                    label="New Password"
-                    placeholder="Create a new password"
-                />
-                <Input
-                    type="password"
-                    name="confirmationPassword"
-                    label="Confirm Password"
-                    placeholder="Confirm your new password"
-                />
+        <AuthContent title="Forgot Password | FYP" description="Enter email address associated with you account" className="md:w-[50%%] lg:w-[35%]">
+            {!isLinkSent && (
+                <Fragment>
+                    <Form onSubmit={handleSendOtp} resolver={zodResolver(requestResetPasswordSchema)}>
+                        <Input label="Email Address" name="email" placeholder="Enter your account email" />
+                        <Button type="submit" isLoading={loading} className="w-full mt-2">Send Reset Password Link</Button>
+                    </Form>
 
-                <Button type="submit" isLoading={loading} className="w-full mt-2">Save Password</Button>
-            </Form>
+                    <div className="mt-4 text-center text-secondary">
+                        Remember account password? <Button href="/signin" className="text-sm">Sign In</Button>
+                    </div>
+                </Fragment>
+            )}
 
-            <div className="mt-4 text-center text-secondary">
-                Want to signin your account? <Button href="/signin">Sign In</Button>
-            </div>
+            {isLinkSent && (
+                <div className="rounded-lg border border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/20 p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                        <FaCheckCircle className="text-green-600 dark:text-green-400 text-2xl" />
+                        <h2 className="text-green-600 dark:text-green-400 text-lg font-semibold m-0">
+                           Password Reset Link Sent!
+                        </h2>
+                    </div>
+                    <p className="text-sm text-secondary mb-4">
+                        Please check your email for the reset password link.
+                        If you don’t see it in your inbox, check your spam folder.
+                    </p>
+                    <Button href="/signin" className="flex items-center justify-center gap-2 w-full mt-2">
+                        <FaArrowLeft /> Back to Sign In
+                    </Button>
+                </div>
+            )}
         </AuthContent>
     )
-}
+};
 
 export default ForgotPassword;

@@ -77,7 +77,7 @@ export const retrieveSupervisorProjects = createAsyncThunk("project/retrieveSupe
 export const retrieveSingleProject = createAsyncThunk("project/getOneSpecific",
     async (id, { rejectWithValue }) => {
         try {
-            const { data } = await apiRequest.get(`/projects/${id}`, { showSuccessToast: false })
+            const { data } = await apiRequest.get(`/projects/${id}`, { showToast: false })
             return data
         } catch (error) {
             return rejectWithValue(error.response?.data)

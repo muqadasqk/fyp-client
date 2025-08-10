@@ -1,6 +1,6 @@
 import { DashboardContent, DataTable, ViewProposalDetails } from '@components'
 import { retrieveProposals } from '@features'
-import { capitalize } from '@utils';
+import { capitalize, splitCamelCase } from '@utils';
 import { useMemo, useState } from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
 import { useSelector } from 'react-redux'
@@ -15,7 +15,11 @@ const ManageProposals = ({ status }) => {
     }
 
     return (
-        <DashboardContent title={capitalize(`${status === "conditionallyAccepted" ? "Conditionally Accepted" : status} Proposals`)} description='View and manage proposal ideas'>
+        <DashboardContent title={capitalize(`${splitCamelCase(status)} Proposals`)} description='View and manage proposal ideas'>
+            <div className="flex justify-between items-center gap-5 p-2 mb-2">
+                <h4 className="font-black text-theme mb-0">Manage {status != "all" && splitCamelCase(status)} Proposals</h4>
+            </div>
+
             {viewDetails && (
                 <ViewProposalDetails proposal={viewDetails} closeForm={() => setViewDetails(null)} />
             )}
@@ -27,19 +31,24 @@ const ManageProposals = ({ status }) => {
                 paginationData={pagination}
                 recordFields={{
                     title: "Title",
-                    type: "Type",
+                    department: "department",
+                    batch: "batch",
                     category: "Category",
-                    status: "Status",
+                    type: "Type",
+                    ...(status == "all" ? { status: "Status" } : {})
                 }}
                 actions={[
                     { label: "Details", icon: <FaInfoCircle />, ShowWhen: { status: true }, onClick: handleViewDetails },
                 ]}
                 searchableFields={{
                     title: "Title",
-                    type: "Type",
+                    department: "department",
+                    batch: "batch",
                     category: "Category",
-                    status: "Status",
+                    type: "Type",
+                    ...(status == "all" ? { status: "Status" } : {})
                 }}
+                empty={`No ${splitCamelCase(status).toLowerCase()} proposals found.`}
             />
         </DashboardContent >
     )

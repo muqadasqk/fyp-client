@@ -1,12 +1,17 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import path from "path";
+import { fileURLToPath } from "url";
+
+// Shim for __dirname in ESM context:
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export default defineConfig({
-  server: {
-    host: true,
-    port: 5173
-  },
+  // server: {
+  //   host: true,
+  //   port: 5173,
+  // },
   plugins: [react()],
   resolve: {
     alias: {
@@ -22,6 +27,8 @@ export default defineConfig({
       "@services": path.resolve(__dirname, "src/services"),
       "@config": path.resolve(__dirname, "src/config"),
       "@utils": path.resolve(__dirname, "src/utils"),
+      "@loaders": path.resolve(__dirname, "src/routes/loaders"),
+      "@data": path.resolve(__dirname, "src/data"),
     },
     extensions: [".js", ".jsx", ".ts", ".tsx", ".json"],
   },

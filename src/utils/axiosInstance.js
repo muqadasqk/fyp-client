@@ -7,6 +7,7 @@ const axiosInstance = axios.create({
     baseURL: API_BASE_URL + "/api",
     timeout: 5000,
     headers: { "Content-Type": "application/json" },
+    withCredentials: true,
     showToast: true,
     showSuccessToast: true,
     showErrorToast: true

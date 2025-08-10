@@ -3,24 +3,28 @@ import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "react-hot-toast";
 import Routes from "@routes";
 import { useDispatch } from "react-redux";
-import { retrieveUsers, setTheme, verifyToken } from "@features";
+import { setTheme, verifyToken } from "@features";
+import { readLocalStorage } from "@utils";
 
 function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(verifyToken());
+    const storedTheme = readLocalStorage('theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const appliedTheme = storedTheme || (systemPrefersDark ? 'dark' : 'light');
+
+    dispatch(setTheme(appliedTheme));
 
     const media = window.matchMedia('(prefers-color-scheme: dark)');
     const switchTheme = (e) => {
-      dispatch(setTheme(e.matches ? 'dark' : 'light'));
+      if (!readLocalStorage('theme')) {
+        dispatch(setTheme(e.matches ? 'dark' : 'light'));
+      }
     };
-
     media.addEventListener('change', switchTheme);
 
-    return () => {
-      media.removeEventListener('change', switchTheme);
-    };
+    return () => media.removeEventListener('change', switchTheme);
   }, []);
 
 

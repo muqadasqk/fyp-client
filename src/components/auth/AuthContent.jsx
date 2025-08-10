@@ -6,8 +6,8 @@ const AuthContent = ({ title = "Title", description = "Description", className =
     return (
         <div
             className={clsx(
-                "border-0 p-5 w-full",
-                "sm:p-10 sm:bg-primary sm:border-primary sm:border sm:rounded-lg",
+                "border-0 p-10 w-full",
+                "sm:p-8 sm:bg-primary sm:border-primary sm:border sm:rounded-lg sm:shadow-sm",
                 className
             )}
         >
@@ -17,8 +17,8 @@ const AuthContent = ({ title = "Title", description = "Description", className =
                 <meta name="description" content={description} />
             </Helmet>
 
-            <div className="text-center mb-6">
-                <h3 className="text-2xl text-[var(--theme-primary-color)] font-bold">{title}</h3>
+            <div className="mb-6">
+                <h3 className="text-xl text-[var(--theme-primary-color)] font-bold">{title}</h3>
                 <p className="text-secondary mt-1">{description}</p>
             </div>
 

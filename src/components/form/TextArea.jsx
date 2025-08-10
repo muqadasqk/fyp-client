@@ -23,7 +23,7 @@ const TextArea = ({ name, label, optional, rows = 4, ...props }) => {
                 rows={rows}
                 {...register(name)}
                 className={clsx(
-                    "input-primary mt-1 block w-full",
+                    "input-primary mt-1 block w-full sm:text-sm",
                     {
                         "border-red-400 focus:ring-0": errorMessage,
                     }

@@ -5,6 +5,7 @@ import { setErrors } from "./uiSlice";
 const initialState = {
     meetings: [],
     pagination: {},
+    signature: null,
     loading: false,
     meeting: null
 }
@@ -46,9 +47,9 @@ export const updateMeeting = createAsyncThunk("meeting/updateMeeting",
 )
 
 export const projectSpecificMeetings = createAsyncThunk("meeting/projectSpecificMeetings",
-    async ({ projectId, page }, { rejectWithValue }) => {
+    async ({ projectId, studentId, page }, { rejectWithValue }) => {
         try {
-            const { data } = await apiRequest.post(`/meetings/p/${projectId}`, { page }, { showSuccessToast: false });
+            const { data } = await apiRequest.post(`/meetings/p/${projectId ?? studentId}`, { page }, { showSuccessToast: false });
             return data
         } catch (error) {
             return rejectWithValue(error.response?.data)
@@ -67,11 +68,22 @@ export const getOneMeeting = createAsyncThunk("meeting/getOneMeeting",
     }
 )
 
-
 export const deleteMeeting = createAsyncThunk("meeting/deleteMeeting",
     async (id, { rejectWithValue }) => {
         try {
             const { data } = await apiRequest.delete(`/meetings/${id}`);
+            return data
+        }
+        catch (error) {
+            return rejectWithValue(error.response?.data)
+        }
+    }
+)
+
+export const generateSignature = createAsyncThunk("meeting/generateSignature",
+    async ({ id, meetingId, role }, { rejectWithValue }) => {
+        try {
+            const { data } = await apiRequest.post(`/meetings/generate-signature`, { id, meetingId, role }, { showToast: false });
             return data
         }
         catch (error) {
@@ -101,7 +113,7 @@ const meetingSlice = createSlice({
             })
             .addCase(createMeeting.fulfilled, (state, action) => {
                 state.loading = false;
-                state.meetings = [action.payload, ...state.meetings]
+                state.meetings = [action.payload.meeting, ...state.meetings]
             })
             .addCase(createMeeting.rejected, (state) => {
                 state.loading = false;
@@ -142,9 +154,19 @@ const meetingSlice = createSlice({
             })
             .addCase(deleteMeeting.fulfilled, (state, action) => {
                 state.loading = false;
-                state.meetings = state.meetings.filter((meeting) => meeting._id !== action.payload._id);
+                state.meetings = state.meetings.filter((meeting) => meeting._id != action.meta.arg);
             })
             .addCase(deleteMeeting.rejected, (state) => {
+                state.loading = false;
+            })
+            .addCase(generateSignature.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(generateSignature.fulfilled, (state, action) => {
+                state.loading = false;
+                state.signature = action.payload.signature;
+            })
+            .addCase(generateSignature.rejected, (state) => {
                 state.loading = false;
             })
     }

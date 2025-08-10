@@ -26,7 +26,7 @@ export const createPresentation = createAsyncThunk("presentation/createPresentat
     async (formData, { rejectWithValue, dispatch }) => {
         try {
             const { data } = await apiRequest.post("/presentations", formData, {
-                headers: { "Content-Type": "application/json" }
+                headers: { "Content-Type": "multipart/form-data" }
             });
 
             return data;
@@ -38,9 +38,9 @@ export const createPresentation = createAsyncThunk("presentation/createPresentat
 );
 
 export const updatePresentation = createAsyncThunk("presentation/updatePresentation",
-    async ({ id, updateData }, { rejectWithValue, dispatch }) => {
+    async ({ id, formData }, { rejectWithValue, dispatch }) => {
         try {
-            const { data } = await apiRequest.patch(`/presentations/${id}`, updateData);
+            const { data } = await apiRequest.patch(`/presentations/${id}`, formData);
             return data;
         } catch (error) {
             dispatch(setErrors(error.response?.data?.errors));
@@ -50,9 +50,9 @@ export const updatePresentation = createAsyncThunk("presentation/updatePresentat
 );
 
 export const projectSpecificPresentations = createAsyncThunk("presentation/projectSpecificPresentations",
-    async ({ projectId, page }, { rejectWithValue }) => {
+    async ({ projectId, studentId, page }, { rejectWithValue }) => {
         try {
-            const { data } = await apiRequest.post(`/presentations/p/${projectId}`, { page }, { showSuccessToast: false });
+            const { data } = await apiRequest.post(`/presentations/p/${projectId ?? studentId}`, { page }, { showSuccessToast: false });
             return data;
         } catch (error) {
             return rejectWithValue(error.response?.data)
@@ -108,7 +108,7 @@ const presentationSlice = createSlice({
             })
             .addCase(createPresentation.fulfilled, (state, action) => {
                 state.loading = false;
-                state.presentations = [action.payload, ...state.presentations];
+                state.presentations = [action.payload.presentation, ...state.presentations];
             })
             .addCase(createPresentation.rejected, (state) => {
                 state.loading = false;
@@ -119,11 +119,7 @@ const presentationSlice = createSlice({
             })
             .addCase(updatePresentation.fulfilled, (state, action) => {
                 state.loading = false;
-                const { id } = action.meta.arg;
-                const index = state.presentations.findIndex((presentation) => presentation._id === id);
-                if (index !== -1) {
-                    state.presentations[index] = { ...action.payload.presentation };
-                }
+                state.presentations = state.presentations.filter(p => p._id != action.meta.arg.id);
             })
             .addCase(updatePresentation.rejected, (state) => {
                 state.loading = false;
@@ -158,9 +154,7 @@ const presentationSlice = createSlice({
             })
             .addCase(deletePresentation.fulfilled, (state, action) => {
                 state.loading = false;
-                state.presentations = state.presentations.filter(
-                    (presentation) => presentation._id !== action.payload._id
-                );
+                state.presentations = state.presentations.filter(p => p._id != action.meta.arg);
             })
             .addCase(deletePresentation.rejected, (state) => {
                 state.loading = false;

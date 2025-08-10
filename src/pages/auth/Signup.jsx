@@ -1,156 +1,140 @@
-import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, Input, Select, Button, AuthContent, ImageCropper, setValue } from "@components";
-import { confirmEmailSchema, signupSchema } from "@schemas";
+import { Form, Input, Select, Button, AuthContent } from "@components";
+import { signupSupervisorSchema, signupStudentSchema } from "@schemas";
+import { departments } from "@data";
 import { useDispatch, useSelector } from "react-redux";
-import { clearEmailForOtp, confirmEmail, sendOtp, signup } from "@features";
-import { useState } from "react";
-import { FaPen } from "react-icons/fa";
+import { signup } from "@features";
+import { Fragment, useState } from "react";
+import { FaCheckCircle } from "react-icons/fa";
+import { retrieveYearRange } from "@utils";
 import clsx from "clsx";
 
 const Signup = () => {
     const dispatch = useDispatch();
-    const [role, setRole] = useState("supervisor");
-    const [imageToCrop, setImageToCrop] = useState(null);
-    const [imagePreview, setImagePreview] = useState(null);
-    const { loading, emailForOtp } = useSelector((state) => state.auth);
+    const [form, setForm] = useState({ d: null, b: null });
+    const [wasSuccessfull, setWasSuccessful] = useState(false);
+    const [role, setRole] = useState("student");
+    const { loading } = useSelector((state) => state.auth);
 
-    const handleSignup = (data) => {
-        dispatch(signup(data));
-    };
-
-    const handleImageChange = (e) => {
-        const file = e.target.files?.[0];
-        if (file) setImageToCrop(file);
-    };
-
-    const handleCropDone = async (base64Image) => {
-        const blob = await (await fetch(base64Image)).blob();
-        const file = new File([blob], "dp.png", { type: "image/png" });
-        setImagePreview(URL.createObjectURL(file));
-        setValue("image", file)
-        setImageToCrop(null);
-    };
-
-    if (emailForOtp) return <EmailConfirmationForm />;
-
-    return (
-        <AuthContent title="Sign Up" description="It's simple and easy!" className="md:w-[50%] my-10">
-            {imageToCrop && (
-                <ImageCropper image={imageToCrop} onCropDone={handleCropDone} onClose={() => setImageToCrop(null)} />
-            )}
-
-            <div className="flex">
-                <Form onSubmit={handleSignup} resolver={zodResolver(signupSchema)} encType="multipart/form-data">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:gap-4">
-                        <Input name="name" label="Name" id="name" placeholder="Enter your name" />
-                        <Input name="email" label="Email" id="email" placeholder="Enter your email" />
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:gap-4">
-                        <Input name="cnic" id="cnic" label="CNIC NO" placeholder="CNIC No. (without dashes)" />
-                        <Input name="phone" label="Phone Number" placeholder="Enter your phone number (10-digits)" optional />
-                    </div>
-
-                    <Select
-                        name="role"
-                        label="Role"
-                        placeholder="Please select your role"
-                        value={role}
-                        onChange={({ target }) => setRole(target.value)}
-                        options={[
-                            { label: "Supervisor", value: "supervisor" },
-                            { label: "Student", value: "student" }
-                        ]}
-                    />
-
-                    <div className={`grid grid-cols-1 md:grid-cols-${role === "student" ? "2" : "1"} lg:gap-4`}>
-                        {role === "student" && (
-                            <Input name="rollNo" id="rollNo" label="Roll No." placeholder="Enter roll number (e.g., 21SW066)" />
-                        )}
-                        <Input type="password" label="Password" name="password" id="password" placeholder="Create strong password" />
-                    </div>
-
-                    {/* {!imagePreview && (
-                        <Input
-                            label="Profile Photo"
-                            type="file"
-                            name="image"
-                            accept=".jpg,.jpeg,.png"
-                            onChange={handleImageChange}
-                        />
-                    )}
-
-                    {imagePreview && (
-                        <img src={imagePreview} className="rounded-full w-20 h-20 object-cover" />
-                    )} */}
-
-                    <div className={clsx("grid grid-cols-1 lg:gap-4", {
-                        "md:grid-cols-2": imagePreview,
-                        "md:grid-cols-1": !imagePreview,
-                    })}>
-                        <Input
-                            label="Profile Photo"
-                            type="file"
-                            name="image"
-                            id="image-upload"
-                            accept=".jpg,.jpeg,.png"
-                            onChange={handleImageChange}
-                            optional
-                        />
-                        {imagePreview && (
-                            <img
-                                src={imagePreview}
-                                alt="Preview"
-                                className="rounded-full mt-5 w-16 h-16 object-cover"
-                            />
-                        )}
-
-                    </div>
-
-                    <Button type="submit" isLoading={loading} className="w-full my-2">Sign Up</Button>
-                </Form>
-            </div>
-
-            <div className="mt-4 text-center text-secondary">
-                Got an account? <Button href="/signin">Sign In</Button>
-            </div>
-        </AuthContent>
-    );
-};
-
-const EmailConfirmationForm = () => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const { loading, emailForOtp } = useSelector((state) => state.auth);
-
-    const handleEmailConfirmation = async (data) => {
-        data.append("email", emailForOtp);
-        const result = await dispatch(confirmEmail(data));
-        if (confirmEmail.fulfilled.match(result)) {
-            dispatch(clearEmailForOtp());
-            navigate("/signin", { replace: true });
+    const handleSignup = async (data) => {
+        const result = await dispatch(signup(data));
+        if (signup.fulfilled.match(result)) {
+            setWasSuccessful(true);
         }
     };
 
-    const handleResendOtp = () => {
-        dispatch(sendOtp({ email: emailForOtp, subject: "Signup Email Confirmation" }));
-    };
-
     return (
-        <AuthContent title="Confirm Email" description="We just sent you an OTP to your email, confirm by entering below!" className="md:w-[50%] lg:w-[35%]">
-            <Form onSubmit={handleEmailConfirmation} resolver={zodResolver(confirmEmailSchema)}>
-                <Input type="number" name="otp" label="One Time Passcode" placeholder="Enter a 6-digit OTP here" />
-                <Button type="submit" isLoading={loading} className="w-full mt-2">Confirm Now</Button>
-            </Form>
+        <AuthContent
+            title="Sign Up | FYP Management System"
+            description="Quick registration to streamline your FYP process."
+            className="md:w-[50%] my-10"
+        >
+            {!wasSuccessfull && (
+                <Fragment>
+                    <div className="flex">
+                        <Form onSubmit={handleSignup} resolver={zodResolver(role == "supervisor" ? signupSupervisorSchema : signupStudentSchema(form.d, form.b))} encType="multipart/form-data">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <Input name="name" label="Name" id="name" placeholder="Enter your name" />
+                                <Input name="email" label="Email" id="email" placeholder="Enter your email" />
+                            </div>
 
-            <div className="mt-4 text-center text-gray-600">
-                Didn't receive an OTP? <Button href="./" onClick={handleResendOtp}>Resend Now</Button>
-            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <Input name="cnic" id="cnic" label="CNIC No." placeholder="CNIC No. (without dashes)" />
+                                <Input name="phone" label="Phone Number" placeholder="Enter your phone number (10-digits)" optional />
+                            </div>
 
-            <div className="mt-1 text-center text-secondary">
-                Want to sign in to your account? <Button href="/signin">Sign In</Button>
-            </div>
+                            <Select
+                                name="role"
+                                label="Role"
+                                placeholder="Please select your role"
+                                defaultValue={role}
+                                onChange={({ target }) => setRole(target.value)}
+                                options={[
+                                    { label: "Student", value: "student" },
+                                    { label: "Supervisor", value: "supervisor" }
+                                ]}
+                            />
+
+                            {role == "student" && (
+                                <Fragment>
+                                    <div className={`grid grid-cols-1 md:grid-cols-${role === "student" ? "2" : "1"} gap-4`}>
+
+                                        <Select
+                                            name="department"
+                                            label="Department"
+                                            onChange={({ target }) => setForm({ ...form, d: target.value })}
+                                            placeholder="Please select your department"
+                                            options={departments?.map(record => ({ label: record?.name, value: record?.abbreviation }))}
+                                        />
+                                        <Select
+                                            name="batch"
+                                            label="Batch"
+                                            onChange={({ target }) => setForm({ ...form, b: String(target.value).slice(-2) })}
+                                            placeholder="Please select your batch"
+                                            options={retrieveYearRange(2000).map(y => ({ label: y, value: String(y) }))}
+                                        />
+                                    </div>
+
+                                    <div className={clsx("grid grid-cols-1 gap-4", {
+                                        "md:grid-cols-2": form.d && form.b
+                                    })}>
+                                        {form.d && form.b && (
+                                            <Input name="rollNo" id="rollNo" label="Roll No." placeholder={`Enter roll no. (e.g., ${form.b ?? 21}${form.d ?? "SW"}066)`} />
+                                        )}
+
+                                        <Select
+                                            name="shift"
+                                            label="Batch Shift"
+                                            placeholder="Please select your batch shift"
+                                            options={[
+                                                { label: "Morning", value: "morning" },
+                                                { label: "Evening", value: "evening" }
+                                            ]}
+                                        />
+                                    </div>
+                                </Fragment>
+                            )}
+
+                            <div className={`grid grid-cols-1 md:grid-cols-${role == "supervisor" ? "2" : "1"} gap-4`}>
+                                {role == "supervisor" && (
+                                    <Select
+                                        name="department"
+                                        label="Department"
+                                        placeholder="Please select your department"
+                                        options={departments?.map(record => ({ label: record?.name, value: record?.abbreviation }))}
+                                    />
+                                )}
+
+                                <Input type="password" label="Password" name="password" id="password" placeholder="Create strong password" />
+                            </div>
+
+                            <Button type="submit" isLoading={loading} className="w-full mt-2">Sign Up</Button>
+                        </Form>
+                    </div>
+
+                    <div className="mt-4 text-center text-secondary">
+                        Got an account? <Button href="/signin" className="text-sm">Sign In</Button>
+                    </div>
+                </Fragment>
+            )}
+
+            {wasSuccessfull && (
+                <div className="rounded-lg border border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/20 p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                        <FaCheckCircle className="text-green-600 dark:text-green-400 text-2xl" />
+                        <h2 className="text-green-600 dark:text-green-400 text-lg font-semibold m-0">
+                            Confirmation Email Sent!
+                        </h2>
+                    </div>
+                    <p className="text-sm text-secondary mb-4">
+                        Your account has been created successfully. Please check your email to confirm your account.
+                        If you don't see the confirmation email, be sure to check your spam or junk folder.
+                    </p>
+                    <Button href="/signin" className="flex items-center justify-center gap-2 w-full mt-2">
+                        Sign In
+                    </Button>
+                </div>
+            )}
         </AuthContent>
     );
 };

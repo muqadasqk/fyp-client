@@ -1,4 +1,4 @@
-import { FaTachometerAlt, FaRegLightbulb, FaDochub } from "react-icons/fa";
+import { FaTachometerAlt, FaRegLightbulb, FaDochub, FaChalkboardTeacher, FaMeetup, FaUserEdit, FaIdeal } from "react-icons/fa";
 
 const student = [
     {
@@ -17,6 +17,30 @@ const student = [
         icon: FaDochub,
         label: "My Project",
         href: "/my-project",
+        hasDropdown: false
+    },
+    {
+        icon: FaChalkboardTeacher,
+        label: "My Presentations",
+        href: "/my-presentations",
+        hasDropdown: false
+    },
+    {
+        icon: FaMeetup,
+        label: "My Meetings",
+        href: "/my-meetings",
+        hasDropdown: false
+    },
+    {
+        icon: FaIdeal,
+        label: "Previous Projects",
+        href: "/previous-projects",
+        hasDropdown: false
+    },
+    {
+        icon: FaUserEdit,
+        label: "Profile Settings",
+        href: "/profile",
         hasDropdown: false
     },
 ];

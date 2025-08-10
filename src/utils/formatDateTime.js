@@ -1,18 +1,20 @@
-const formateDateTime = (date) => {
+const formateDateTime = (date, withTime = false) => {
     const options = {
         weekday: 'long',
         year: 'numeric',
         month: 'short',
         day: 'numeric',
-        // hour: 'numeric',
-        // minute: 'numeric',
-        // second: 'numeric',
-        // hour12: true,
-        // timeZone: 'UTC'
     };
 
+    if (withTime) {
+        options.hour = '2-digit';
+        options.minute = '2-digit';
+        options.hour12 = undefined;
+        options.timeZone = 'UTC';
+    }
+
     const formatDate = new Date(date);
-    return formatDate.toLocaleString('en-US', options);
+    return formatDate.toLocaleString(undefined, options);
 }
 
 export default formateDateTime;

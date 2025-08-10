@@ -5,6 +5,7 @@ import { setErrors } from "./uiSlice";
 const initialState = {
     users: [],
     pagination: {},
+    dashboard: {},
     loading: false
 }
 
@@ -47,6 +48,7 @@ export const updateProfile = createAsyncThunk("user/updateProfile",
         }
     }
 )
+
 export const updatePassword = createAsyncThunk("user/updatePassword",
     async (formData, { rejectWithValue, dispatch }) => {
         try {
@@ -69,10 +71,22 @@ export const deleteUser = createAsyncThunk("user/deleteUser",
         }
     }
 )
+
 export const updateStatus = createAsyncThunk("user/updateStatus",
     async ({ id, statusCode }, { rejectWithValue }) => {
         try {
             const { data } = await apiRequest.patch(`/users/${id}`, { statusCode });
+            return data;
+        } catch (error) {
+            return rejectWithValue(error.respone?.data);
+        }
+    }
+)
+
+export const dashboardData = createAsyncThunk("user/dashboard/data",
+    async (_, { rejectWithValue }) => {
+        try {
+            const { data } = await apiRequest.get('/users/dashboard/data', { showSuccessToast: false });
             return data;
         } catch (error) {
             return rejectWithValue(error.respone?.data);
@@ -153,13 +167,25 @@ const userSlice = createSlice({
             .addCase(updateStatus.fulfilled, (state, action) => {
                 state.loading = false;
                 const index = state.users.findIndex((user) => user._id === action.payload.user._id);
-                if (action.meta.arg.statusCode === 20002) {
+                if ([20001, 20002].includes(action.meta.arg.statusCode)) {
                     state.users.splice(index, 1);
                 } else {
                     state.users[index] = action.payload.user;
                 }
             })
             .addCase(updateStatus.rejected, (state) => {
+                state.loading = false;
+            })
+
+            // dasboard data
+            .addCase(dashboardData.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(dashboardData.fulfilled, (state, action) => {
+                state.loading = false;
+                state.dashboard = action.payload.data;
+            })
+            .addCase(dashboardData.rejected, (state) => {
                 state.loading = false;
             })
     }

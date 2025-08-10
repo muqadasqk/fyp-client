@@ -25,21 +25,31 @@ const Pagination = ({ data, set, onSort }) => {
     };
 
     const pagesToDisplay = getPageNumbers();
+    const from = (data.page - 1) * data.perPage + 1;
+    const to = Math.min(data.page * data.perPage, data.totalItems);
+    const isSingle = from === to;
 
     return (
-        <div className="w-full flex flex-row justify-between items-center gap-y-2 gap-x-4 sm:px-4 sm:py-3 mt-5">
+        <div className="w-full flex flex-row justify-between items-center gap-y-2 mt-5">
 
-            <div className="hidden sm:flex flex-row items-center text-primary gap-x-2">
-                <span>
-                    Page <span className="font-medium">{currentPage}</span> of <span className="font-medium">{totalPages}</span>
+            <div className="flex items-center gap-2 flex-wrap">
+                <span className="hidden sm:block text-sm text-secondary">
+                    Showing {isSingle ? from : `${from} to ${to}`} of {data.totalItems} records
                 </span>
+                <select onChange={({ target }) => onSort(target.value)}
+                    className="text-xs text-secondary bg-primary border border-primary rounded-md p-1 focus:outline-none focus:ring"
+                >
+                    {[10, 20, 50, 100].map(range => (
+                        <option key={range} value={range}>{`${range}/page`}</option>
+                    ))}
+                </select>
             </div>
 
             <div className={clsx("flex justify-center items-center", { hidden: totalPages <= 1 })}>
                 <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage <= 1}
-                    className="w-8 h-8 mx-1 flex items-center justify-center rounded-full disabled:opacity-40"
+                    className="w-8 h-8 mx-1 flex items-center justify-center rounded-full disabled:opacity-40 disabled:pointer-events-none hover:bg-[#2564eb2a]"
                 >
                     <FaChevronLeft />
                 </button>
@@ -53,7 +63,7 @@ const Pagination = ({ data, set, onSort }) => {
                             onClick={() => handlePageChange(num)}
                             disabled={currentPage === num}
                             className={clsx(
-                                "w-8 h-8 mx-1 rounded-full flex items-center justify-center",
+                                "w-8 h-8 mx-1 rounded-full flex items-center justify-center disabled:pointer-events-none hover:bg-[#2564eb2a]",
                                 { "bg-theme": currentPage == num }
                             )}
                         >
@@ -65,22 +75,10 @@ const Pagination = ({ data, set, onSort }) => {
                 <button
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage >= totalPages}
-                    className="w-8 h-8 mx-1 flex items-center justify-center rounded-full disabled:opacity-40"
+                    className="w-8 h-8 mx-1 flex items-center justify-center rounded-full disabled:opacity-40 disabled:pointer-events-none hover:bg-[#2564eb2a]"
                 >
                     <FaChevronRight />
                 </button>
-            </div>
-
-            <div>
-                <select
-                    className="border border-primary rounded-md bg-primary px-2 py-1 focus:outline-none focus:ring"
-                    onChange={(e) => onSort(e.target.value)}
-                    defaultValue={10}
-                >
-                    {[1, 10, 20, 50, 100].map((range) => (
-                        <option key={range} value={range}>{range}/page</option>
-                    ))}
-                </select>
             </div>
         </div>
     );

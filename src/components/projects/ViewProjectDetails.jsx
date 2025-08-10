@@ -1,129 +1,199 @@
-import React, { Fragment, useEffect, useState } from 'react'
-import { Button, ConfirmtionModal, HandleProjectStudentsAndSupervisor, Overlay } from '@components'
-import { readFile } from '@services'
-import { capEach, firstLetter, formatDateTime, showSuccessToast, splitCamelCase } from '@utils'
-import { FaCheck, FaEdit, FaPen } from 'react-icons/fa';
-import { updateProject } from '@features';
+import { Fragment, useState } from 'react'
+import { Button, ConfirmtionModal, CreateMeetingForm, ManageProjectTeam, Overlay } from '@components'
+import { capEach, capitalize, firstLetter, formatDateTime, formatFilePath, getCategoryLabel, splitCamelCase } from '@utils'
+import { FaAnchor, FaClock, FaTrashAlt, FaUserCog } from 'react-icons/fa';
+import { deleteProject, updateProject } from '@features';
 import { useDispatch, useSelector } from 'react-redux';
+import clsx from 'clsx';
+import { departments } from '@data';
 
-const ViewProjectDetails = ({ project, closeForm }) => {
+const ViewProjectDetails = ({ project, closeForm, status }) => {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.auth);
-    const [images, setImages] = useState({
-        lead: null, memberOne: null, memberTwo: null, supervisor: null,
-    });
+    const { loading } = useSelector((state) => state.meetings);
     const [confirming, setConfirming] = useState(false);
+    const [createMeeting, setcreateMeeting] = useState(false);
 
-    const handleStatusCompleted = async () => {
-        const data = {
-            id: project._id,
-            formData: { status: "completed" },
-            showSuccessToast: false
-        }
+    if (!project?.title) closeForm(true);
 
-        const result = await dispatch(updateProject(data));
-        if (updateProject.fulfilled.match(result)) {
-            showSuccessToast("The project was marked completed");
+    const handleDelete = async () => {
+        const result = await dispatch(deleteProject(project._id))
+        if (deleteProject.fulfilled.match(result)) {
             setConfirming(false); closeForm();
             return true;
-        };
-    }
-    const handleSubmit = async (d) => {
-        const data = {
-            id: project._id,
-            formData: { ...d },
-            showSuccessToast: false
         }
-
-        const result = await dispatch(updateProject(data));
-        if (updateProject.fulfilled.match(result)) {
-            showSuccessToast("The project was marked completed");
-            setConfirming(false); closeForm();
-            return true;
-        };
     }
 
-    useEffect(() => {
-        (async () => {
-            const [lead, memberOne, memberTwo, supervisor] = await Promise.all([
-                project?.lead?.image ? readFile(project.lead.image).catch(() => null) : null,
-                project?.memberOne?.image ? readFile(project.memberOne.image).catch(() => null) : null,
-                project?.memberTwo?.image ? readFile(project.memberTwo.image).catch(() => null) : null,
-                project?.supervisor?.image ? readFile(project.supervisor.image).catch(() => null) : null,
-            ]);
-
-            setImages({ lead, memberOne, memberTwo, supervisor });
-        })()
-    }, [project]);
+    const handleManageTeam = async (data) => {
+        const result = await dispatch(updateProject({ id: project._id, formData: data }));
+        if (updateProject.fulfilled.match(result)) {
+            setConfirming(false); closeForm();
+        };
+    }
 
     const FieldBlock = ({ label, value }) => (
         <div className="flex flex-col gap-1">
-            <span className="text-sm text-primary font-medium">{label}</span>
-            <p className="text-sm text-secondary whitespace-pre-line">{splitCamelCase(value) || "N/A"}</p>
+            <span className="text-sm text-secondary font-medium">{label}</span>
+            <p className="text-sm text-primary whitespace-pre-line">{value || "N/A"}</p>
+        </div>
+    );
+
+    const PersonCard = (person, label, hasRoleNo = true) => (
+        <div className="bg-primary border border-primary rounded-lg p-4 flex gap-4 items-center w-full relative shadow-sm">
+            {user?._id == person?._id && (
+                <span className="absolute top-2 right-2 bg-primary/10 text-primary text-[10px] px-2 py-0.5 rounded-full border border-primary font-semibold tracking-wide">
+                    You
+                </span>
+            )}
+
+            {person?.image ? (
+                <img
+                    src={formatFilePath(person.image)}
+                    alt={person?.name}
+                    className="w-16 h-16 object-cover rounded-full border border-primary"
+                />
+            ) : (
+                <div className="w-16 h-16 rounded-full flex items-center justify-center bg-secondary border border-primary text-lg font-semibold text-secondary">
+                    {firstLetter(person?.name)}
+                </div>
+            )}
+
+            <div>
+                <h3 className="text-lg font-semibold text-primary m-0">{label}</h3>
+                <p className="text-sm text-secondary font-medium">
+                    Name: <span className="text-primary">{capEach(person?.name)} {hasRoleNo && (<span className="font-extralight">({person?.rollNo})</span>)}</span>
+                </p>
+                <p className="text-sm text-secondary">
+                    Email: <span className="text-primary">{person?.email}</span>
+                </p>
+            </div>
         </div>
     );
 
     return (
         <Fragment>
-            {confirming === "completed" && (
+            {confirming === "delete" && (
                 <ConfirmtionModal
-                    modalTitle="Marking the Project as Completed"
-                    prompt="Are you sure you want to mark this project as completed?"
+                    modalTitle="Delete Project"
+                    prompt="Are you sure you want to delete this project?"
                     promptText="This action cannot be undone. Please confirm to proceed."
-                    icon={<FaCheck className="text-2xl text-green-600" />}
-                    buttonColor="button-success"
-                    confirmBtnText="Mark Completed"
+                    icon={<FaTrashAlt />}
+                    buttonColor="button-danger"
+                    confirmBtnText="Delete"
                     model="projects"
-                    onConfirm={handleStatusCompleted}
+                    onConfirm={handleDelete}
                     onClose={setConfirming}
                 />
             )}
 
-            {confirming === "edit" && (
-                <HandleProjectStudentsAndSupervisor
+            {confirming === "action" && (
+                <ManageProjectTeam
                     project={project}
-                    handleSubmit={handleSubmit}
+                    handleManageTeam={handleManageTeam}
                     closeForm={() => setConfirming(false)}
+                />
+            )}
+
+            {createMeeting && (
+                <CreateMeetingForm
+                    closeForm={() => setcreateMeeting(false)}
+                    project={project}
+                    isLoading={loading}
+                    zIndex="z-50"
                 />
             )}
 
             <Overlay
                 onClose={() => closeForm(true)}
-                title={capEach(project.title)}
+                title={capitalize(project.title)}
                 width="w-[90%] sm:w-[80%] lg:w-[70%]"
             >
 
-                <div className="flex flex-col gap-6">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <PersonBlock title="Team Leader" person={project?.lead} image={images.lead} />
-                        <PersonBlock title="Group Member One" person={project?.memberOne} image={images.memberOne} />
-                        <PersonBlock title="Group Member Two" person={project?.memberTwo} image={images.memberTwo} />
-                        <PersonBlock title="Supervisor" person={project?.supervisor} image={images.supervisor} />
+                <div className="flex flex-col gap-4">
+                    {(() => {
+                        let persons = [
+                            { user: project.lead, label: 'Project Lead' },
+                            project.memberOne && { user: project.memberOne, label: 'Team Member' },
+                            project.memberTwo && { user: project.memberTwo, label: 'Team Member' },
+                            project.supervisor && { user: project.supervisor, label: 'Supervisor', hasRoleNo: false }
+                        ].filter(Boolean);
+
+                        persons = persons.sort((a, b) => {
+                            const isAUser = a.user?._id === user._id;
+                            const isBUser = b.user?._id === user._id;
+                            return isBUser - isAUser;
+                        });
+
+                        return (
+                            <div
+                                className={clsx(
+                                    "grid gap-4",
+                                    persons.length === 1 && "grid-cols-1",
+                                    persons.length === 2 && "grid-cols-1 sm:grid-cols-2",
+                                    persons.length === 3 && "grid-cols-1 sm:grid-cols-2",
+                                    persons.length >= 4 && "grid-cols-1 sm:grid-cols-2"
+                                )}
+                            >
+                                {persons.map(({ user, label, hasRoleNo = true }, index) => (
+                                    <div key={label + index} className={clsx("w-full", { "sm:col-span-2": persons.length == 3 && index == 2 })}>
+                                        {PersonCard(user, label, hasRoleNo)}
+                                    </div>
+                                ))}
+                            </div>
+                        );
+                    })()}
+
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 bg-primary p-5 border border-primary rounded-lg shadow-sm">
+                        <FieldBlock label="Department" value={departments?.find(d => d.abbreviation == project.department)?.name ?? "-"} />
+                        <FieldBlock label="Batch" value={project.batch ?? "-"} />
+                        <FieldBlock label="Shift" value={capitalize(project.shift ?? "-")} />
+                        <FieldBlock label="PID" value={project.pid} />
+                        <FieldBlock label="Type" value={splitCamelCase(project.type)} />
+                        <FieldBlock label="Category" value={getCategoryLabel(project.category)} />
+                        <FieldBlock label="Status" value={splitCamelCase(project.status)} />
+                        <FieldBlock label="Proposal File" value={
+                            <Button target="_blank" href={formatFilePath(project.proposal)}>View File</Button>
+                        } />
+                        <FieldBlock label="Started On" value={formatDateTime(project.createdAt)} />
+
+                        {status != "past" && (
+                            <div className="flex-1 relative shadow-sm mt-4 col-span-3">
+                                <div className="w-full h-4 bg-[#2357e42d] rounded-full overflow-hidden relative">
+                                    <div
+                                        className="h-full bg-theme rounded-full transition-all duration-300 flex items-center justify-center"
+                                        style={{ width: `${project.progress}%` }}
+                                    >
+                                        <span className="text-xs text-white font-semibold ">
+                                            <span className={clsx({ "hidden": window.innerWidth < 640 && project.progress <= 25 })}>Progress </span>
+                                            {project.progress}%
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-primary p-5 border border-primary rounded-xl">
-                        <FieldBlock label="Title" value={project.title} />
-                        <FieldBlock label="Type" value={project.type} />
-                        <FieldBlock label="Category" value={project.category} />
-                        <FieldBlock label="Status" value={project.status} />
-                        <FieldBlock label="Created At" value={formatDateTime(project.createdAt)} />
-                        <FieldBlock label="Updated At" value={formatDateTime(project.updatedAt)} />
-                    </div>
-
-                    <div className="bg-primary border border-primary p-5 rounded-xl">
+                    <div className="bg-primary border border-primary p-5 rounded-lg shadow-sm">
                         <FieldBlock label="Abstract" value={project.abstract} />
                     </div>
 
-                    {user.role == "admin" && project.status != "completed" && (
-                        <div className="flex flex-wrap justify-end gap-3 border-t border-primary pt-4">
-                            {project.status == "initialized" && (
-                                <Button className="button-success" onClick={() => setConfirming("completed")}>
-                                    <FaCheck /> Mark Completed
+                    {user.role != "student" && (
+                        <div className="flex flex-wrap justify-end gap-3 ">
+                            {project?.status != "completed" && user?.role == "admin" && (
+                                <Button onClick={() => setConfirming("action")}>
+                                    <FaUserCog /> Manage Team
                                 </Button>
                             )}
-                            {project.status == "underDevelopment" && (
-                                <Button className="button-primary" onClick={() => setConfirming("edit")}>
-                                    <FaEdit /> Edit
+
+                            {/* {user.role == "admin" && (
+                                <Button className="button-danger" onClick={() => setConfirming("delete")}>
+                                    <FaTrashAlt /> Delete
+                                </Button>
+                            )} */}
+
+                            {user.role == "supervisor" && (
+                                <Button className="button-primary" onClick={() => setcreateMeeting(true)}>
+                                    <FaClock /> Schedule Meeting
                                 </Button>
                             )}
                         </div>
@@ -133,50 +203,5 @@ const ViewProjectDetails = ({ project, closeForm }) => {
         </Fragment>
     );
 };
-
-
-const PersonBlock = ({ title, person, image }) => {
-    return (
-        <div className="flex bg-primary border border-primary rounded-2xl overflow-hidden w-full max-w-md">
-            <div className="flex items-center justify-center w-36 h-36 shrink-0">
-                {image ? (
-                    <img src={image} alt={`${title} picture`} className="w-32 h-32 object-cover rounded-full" />
-                ) : (
-                    <div className="flex items-center justify-center w-32 h-32 rounded-full bg-primary-hover border border-primary">
-                        {!person ? (
-                            <span className="text-secondary text-sm italic">No Image</span>
-                        ) : (
-                            <span className="text-secondary text-3xl font-semibold">
-                                {firstLetter(person.name)}
-                            </span>
-                        )}
-                    </div>
-                )}
-            </div>
-
-
-            <div className="p-4 flex flex-col justify-center w-full">
-                <p className="font-semibold text-primary mb-1">{title}</p>
-
-                {person ? (
-                    <div className="space-y-1 text-sm">
-                        {person.name && (
-                            <div><span className="font-medium text-secondary">Name:</span> <span className="text-primary font-semibold">{person.name}</span></div>
-                        )}
-                        {title != "Supervisor" && person.rollNo && (
-                            <div><span className="font-medium text-secondary">Roll No:</span> <span className="text-primary font-semibold">{person.rollNo}</span></div>
-                        )}
-                        {person.phone && (
-                            <div><span className="font-medium text-secondary">Email:</span> <span className="text-primary font-semibold">{person.email}</span></div>
-                        )}
-                    </div>
-                ) : (
-                    <p className="italic text-sm text-secondary">Yet not assigned</p>
-                )}
-            </div>
-        </div>
-    );
-};
-
 
 export default ViewProjectDetails;

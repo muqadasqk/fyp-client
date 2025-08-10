@@ -43,41 +43,37 @@ const createProposalSchema = z.object({
         .max(50, { message: "Category must not exceed 50 characters" }),
 });
 
-const AcceptStatusHandleSchema = z.object({
-    supervisor: z
-        .string()
-        .min(1, { message: "The supervisor is required" }),
+const proposalEvaluationSchema = (departmentPrefix = "XX") => {
+    const pidRegex = new RegExp(`^${departmentPrefix}-\\d{3}$`);
 
-    pid: z
-        .string()
-        .refine(
-            (val) => /^[A-Za-z]{2}-\d{3}$/.test(val),
+    return z.object({
+        supervisor: z.string().min(1, { message: "The supervisor is required" }),
+
+        pid: z.
+            string()
+            .min(1, {message:"Project ID is required"})
+            .refine(
+                (val) => pidRegex.test(val),
+                {
+                    message: `Project ID format '${departmentPrefix}-001'`,
+                }
+            ),
+
+        statusCode: z.string().refine(
+            (val) => ["20001", "20002", "20003"].includes(val),
             {
-                message: "The proposal ID must be in the format 'XX-123'",
+                message: "Set status to one of 'Accept', 'Accept with conditions', or 'Reject'",
             }
         ),
 
-    statusCode: z
-        .string()
-        .refine((val) =>
-            ["20001", "20002", "20003"].includes(val),
-            {
-                message: "Set status one of the 'Accept', Accept with conditions', or 'Reject'",
-            }
-        ),
-
-    remarks: z
-        .string()
-        .refine(
-            (val) => {
-                const wordCount = val.trim().split(/\s+/).length;
-                return wordCount >= 5 && wordCount <= 350;
-            },
-            {
-                message: "Abstract must be between 5 and 350 words",
-            }
-        ),
-});
+        remarks: z.string().refine((val) => {
+            const wordCount = val.trim().split(/\s+/).length;
+            return wordCount >= 5 && wordCount <= 350;
+        }, {
+            message: "Abstract must be between 5 and 350 words",
+        }),
+    });
+};
 
 const RejectStatusHandleSchema = z.object({
     supervisor: z
@@ -85,15 +81,6 @@ const RejectStatusHandleSchema = z.object({
         .optional()
         .or(z.literal("")),
 
-    pid: z
-        .string()
-        .refine(
-            (val) => /^[A-Za-z]{2}-\d{3}$/.test(val),
-            {
-                message: "The proposal ID must be in the format 'XX-123'",
-            }
-        ),
-
     statusCode: z
         .string()
         .refine((val) =>
@@ -111,9 +98,9 @@ const RejectStatusHandleSchema = z.object({
                 return wordCount >= 5 && wordCount <= 350;
             },
             {
-                message: "Abstract must be between 5 and 350 words",
+                message: "Remarks must be between 5 and 350 words",
             }
         ),
 });
 
-export { createProposalSchema, AcceptStatusHandleSchema, RejectStatusHandleSchema }
+export { createProposalSchema, proposalEvaluationSchema, RejectStatusHandleSchema }

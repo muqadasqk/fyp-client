@@ -5,36 +5,8 @@ import { setErrors } from "./uiSlice";
 const initialState = {
   user: readLocalStorage("authenticatedUser", true),
   token: readLocalStorage("accessToken"),
-  emailForOtp: readLocalStorage("emailForOtp"),
-  resetPasswordToken: readLocalStorage("resetPasswordToken"),
   loading: false,
 }
-
-export const signup = createAsyncThunk("auth/signup",
-  async (formData, { rejectWithValue, dispatch }) => {
-    try {
-      const { data } = await apiRequest.post("/auth/signup", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      return data;
-    } catch (error) {
-      dispatch(setErrors(error.response?.data?.errors));
-      return rejectWithValue(error.response?.data);
-    }
-  }
-);
-
-export const confirmEmail = createAsyncThunk("auth/confirmEmail",
-  async (formData, { rejectWithValue, dispatch }) => {
-    try {
-      const { data } = await apiRequest.post("/auth/confirm-email", formData);
-      return data;
-    } catch (error) {
-      dispatch(setErrors(error.response?.data?.errors));
-      return rejectWithValue(error.response?.data);
-    }
-  }
-);
 
 export const signin = createAsyncThunk("auth/signin",
   async (credentials, { rejectWithValue, dispatch }) => {
@@ -48,36 +20,44 @@ export const signin = createAsyncThunk("auth/signin",
   }
 );
 
+export const signup = createAsyncThunk("auth/signup",
+  async (formData, { rejectWithValue, dispatch }) => {
+    try {
+      const { data } = await apiRequest.post("/auth/signup", formData);
+      return data;
+    } catch (error) {
+      dispatch(setErrors(error.response?.data?.errors));
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);
+
+export const confirmAccount = createAsyncThunk("auth/confirmAccount",
+  async ({ token, email }, { rejectWithValue }) => {
+    try {
+      const { data } = await apiRequest.post("/auth/confirm-account", { token, email });
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);
+
+export const requestResetPassword = createAsyncThunk("auth/requestResetPassword",
+  async (formData, { rejectWithValue, dispatch }) => {
+    try {
+      const { data } = await apiRequest.post("/auth/request-reset-password", formData);
+      return data;
+    } catch (error) {
+      dispatch(setErrors(error.response?.data?.errors));
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);
 export const resetPassword = createAsyncThunk("auth/resetPassword",
   async (formData, { rejectWithValue, dispatch }) => {
     try {
-      const { data } = await apiRequest.patch("/auth/reset-password", formData, {
-        headers: { token: readLocalStorage("resetPasswordToken") },
-      });
-      return data;
-    } catch (error) {
-      dispatch(setErrors(error.response?.data?.errors));
-      return rejectWithValue(error.response?.data);
-    }
-  }
-);
-
-export const verifyOtp = createAsyncThunk("auth/verifyOtp",
-  async (formData, { rejectWithValue, dispatch }) => {
-    try {
-      const { data } = await apiRequest.post("/auth/verify-otp", formData);
-      return data;
-    } catch (error) {
-      dispatch(setErrors(error.response?.data?.errors));
-      return rejectWithValue(error.response?.data);
-    }
-  }
-);
-
-export const sendOtp = createAsyncThunk("auth/sendOtp",
-  async (formData, { rejectWithValue, dispatch }) => {
-    try {
-      const { data } = await apiRequest.post("/auth/send-otp", formData);
+      const { data } = await apiRequest.patch("/auth/reset-password", formData);
       return data;
     } catch (error) {
       dispatch(setErrors(error.response?.data?.errors));
@@ -102,6 +82,7 @@ export const verifyToken = createAsyncThunk("auth/verifyToken",
   }
 );
 
+
 const authSlice = createSlice({
   name: "auth",
   initialState: initialState,
@@ -116,45 +97,9 @@ const authSlice = createSlice({
       state.user = action.payload;
       writeLocalStorage("authenticatedUser", action.payload, true);
     },
-    clearEmailForOtp: (state) => {
-      state.emailForOtp = null;
-      deleteLocalStorage("emailForOtp");
-    },
-    clearResetPasswordToken: (state) => {
-      state.resetPasswordToken = null;
-      deleteLocalStorage("resetPasswordToken");
-    },
   },
   extraReducers: (builder) => {
     builder
-      // signup
-      .addCase(signup.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(signup.fulfilled, (state, action) => {
-        state.loading = false;
-        const formData = action.meta.arg;
-        const email = formData instanceof FormData ? formData.get("email") : formData.email;
-        state.emailForOtp = email;
-        writeLocalStorage("emailForOtp", email);
-      })
-      .addCase(signup.rejected, (state, action) => {
-        state.loading = false;
-      })
-
-      // confirm email
-      .addCase(confirmEmail.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(confirmEmail.fulfilled, (state) => {
-        state.loading = false;
-        state.emailForOtp = null;
-        deleteLocalStorage("emailForOtp");
-      })
-      .addCase(confirmEmail.rejected, (state) => {
-        state.loading = false;
-      })
-
       // signin
       .addCase(signin.pending, (state) => {
         state.loading = true;
@@ -171,47 +116,47 @@ const authSlice = createSlice({
         state.loading = false;
       })
 
+      // signup
+      .addCase(signup.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(signup.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(signup.rejected, (state, action) => {
+        state.loading = false;
+      })
+
+      // confirm account
+      .addCase(confirmAccount.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(confirmAccount.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(confirmAccount.rejected, (state) => {
+        state.loading = false;
+      })
+
+      // request reset password
+      .addCase(requestResetPassword.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(requestResetPassword.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(requestResetPassword.rejected, (state) => {
+        state.loading = false;
+      })
+
       // reset password
       .addCase(resetPassword.pending, (state) => {
         state.loading = true;
       })
       .addCase(resetPassword.fulfilled, (state) => {
         state.loading = false;
-        state.resetPasswordToken = null;
-        deleteLocalStorage("resetPasswordToken");
       })
       .addCase(resetPassword.rejected, (state) => {
-        state.loading = false;
-      })
-
-      // verify otp
-      .addCase(verifyOtp.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(verifyOtp.fulfilled, (state, action) => {
-        state.loading = false;
-        const { token } = action.payload;
-        state.resetPasswordToken = token;
-        writeLocalStorage("resetPasswordToken", token);
-        state.emailForOtp = null;
-        deleteLocalStorage("emailForOtp");
-      })
-      .addCase(verifyOtp.rejected, (state) => {
-        state.loading = false;
-      })
-
-      // send otp
-      .addCase(sendOtp.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(sendOtp.fulfilled, (state, action) => {
-        state.loading = false;
-        const formData = action.meta.arg;
-        const email = formData instanceof FormData ? formData.get("email") : formData.email;
-        state.emailForOtp = email;
-        writeLocalStorage("emailForOtp", email);
-      })
-      .addCase(sendOtp.rejected, (state) => {
         state.loading = false;
       })
 
@@ -227,5 +172,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { update, updateAuthenticatedUser, signout, clearEmailForOtp, clearResetPasswordToken } = authSlice.actions;
+export const { signout, updateAuthenticatedUser } = authSlice.actions;
 export default authSlice.reducer;

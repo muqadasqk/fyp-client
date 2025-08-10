@@ -1,91 +1,100 @@
-import { Button, DashboardContent, Form, Input, ProfileForm, UpdatePasswordForm } from "@components"
+import { DashboardContent, ImageCropper, ProfileForm, UpdatePasswordForm } from "@components";
 import { updateProfile, updateAuthenticatedUser } from "@features";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { updateProfileImageschema } from "@schemas";
-import { readFile } from "@services";
-import { useEffect, useState } from "react";
-import { FaSave, FaTimes } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux"
+import { capEach, firstLetter, formatFilePath } from "@utils";
+import { useState, useRef } from "react";
+import { FaCamera } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 
 const ProfileSettings = () => {
     const dispatch = useDispatch();
-    const { user } = useSelector((state) => state.auth);
-    const [isEditing, setIsEditing] = useState(false);
-    const [src, setSrc] = useState(null);
+    const { user, loading } = useSelector((state) => state.auth);
+    const fileRef = useRef();
+    const [cropImageFile, setCropImageFile] = useState(null);
 
-    useEffect(() => {
-        if (!src && user?.image) (async () => setSrc(await readFile(user.image)))();
-    }, [user, src, isEditing]);
+    const handleCropped = async (base64Image) => {
+        const blob = await (await fetch(base64Image)).blob();
+        const formData = new FormData();
+        formData.append("image", blob, "cropped.png");
 
-    const handleProfilePictureChange = async (data) => {
-        const result = await dispatch(updateProfile(data));
+        const result = await dispatch(updateProfile(formData));
         if (updateProfile.fulfilled.match(result)) {
             dispatch(updateAuthenticatedUser(result.payload.user));
-            setIsEditing(false);
-        };
-    }
-
-    const handleImageSelect = ({ target }) => {
-        const file = target.files?.[0];
-        if (file) setSrc(URL.createObjectURL(file));
-    }
+            setCropImageFile(null);
+        }
+    };
 
     return (
-        <DashboardContent title="Profile" description="Manage your profile settings and changes">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-1 space-y-6">
-                    <div className="bg-primary border border-primary rounded-lg shadow p-6">
-                        <h2 className="text-2xl font-bol">
-                            Profile Picture
-                        </h2>
-                        <div>
-                            <img
-                                src={src}
-                                alt="display picture"
-                                onClick={() => setIsEditing(true)}
-                                className="relative w-48 h-48 text-4xl mx-auto flex rounded-full items-center justify-center font-semibold object-cover cursor-pointer"
-                            />
-                        </div>
+        <DashboardContent title="Profile Settings" description="Manage your profile settings and changes">
+            {cropImageFile && (
+                <ImageCropper
+                    moodalTitle="Adjust and Upload Profile Picture"
+                    buttonText="Upload"
+                    image={cropImageFile}
+                    onCrop={handleCropped}
+                    onClose={() => setCropImageFile(null)}
+                    isLoading={loading}
+                />
+            )}
 
-                        {isEditing && (
-                            <Form
-                                onSubmit={handleProfilePictureChange}
-                                resolver={zodResolver(updateProfileImageschema)}
-                                resolverMode="onSubmit"
-                                encType="multipart/form-data"
-                            >
-                                <Input
-                                    type="file"
-                                    name="image"
-                                    accept=".jpg,.jpeg,.png"
-                                    className="block w-full bg-primary border border-primary rounded-lg cursor-pointerfocus:outline-none focus:ring-2 focus:ring-primary  mt-4 p-2"
-                                    onChange={handleImageSelect}
+            <input
+                ref={fileRef}
+                type="file"
+                accept=".jpg,.jpeg,.png"
+                hidden
+                onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) setCropImageFile(file);
+                    e.target.value = ""
+                }}
+            />
+
+            <div className="flex justify-between items-center gap-6 p-2 mb-2">
+                <h4 className="font-black text-theme text-lg sm:text-xl m-0">Profile Settings</h4>
+            </div>
+
+            <div className="relative bg-primary border border-primary rounded-lg overflow-hidden mb-4 shadow-sm">
+                <div className="h-24 w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
+                <div className="flex items-center gap-4 px-6  -mt-12 sm:-mt-14 mb-8">
+                    <div className="relative w-24 sm:w-28 h-24 sm:h-28 focus:outline-none">
+                        <div className="w-full h-full rounded-full overflow-hidden border border-primary bg-secondary">
+                            {user?.image ? (
+                                <img
+                                    src={formatFilePath(user.image)}
+                                    alt="profile"
+                                    className="w-full h-full object-cover"
                                 />
-
-                                <div className="flex flex-col sm:flex-row gap-3 mt-1">
-                                    <Button type="submit" className="flex-1">
-                                        <FaSave /> Save
-                                    </Button>
-                                    <Button
-                                        type="button"
-                                        onClick={() => setIsEditing(false)}
-                                        className="button-secondary flex-1"
-                                    >
-                                        <FaTimes /> Cancel
-                                    </Button>
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center text-3xl font-bold text-secondary">
+                                    {firstLetter(user?.name)}
                                 </div>
-                            </Form>
-                        )}
+                            )}
+                        </div>
+                        <button
+                            onClick={() => fileRef.current?.click()}
+                            className="absolute bottom-1 right-1 bg-white shadow p-[6px] rounded-full hover:!bg-gray-100 transition"
+                            title="Change picture"
+                        >
+                            <FaCamera className="text-gray-700 text-[14px]" />
+                        </button>
+                    </div>
+                    <div className="flex-1 mt-4">
+                        <h2 className="text-lg font-semibold text-white">{capEach(user?.name)}</h2>
+                        <p className="text-sm text-secondary">{user?.email}</p>
+                        <p className="text-sm text-secondary">({user?.role})</p>
                     </div>
                 </div>
+            </div>
 
-                <div className="lg:col-span-2 space-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                <div className="lg:col-span-8 shadow-sm">
                     <ProfileForm />
+                </div>
+                <div className="lg:col-span-4 shadow-sm">
                     <UpdatePasswordForm />
                 </div>
             </div>
         </DashboardContent>
-    )
-}
+    );
+};
 
-export default ProfileSettings
+export default ProfileSettings;

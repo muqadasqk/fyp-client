@@ -1,25 +1,32 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, Input, Button, Overlay } from "@components";
-import { createUserSchema } from "@schemas";
+import { Form, Input, Button, Overlay, Select } from "@components";
+import { createAdminSchema, createSupervisorSchema, createStudentSchema } from "@schemas";
 import { useDispatch } from "react-redux";
 import { createUser } from "@features";
+import { capitalize, retrieveYearRange } from "@utils";
+import { departments } from "@data";
+import { Fragment } from "react";
 
 
 const CreateUserForm = ({ role, closeForm, isLoading }) => {
     const dispatch = useDispatch();
 
     const onSubmit = async (data) => {
-        if (data.get("image") === "undefined") data.delete("image");
-
         data.append("role", role);
         const result = await dispatch(createUser(data));
         if (createUser.fulfilled.match(result)) closeForm(true);
     }
 
+    const getRespectiveRoleValidator = () => ({
+        admin: createAdminSchema,
+        supervisor: createSupervisorSchema,
+        student: createStudentSchema,
+    }[role]);
+
     return (
-        <Overlay dasboardSpecific onClose={() => closeForm(true)} title={`Create ${role} account`} width="w-[90%] sm:w-[70%] md:w-[50%]">
+        <Overlay onClose={() => closeForm(true)} title={`Create ${capitalize(role)} Account`} width="w-[90%] sm:w-[70%] md:w-[50%]">
             <div className="flex">
-                <Form onSubmit={onSubmit} resolver={zodResolver(createUserSchema)} encType="multipart/form-data">
+                <Form onSubmit={onSubmit} resolver={zodResolver(getRespectiveRoleValidator())} encType="multipart/form-data">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:gap-4 w-full">
                         <div className="flex flex-col">
                             <Input
@@ -54,19 +61,45 @@ const CreateUserForm = ({ role, closeForm, isLoading }) => {
                             />
                         </div>
                     </div>
-                    {role === "student" && <Input
-                        name="rollNo"
-                        label="Roll No."
-                        placeholder="Enter your roll number (e.g., 21SW066)"
 
-                    />}
-                    <Input
-                        type="file"
-                        name="image"
-                        label="Profile Photo"
-                        accept=".jpg,.jpeg,.png"
-                        optional
-                    />
+                    {role != "admin" && (
+                        <div className={`grid grid-cols-1 md:grid-cols-${role == "supervisor" ? "1" : "2"} lg:gap-4`}>
+                            <Select
+                                name="department"
+                                label="Department"
+                                placeholder="Please select your department"
+                                options={departments?.map(record => ({ label: record?.name, value: record?.abbreviation }))}
+                            />
+
+                            {role == "student" && (
+                                <Input name="rollNo" id="rollNo" label="Roll No." placeholder="Enter roll no. (e.g., 21SW066)" />
+                            )}
+                        </div>
+                    )}
+
+                    {role == "student" && (
+                        <Fragment>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:gap-4">
+                                <Select
+                                    name="batch"
+                                    label="Batch"
+                                    placeholder="Please select your batch"
+                                    options={retrieveYearRange(2000).map(y => ({ label: y, value: String(y) }))}
+                                />
+
+                                <Select
+                                    name="shift"
+                                    label="Batch Shift"
+                                    placeholder="Please select your batch shift"
+                                    options={[
+                                        { label: "Morning", value: "morning" },
+                                        { label: "Evening", value: "evening" }
+                                    ]}
+                                />
+                            </div>
+                        </Fragment>
+                    )}
+
                     <Button type="submit" isLoading={isLoading} className="w-full mt-3">Create</Button>
                 </Form>
             </div>

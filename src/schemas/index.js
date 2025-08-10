@@ -1,11 +1,17 @@
 // auth schemas
-export { signupSchema, confirmEmailSchema, signinSchema, resetPasswordSchema, verifyOtpSchema, sendOtpSchema } from "./auth";
+export { signinSchema, signupSupervisorSchema, signupStudentSchema, requestResetPasswordSchema, resetPasswordSchema } from "./auth";
 
 //  user
-export { createUserSchema, updateProfileSchema, updateProfileImageschema, updatePasswordSchema } from "./user";
+export { createAdminSchema, createSupervisorSchema, createStudentSchema, updateAdminProfileSchema, updateSupervisorProfileSchema, updateStudentProfileSchema, updateProfileImageschema, updatePasswordSchema } from "./user";
 
 // proposal
-export { createProposalSchema, AcceptStatusHandleSchema, RejectStatusHandleSchema } from "./proposal";
+export { createProposalSchema, proposalEvaluationSchema, RejectStatusHandleSchema } from "./proposal";
+
+// presentation
+export { createPresentationSchema, ReviewPresentationSchema } from "./presentation";
+
+// meeting
+export { createMeetingSchema } from "./meeting";
 
 // project
-export { uploadProposalFileSchema } from "./project";
+export { uploadProposalFileSchema, manageTeamSchema } from "./project";

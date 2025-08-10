@@ -1,14 +1,18 @@
 // ui
+export { default as notificationReducer } from "./notificationSlice"
+export { retrieveNotifications, markNotificationAsRead, markNotificationsAllAsRead, receiveNotification, clearNotifications } from "./notificationSlice"
+
+// ui
 export { default as uiReducer } from "./uiSlice"
 export { setTheme, setLoading, setMetadata, setErrors, clearErrors } from "./uiSlice"
 
 // auth
 export { default as authReducer } from "./authSlice";
-export { signup, confirmEmail, updateAuthenticatedUser, signin, signout, resetPassword, verifyOtp, sendOtp, verifyToken, clearEmailForOtp, clearResetPasswordToken } from "./authSlice";
+export { signin, signup, confirmAccount, requestResetPassword, resetPassword, verifyToken, signout, updateAuthenticatedUser } from "./authSlice";
 
 // users
 export { default as userReducer } from "./userSlice";
-export { retrieveUsers, createUser, updateProfile, updatePassword, deleteUser, updateStatus } from "./userSlice";
+export { retrieveUsers, createUser, updateProfile, updatePassword, deleteUser, updateStatus, dashboardData } from "./userSlice";
 
 //proposals
 export { default as proposalReducer } from "./proposalSlice";
@@ -24,4 +28,4 @@ export { retrievePresentations, createPresentation, updatePresentation, projectS
 
 //meetings
 export { default as meetingsReducer } from "./meetingSlice";
-export { retrieveMeetings, createMeeting, updateMeeting, projectSpecificMeetings, getOneMeeting, deleteMeeting } from "./meetingSlice";
+export { retrieveMeetings, createMeeting, updateMeeting, projectSpecificMeetings, getOneMeeting, deleteMeeting, generateSignature } from "./meetingSlice";

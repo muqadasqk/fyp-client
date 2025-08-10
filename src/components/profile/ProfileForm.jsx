@@ -1,16 +1,25 @@
-import { Button, Form, Input } from "@components";
+import { Button, Form, Input, Select } from "@components";
+import { departments } from "@data";
 import { updateAuthenticatedUser, updateProfile } from "@features";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updateProfileSchema } from "@schemas";
-import { readLocalStorage } from "@utils";
-import { useState } from "react";
+import { updateAdminProfileSchema, updateSupervisorProfileSchema, updateStudentProfileSchema } from "@schemas";
+import { capitalize, readLocalStorage } from "@utils";
+import { Fragment, useState } from "react";
 import { FaEdit, FaSave, FaTimes } from "react-icons/fa";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const ProfileForm = () => {
     const dispatch = useDispatch();
     const [isEditing, setIsEditing] = useState(false);
-    const profile = readLocalStorage("authenticatedUser", true);
+    const profile = useSelector((state) => state.auth?.user);
+
+    const getValidatorSchema = () => {
+        switch (profile?.role) {
+            case "admin": return updateAdminProfileSchema; break;
+            case "supervisor": return updateSupervisorProfileSchema; break;
+            case "student": return updateStudentProfileSchema; break;
+        }
+    }
 
     const onSubmit = async (data) => {
         data = Object.fromEntries(data.entries());
@@ -26,37 +35,55 @@ const ProfileForm = () => {
 
     const renderViewMode = () => (
         <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div>
-                    <label className="font-medium">Full Name</label>
-                    <p className="text-lg font-semibold break-words">{profile?.name}</p>
+                    <label className="text-secondary">Full Name</label>
+                    <p className="text-priamrys break-words">{profile?.name}</p>
                 </div>
                 <div>
-                    <label className="font-medium">Email Address</label>
-                    <p className="text-lg font-semibold break-words">{profile?.email}</p>
+                    <label className="text-secondary">Email Address</label>
+                    <p className="text-priamrys break-words">{profile?.email}</p>
                 </div>
-                {profile?.cnic && <div>
-                    <label className="font-medium">CNIC No.</label>
-                    <p className="text-lg font-semibold break-words">{profile?.cnic ?? "Not Provided"}</p>
-                </div>}
                 <div>
-                    <label className="font-medium">Phone Number</label>
-                    <p className="text-lg font-semibold break-words">{profile?.phone ?? "Not provided"}</p>
+                    <label className="text-secondary">CNIC No.</label>
+                    <p className="text-priamrys break-words">{profile?.cnic ?? "-"}</p>
                 </div>
-                {profile?.rollNo && <div>
-                    <label className="font-medium">Roll No.</label>
-                    <p className="text-lg font-semibold break-words">{profile.rollNo}</p>
-                </div>}
+                <div>
+                    <label className="text-secondary">Phone Number</label>
+                    <p className="text-priamrys break-words">{profile?.phone ?? "-"}</p>
+                </div>
+                {profile?.role != "admin" && (
+                    <div>
+                        <label className="text-secondary">Department</label>
+                        <p className="text-priamrys break-words">{departments.find(d => d.abbreviation == profile?.department)?.name ?? "-"}</p>
+                    </div>
+                )}
+                {profile?.role == "student" && (
+                    <Fragment>
+                        <div>
+                            <label className="text-secondary">Roll No.</label>
+                            <p className="text-priamrys break-words">{profile?.rollNo ?? "-"}</p>
+                        </div>
+                        <div>
+                            <label className="text-secondary">Batch</label>
+                            <p className="text-priamrys break-words">{profile?.batch ?? "-"}</p>
+                        </div>
+                        <div>
+                            <label className="text-secondary">Shift</label>
+                            <p className="text-priamrys break-words">{capitalize(profile?.shift ?? "-")}</p>
+                        </div>
+                    </Fragment>
+                )}
             </div>
 
-            <Button type="button" onClick={() => setIsEditing(true)} className="w-full">
+            <Button type="button" onClick={() => setIsEditing(true)} className="w-full text-sm">
                 <FaEdit /> Edit Profile
             </Button>
         </div>
     );
 
     const renderEditMode = () => (
-        <Form onSubmit={onSubmit} resolver={zodResolver(updateProfileSchema)} className="space-y-6">
+        <Form onSubmit={onSubmit} resolver={zodResolver(getValidatorSchema())} className="space-y-4 text-sm">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
                 <Input
                     name="name"
@@ -71,13 +98,14 @@ const ProfileForm = () => {
                     defaultValue={profile?.email ?? undefined}
                 />
 
-                {profile?.cnic && <Input
+                <Input
                     name="cnic"
                     label="CNIC No."
                     defaultValue={profile?.cnic ?? undefined}
                     placeholder="Your cnic no."
-                    disabled={true}
-                />}
+                    readonly
+                />
+
                 <Input
                     name="phone"
                     label="Phone Number"
@@ -85,29 +113,62 @@ const ProfileForm = () => {
                     defaultValue={profile?.phone ?? undefined}
                 />
 
-                {profile?.rollNo && <Input
-                    name="rollNo"
-                    label="Roll No."
-                    defaultValue={profile.rollNo ?? undefined}
-                    placeholder="Your roll no."
-                    disabled={true}
-                />}
+                {profile?.role != "admin" && (
+                    <Select
+                        name="department"
+                        label="Department"
+                        placeholder="Please select your department"
+                        defaultValue={profile?.department ?? null}
+                        options={departments?.map(record => ({ label: record?.name, value: record?.abbreviation }))}
+                        readonly={profile?.role == "student"}
+                    />
+                )}
+
+                {profile?.role == "student" && (
+                    <Fragment>
+                        <Input
+                            name="rollNo"
+                            label="Roll No."
+                            defaultValue={profile?.rollNo ?? undefined}
+                            placeholder="Your roll no."
+                            readonly
+                        />
+                        <Input
+                            name="batch"
+                            label="Batch"
+                            defaultValue={profile?.batch ?? undefined}
+                            placeholder="Your roll no."
+                            readonly
+                        />
+                        <Select
+                            name="shift"
+                            label="Batch Shift"
+                            placeholder="Please select your batch shift"
+                            defaultValue={profile?.shift ?? null}
+                            options={[
+                                { label: "Morning", value: "morning" },
+                                { label: "Evening", value: "evening" }
+                            ]}
+                        />
+                    </Fragment>
+                )}
             </div>
-            <div className="flex flex-col sm:flex-row gap-4">
-                <Button type="submit" className="flex-1">
-                    <FaSave /> Save Changes
+
+            <div className="flex flex-row gap-2">
+                <Button type="button" onClick={() => setIsEditing(false)} className="button-secondary flex-1 text-sm">
+                    <FaTimes /> Cancel
                 </Button>
 
-                <Button type="button" onClick={() => setIsEditing(false)} className="button-secondary flex-1">
-                    <FaTimes /> Cancel
+                <Button type="submit" className="flex-1 text-sm">
+                    <FaSave /> Save Changes
                 </Button>
             </div>
         </Form>
     );
 
     return (
-        <div className="bg-primary sm:border sm:border-primary sm:rounded-lg p-6 w-full">
-            <h2 className="text-2xl font-bold">Profile Information</h2>
+        <div className="bg-primary border border-primary rounded-lg p-6 w-full">
+            <h2 className="text-lg font-semibold mb-4">Profile Information</h2>
             {isEditing ? renderEditMode() : renderViewMode()}
         </div>
     );

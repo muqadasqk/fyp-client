@@ -1,4 +1,4 @@
-import { DashboardContent, DataTable, ViewProposalDetails } from '@components'
+import { DashboardContent, DataTable, ViewPresentationDetails, ViewProposalDetails } from '@components'
 import { retrievePresentations } from '@features'
 import { capitalize, splitCamelCase } from '@utils';
 import { useMemo, useState } from 'react';
@@ -11,13 +11,19 @@ const ManagePresentations = ({ status }) => {
     const retrieve = useMemo(() => ({ status }), [status]);
 
     const handleViewDetails = (id) => {
-        setViewDetails(presentations.find(proposal => proposal._id == id));
+        setViewDetails(presentations.find(presentation => presentation._id == id));
     }
 
     return (
         <DashboardContent title={capitalize(`${splitCamelCase(status)} Presentations`)} description='View and manage presenations'>
+            <div className="flex justify-between items-center gap-5 p-2 mb-2">
+                <h4 className="font-black text-theme mb-0">
+                    Manage {status != "all" && splitCamelCase(status)} Presentations
+                </h4>
+            </div>
+
             {viewDetails && (
-                <ViewProposalDetails proposal={viewDetails} closeForm={() => setViewDetails(null)} />
+                <ViewPresentationDetails presentation={viewDetails} closeForm={() => setViewDetails(null)} />
             )}
 
             <DataTable
@@ -25,16 +31,13 @@ const ManagePresentations = ({ status }) => {
                 retrieve={retrieve}
                 recordList={presentations}
                 paginationData={pagination}
-                empty="No presentations found"
                 recordFields={{
                     "project.title": "Project",
                     summary: "Summary",
-                    remarks: "Remarks",
                     fyp: "Phase",
                     ...(status == "all" ? { status: "Status" } : {})
                 }}
                 actions={[
-                    // { label: "Files", icon: <FaFileArchive />, ShowWhen: { resource: true }, onClick: handleViewDetails },
                     { label: "Details", icon: <FaEye />, ShowWhen: { status: true }, onClick: handleViewDetails },
                 ]}
                 searchableFields={{
@@ -43,6 +46,7 @@ const ManagePresentations = ({ status }) => {
                     fyp: "Phase",
                     ...(status == "all" ? { status: "Status" } : {})
                 }}
+                empty={`No ${splitCamelCase(status).toLowerCase()} presentations found.`}
             />
         </DashboardContent >
     )

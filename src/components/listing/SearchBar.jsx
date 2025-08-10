@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { debounce } from "lodash";
+import { FaSearch } from "react-icons/fa";
 
 const SearchBar = ({ fields, set, ...props }) => {
     const [text, setText] = useState("");
@@ -7,44 +8,60 @@ const SearchBar = ({ fields, set, ...props }) => {
     const debouncedSet = useCallback(debounce(set, 500), [set]);
 
     const handleChange = ({ target }) => {
-        const searchValue = target.value;
         const query =
             field === "*"
-                ? Object.entries(fields).reduce((acc, [key]) => ({ ...acc, [key]: searchValue }), {})
-                : { [field]: searchValue };
+                ? Object.entries(fields).reduce(
+                    (acc, [key]) => ({ ...acc, [key]: target.value }),
+                    {}
+                )
+                : { [field]: target.value };
 
-        setText(searchValue);
+        setText(target.value);
         debouncedSet(query);
     };
 
     const handleFieldChange = ({ target }) => {
-        setField(target.value)
-        const query = target.value === "*"
-            ? Object.entries(fields).reduce((acc, [key]) => ({ ...acc, [key]: text }), {})
-            : { [target.value]: text };
+        setField(target.value);
+        const query =
+            target.value === "*"
+                ? Object.entries(fields).reduce(
+                    (acc, [key]) => ({ ...acc, [key]: text }),
+                    {}
+                )
+                : { [target.value]: text };
         set(query);
-    }
+    };
 
     return (
-        <div className="flex gap-1 w-full mb-5">
-            <select onChange={handleFieldChange} value={field} id="fields"
-                className="w-6 sm:w-max bg-primary border border-primary p-2 rounded-md focus:outline-none focus:ring"
+        <div className="flex flex-wrap md:flex-nowrap items-center gap-1 w-full mb-4">
+            <select
+                value={field}
+                onChange={handleFieldChange}
+                className="w-auto bg-primary border border-primary rounded-l-md p-2 focus:outline-none focus:ring text-sm"
             >
                 <option value="*">All Fields</option>
                 {Object.entries(fields).map(([key, label]) => (
-                    <option key={key} value={key}>{label}</option>
+                    <option key={key} value={key}>
+                        {label}
+                    </option>
                 ))}
-
             </select>
 
-            <input
-                className="bg-primary w-full p-2 border border-primary rounded-md focus:outline-none focus:ring"
-                type="search"
-                value={text}
-                onChange={handleChange}
-                placeholder={field === "*" ? "Filter records by all fields..." : `Filter records by ${fields[field].toLowerCase()}`}
-                {...props}
-            />
+            <div className="relative flex-grow">
+                <input
+                    type="search"
+                    value={text}
+                    onChange={handleChange}
+                    placeholder={
+                        field === "*"
+                            ? "Search across all fields…"
+                            : `Search by ${fields[field].toLowerCase()}…`
+                    }
+                    className="w-full bg-primary border border-primary rounded-r-md p-2 pr-10 focus:outline-none focus:ring text-sm"
+                    {...props}
+                />
+                <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-primary pointer-events-none" />
+            </div>
         </div>
     );
 };

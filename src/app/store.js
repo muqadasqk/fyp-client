@@ -1,8 +1,9 @@
-import { uiReducer, authReducer, userReducer, proposalReducer, projectReducer, presentationReducer, meetingsReducer } from "@features";
+import { uiReducer, authReducer, userReducer, proposalReducer, projectReducer, presentationReducer, meetingsReducer, notificationReducer } from "@features";
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
     reducer: {
+        notifications: notificationReducer,
         ui: uiReducer,
         auth: authReducer,
         users: userReducer,
